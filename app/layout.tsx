@@ -4,6 +4,7 @@ import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils";
 import { Navbar } from "@/components/layout/navigation/navbar";
+import { Footer } from "@/components/layout/navigation/footer";
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-sans' })
 
@@ -23,12 +24,13 @@ export default function RootLayout({
       suppressHydrationWarning
       className={cn("antialiased", fontMono.variable, "font-sans", geist.variable)}
     >
-      <body>
+      <body className="min-h-screen flex flex-col bg-background">
         <ThemeProvider>
           <Navbar />
-          <main>
+          <main className="flex-1 pt-24">
             {children}
           </main>
+          <Footer />
         </ThemeProvider>
       </body>
     </html>

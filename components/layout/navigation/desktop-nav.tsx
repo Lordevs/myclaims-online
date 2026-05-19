@@ -53,8 +53,9 @@ export function DesktopNav({ className, itemClassName, onClick }: DesktopNavProp
                       const SubIcon = subItem.icon
                       const isSubActive = isActive(subItem.href)
                       return (
-                        <Link key={subItem.href} href={subItem.href} passHref legacyBehavior>
-                          <NavigationMenuLink
+                        <NavigationMenuLink asChild key={subItem.href}>
+                          <Link
+                            href={subItem.href}
                             onClick={onClick}
                             className={cn(
                               "flex items-center justify-between px-6 py-4.5 transition-all duration-150 border-b border-white/5 cursor-pointer rounded-none text-left w-full outline-hidden bg-transparent",
@@ -70,8 +71,8 @@ export function DesktopNav({ className, itemClassName, onClick }: DesktopNavProp
                               <span className="text-sm font-semibold tracking-wide">{subItem.label}</span>
                             </div>
                             <ChevronRight className="w-4 h-4 text-white/30" />
-                          </NavigationMenuLink>
-                        </Link>
+                          </Link>
+                        </NavigationMenuLink>
                       )
                     })}
                   </div>
@@ -84,8 +85,9 @@ export function DesktopNav({ className, itemClassName, onClick }: DesktopNavProp
           const isLinkActive = link.href ? isActive(link.href) : false
           return (
             <NavigationMenuItem key={link.href}>
-              <Link href={link.href || "#"} passHref legacyBehavior>
-                <NavigationMenuLink
+              <NavigationMenuLink asChild>
+                <Link
+                  href={link.href || "#"}
                   className={cn(
                     "relative py-2 text-[13px] font-extrabold tracking-wider uppercase transition-all duration-200 cursor-pointer select-none",
                     "bg-transparent hover:bg-transparent focus:bg-transparent active:bg-transparent p-0 rounded-none border-0 text-white/80 hover:text-white",
@@ -97,8 +99,8 @@ export function DesktopNav({ className, itemClassName, onClick }: DesktopNavProp
                   {isLinkActive && (
                     <span className="absolute bottom-[-4px] left-0 right-0 h-[3px] bg-[#F58220] rounded-full" />
                   )}
-                </NavigationMenuLink>
-              </Link>
+                </Link>
+              </NavigationMenuLink>
             </NavigationMenuItem>
           )
         })}
