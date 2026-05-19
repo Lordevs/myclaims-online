@@ -33,10 +33,7 @@ export function GetInTouch() {
     <section className="bg-[#F9FAF5] py-20 md:py-28 font-sans">
       <Container>
         <div
-          className="bg-white rounded-3xl px-6 py-12 md:py-16 md:px-12 lg:px-20 border-[2.25px] border-[#0F172A] flex flex-col items-center text-center max-w-[865px] mx-auto"
-          style={{
-            boxShadow: "4.5px 4.5px 0px 0px #1A1C19",
-          }}
+          className="bg-white rounded-3xl px-6 py-12 md:py-16 md:px-12 lg:px-20 border-[2.25px] border-[#0F172A] flex flex-col items-center text-center max-w-[865px] mx-auto shadow-[4.5px_4.5px_0px_0px_#1A1C19]"
         >
           {/* Section Heading & Tagline wrapped in FadeIn */}
           <FadeIn delay={0.1} className="flex flex-col items-center">

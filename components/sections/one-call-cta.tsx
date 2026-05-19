@@ -74,12 +74,9 @@ export function OneCallCTA({
             <Button
               asChild
               className={cn(
-                "w-[220px] sm:w-auto px-6 py-3.5 sm:px-8 sm:py-4.5 rounded-xl font-bold text-white bg-[#0D421B] hover:bg-[#072d11]! transition-transform active:scale-[0.97] duration-150 border-[2.25px] border-[#1A1C19] flex items-center justify-center gap-3 h-auto select-none",
+                "w-[220px] sm:w-auto px-6 py-3.5 sm:px-8 sm:py-4.5 rounded-xl font-bold text-white bg-[#0D421B] hover:bg-[#072d11]! transition-transform active:scale-[0.97] duration-150 border-[2.25px] border-[#1A1C19] flex items-center justify-center gap-3 h-auto select-none shadow-[4.5px_4.5px_0px_0px_#1A1C19]",
                 "text-sm sm:text-base cursor-pointer"
               )}
-              style={{
-                boxShadow: "4.5px 4.5px 0px 0px #1A1C19",
-              }}
             >
               <a href={telLink}>
                 <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-white" strokeWidth={2.5} />
@@ -91,12 +88,9 @@ export function OneCallCTA({
             <Button
               asChild
               className={cn(
-                "w-[220px] sm:w-auto px-8 py-3.5 sm:px-10 sm:py-4.5 rounded-xl font-bold text-[#E94E6B] bg-white hover:bg-slate-50! transition-transform active:scale-[0.97] duration-150 border-[2.25px] border-[#1A1C19] flex items-center justify-center h-auto select-none",
+                "w-[220px] sm:w-auto px-8 py-3.5 sm:px-10 sm:py-4.5 rounded-xl font-bold text-[#E94E6B] bg-white hover:bg-slate-50! transition-transform active:scale-[0.97] duration-150 border-[2.25px] border-[#1A1C19] flex items-center justify-center h-auto select-none shadow-[4.5px_4.5px_0px_0px_#1A1C19]",
                 "text-sm sm:text-base cursor-pointer"
               )}
-              style={{
-                boxShadow: "4.5px 4.5px 0px 0px #1A1C19",
-              }}
             >
               <Link href={enquiryHref}>
                 <span>{enquiryLabel}</span>
