@@ -8,6 +8,7 @@ import { GetInTouch } from "@/components/sections/get-in-touch"
 import { ClaimsSupport } from "@/components/sections/claims-support"
 import { InfoBanner } from "@/components/sections/info-banner"
 import { ImageWithListSection } from "@/components/sections/image-with-list-section"
+import { ClaimsCardCTA } from "@/components/sections/claims-card-cta"
 
 export default function Page() {
   return (
@@ -37,6 +38,17 @@ export default function Page() {
       />
 
       <HowItWorks />
+
+      {/* Card Call-To-Action Banner: Motorcycle Accident Claims */}
+      <ClaimsCardCTA
+        title="Motorcycle accident that was not your fault?"
+        description="Let us handle everything so you can focus on recovery. Our team is ready to get you back on the road."
+        primaryBtnText="Start My Claim"
+        primaryBtnHref="#enquiry-form"
+        secondaryBtnText="Call Now"
+        secondaryBtnHref="tel:07930444467"
+      />
+
       <WhyChooseUs />
 
       {/* Pink Variant: Non-Fault Car Accident Claims UK */}
@@ -56,6 +68,7 @@ export default function Page() {
     </div>
   )
 }
+
 
 
 
