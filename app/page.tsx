@@ -9,6 +9,8 @@ import { ClaimsSupport } from "@/components/sections/claims-support"
 import { InfoBanner } from "@/components/sections/info-banner"
 import { ImageWithListSection } from "@/components/sections/image-with-list-section"
 import { ClaimsCardCTA } from "@/components/sections/claims-card-cta"
+import { SimpleLinkCTA } from "@/components/sections/simple-link-cta"
+import { TextColumnsSection } from "@/components/sections/text-columns-section"
 
 export default function Page() {
   return (
@@ -28,6 +30,13 @@ export default function Page() {
           "Correct assessment of battery damage",
           "Compliance with manufacturer standards",
         ]}
+      />
+
+      {/* Taxi, Uber and Private Hire Accident Claims UK Split Text Section */}
+      <TextColumnsSection
+        title="Taxi, Uber and Private Hire Accident Claims UK"
+        col1Text="For most drivers, an accident is an inconvenience. For a taxi or private hire driver, it's a potential disaster for their livelihood. Our mission is to minimize downtime and ensure that professional drivers are not unfairly penalized for non-fault accidents. Whether you operate in London, Manchester, Birmingham, or any other UK city, our nationwide network provides local support with the power of a national organization."
+        col2Text="Minimizing downtime is our priority. We understand that every day your car is in the garage is a day you aren't earning. That's why we focus on immediate replacement vehicle provision and rapid repair authorization. Our dedicated handlers are experts in the specific requirements of licensing authorities, ensuring that your replacement vehicle is fully compliant and ready for work the moment it arrives."
       />
       
       {/* Green Variant: Car Accident Claims Made Simple */}
@@ -59,6 +68,14 @@ export default function Page() {
           "If you have been involved in a car accident that was not your fault, you have specific legal rights under UK law. Many drivers believe they must only contact their insurance company, but using a dedicated claims management service often results in better replacement vehicle options and more personalized support.",
           "We specialize in the recovery of reasonable expenses, including car hire costs and loss of earnings. Our legal partners ensure that the negligent party's insurance company fulfills their obligations to return you to the position you were in before the incident occurred."
         ]}
+      />
+
+      {/* Simple Link CTA: Cycle or E-scooter accident */}
+      <SimpleLinkCTA
+        badgeText="Last chance to claim"
+        headingText="Cycle or e-scooter accident that was not your fault?"
+        linkText="Check your eligibility now in 60 seconds"
+        linkHref="#enquiry-form"
       />
 
       <OneCallCTA />
