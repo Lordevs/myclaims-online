@@ -1,5 +1,6 @@
 import { TrustBanner } from "@/components/sections/trust-banner"
 import { OneCallCTA } from "@/components/sections/one-call-cta"
+import { GreenCTASection } from "@/components/sections/green-cta-section"
 import { ClaimsJourney } from "@/components/sections/claims-journey"
 import { WhatWeOffer } from "@/components/sections/what-we-offer"
 import { WhyChooseUs } from "@/components/sections/why-choose-us"
@@ -79,6 +80,14 @@ export default function Page() {
         primaryBtnHref="#enquiry-form"
         secondaryBtnText="Call Now"
         secondaryBtnHref="tel:07930444467"
+      />
+
+      {/* Green Premium Gradient Call-To-Action Section */}
+      <GreenCTASection
+        title="Speak to a Specialist Today"
+        subtitle="We provide immediate legal support and vehicle recovery."
+        buttonLabel="0800 123 4567"
+        buttonHref="tel:08001234567"
       />
 
       <WhyChooseUs />
