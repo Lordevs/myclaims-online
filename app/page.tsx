@@ -1,6 +1,6 @@
 import { TrustBanner } from "@/components/sections/trust-banner"
 import { OneCallCTA } from "@/components/sections/one-call-cta"
-import { HowItWorks } from "@/components/sections/how-it-works"
+import { ClaimsJourney } from "@/components/sections/claims-journey"
 import { WhatWeOffer } from "@/components/sections/what-we-offer"
 import { WhyChooseUs } from "@/components/sections/why-choose-us"
 import { FAQSection } from "@/components/sections/faq"
@@ -68,7 +68,8 @@ export default function Page() {
         paragraphs="Being involved in a road traffic accident is stressful enough without the headache of insurance paperwork and finding a temporary car. At My Claims Online, we specialise in helping drivers who weren't at fault get back on the road immediately. We bypass the long wait times of traditional insurers to provide a direct, human-centric recovery and replacement service."
       />
 
-      <HowItWorks />
+      {/* The Claims Journey horizontal process steps section */}
+      <ClaimsJourney />
 
       {/* Card Call-To-Action Banner: Motorcycle Accident Claims */}
       <ClaimsCardCTA
