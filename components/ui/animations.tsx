@@ -123,7 +123,7 @@ export function StaggerItem({
       opacity: 1,
       y: 0,
       x: 0,
-      transition: { duration, ease: [0.21, 0.47, 0.32, 0.98] }
+      transition: { duration, ease: [0.21, 0.47, 0.32, 0.98] },
     },
   }
 

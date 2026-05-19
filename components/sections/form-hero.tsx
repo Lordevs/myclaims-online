@@ -54,46 +54,49 @@ export function FormHero({
 }: FormHeroProps) {
   // Smart auto-splitting of the heading around the question mark for premium dual-color rendering
   const titleParts = title.split("?")
-  const renderedHeading = titleParts.length > 1 ? (
-    <h1 className="text-3xl md:text-4xl lg:text-[46px] font-extrabold tracking-tight leading-[1.15] mb-6">
-      <span className="text-[#111111]">{titleParts[0]}?</span>{" "}
-      <span className="text-[#064E3B]">{titleParts[1]}</span>
-    </h1>
-  ) : (
-    <h1 className="text-[#064E3B] text-3xl md:text-4xl lg:text-[46px] font-extrabold tracking-tight leading-[1.15] mb-6">
-      {title}
-    </h1>
-  )
+  const renderedHeading =
+    titleParts.length > 1 ? (
+      <h1 className="mb-6 text-3xl leading-[1.15] font-extrabold tracking-tight md:text-4xl lg:text-[46px]">
+        <span className="text-[#111111]">{titleParts[0]}?</span>{" "}
+        <span className="text-[#064E3B]">{titleParts[1]}</span>
+      </h1>
+    ) : (
+      <h1 className="mb-6 text-3xl leading-[1.15] font-extrabold tracking-tight text-[#064E3B] md:text-4xl lg:text-[46px]">
+        {title}
+      </h1>
+    )
 
   return (
     <section
       className={cn(
-        "w-full pt-16 pb-14 md:pt-24 md:pb-20 overflow-hidden text-left relative",
+        "relative w-full overflow-hidden pt-16 pb-14 text-left md:pt-24 md:pb-20",
         "bg-[linear-gradient(109.99deg,#F4F8E5_0%,#F4F8E5_35%,#F4F8E5_70%,#FFFFFF_100%)]",
         className
       )}
     >
       <Container className="relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
-
+        <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12 lg:gap-16">
           {/* LEFT COLUMN: Split heading, 2-col checklist, and transition diagram */}
-          <div className="col-span-1 lg:col-span-7 flex flex-col justify-start">
+          <div className="col-span-1 flex flex-col justify-start lg:col-span-7">
             <FadeIn delay={0.1}>
               {renderedHeading}
 
               {/* Description body */}
-              <p className="text-[#444444] text-sm md:text-base leading-relaxed mb-8 max-w-2xl font-normal">
+              <p className="mb-8 max-w-2xl text-sm leading-relaxed font-normal text-[#444444] md:text-base">
                 {description}
               </p>
 
               {/* 2-Column responsive checklist */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+              <div className="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
                 {listItems.map((item, idx) => (
                   <div key={idx} className="flex items-center gap-3">
-                    <div className="w-5.5 h-5.5 rounded-full shrink-0 flex items-center justify-center bg-[#1B6E3F] shadow-none">
-                      <Check className="w-3.5 h-3.5 text-white" strokeWidth={3} />
+                    <div className="flex h-5.5 w-5.5 shrink-0 items-center justify-center rounded-full bg-[#1B6E3F] shadow-none">
+                      <Check
+                        className="h-3.5 w-3.5 text-white"
+                        strokeWidth={3}
+                      />
                     </div>
-                    <span className="text-[#111111] text-xs sm:text-sm font-semibold leading-tight">
+                    <span className="text-xs leading-tight font-semibold text-[#111111] sm:text-sm">
                       {item}
                     </span>
                   </div>
@@ -101,7 +104,7 @@ export function FormHero({
               </div>
 
               {/* Large graphic diagram underneath lists (no neobrutalist borders) */}
-              <div className="relative w-full aspect-[1.15/1] sm:aspect-1.25/1 overflow-hidden rounded-2xl">
+              <div className="relative aspect-[1.15/1] w-full overflow-hidden rounded-2xl sm:aspect-1.25/1">
                 <Image
                   src={imageSrc}
                   alt={imageAlt}
@@ -115,7 +118,7 @@ export function FormHero({
           </div>
 
           {/* RIGHT COLUMN: Interactive Form Column */}
-          <div className="col-span-1 lg:col-span-5 w-full sticky top-24">
+          <div className="sticky top-24 col-span-1 w-full lg:col-span-5">
             <FadeIn delay={0.25}>
               <EnquiryForm
                 title={formTitle}
@@ -124,11 +127,10 @@ export function FormHero({
               />
             </FadeIn>
           </div>
-
         </div>
       </Container>
     </section>
   )
 }
 
-export default FormHero;
+export default FormHero

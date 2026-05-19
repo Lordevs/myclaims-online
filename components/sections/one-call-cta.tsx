@@ -41,45 +41,48 @@ export function OneCallCTA({
   return (
     <section
       className={cn(
-        "relative bg-[#E94E6B] w-full font-sans select-none overflow-hidden",
+        "relative w-full overflow-hidden bg-[#E94E6B] font-sans select-none",
         "border-t-[4.5px] border-b-[4.5px] border-[#0D421B]",
         className
       )}
     >
-      <Container className="relative z-10 py-20 md:py-28 ">
+      <Container className="relative z-10 py-20 md:py-28">
         {/* Background Vector Left Icon (Bottom-Left) */}
-        <div className="absolute bottom-0 left-0 text-white/10 select-none pointer-events-none translate-y-12 translate-x-4 md:translate-x-8">
-          <LeftIcon className="w-36 h-36 sm:w-56 sm:h-56 md:w-72 md:h-72 stroke-[1.5]" />
+        <div className="pointer-events-none absolute bottom-0 left-0 translate-x-4 translate-y-12 text-white/10 select-none md:translate-x-8">
+          <LeftIcon className="h-36 w-36 stroke-[1.5] sm:h-56 sm:w-56 md:h-72 md:w-72" />
         </div>
 
         {/* Background Vector Right Icon (Bottom-Right) */}
-        <div className="absolute bottom-0 right-0 text-white/10 select-none pointer-events-none translate-y-12 -translate-x-4 md:-translate-x-8 ">
-          <RightIcon className="w-36 h-36 sm:w-56 sm:h-56 md:w-72 md:h-72 stroke-[1.5]" />
+        <div className="pointer-events-none absolute right-0 bottom-0 -translate-x-4 translate-y-12 text-white/10 select-none md:-translate-x-8">
+          <RightIcon className="h-36 w-36 stroke-[1.5] sm:h-56 sm:w-56 md:h-72 md:w-72" />
         </div>
 
         <FadeIn delay={0.1} className="flex flex-col items-center text-center">
           {/* Main Heading */}
-          <h2 className="text-white text-3xl md:text-5xl lg:text-[54px] font-extrabold tracking-tight mb-4 leading-tight">
+          <h2 className="mb-4 text-3xl leading-tight font-extrabold tracking-tight text-white md:text-5xl lg:text-[54px]">
             {title}
           </h2>
 
           {/* Subtitle Tagline */}
-          <p className="text-[#FFFFFFE5] text-sm md:text-xl font-normal max-w-xl leading-relaxed mb-10 md:mb-12">
+          <p className="mb-10 max-w-xl text-sm leading-relaxed font-normal text-[#FFFFFFE5] md:mb-12 md:text-xl">
             {subtitle}
           </p>
 
           {/* Action Buttons Grid */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-5 sm:gap-6 md:gap-8 w-full sm:w-auto px-4 sm:px-0">
+          <div className="flex w-full flex-col items-center justify-center gap-5 px-4 sm:w-auto sm:flex-row sm:gap-6 sm:px-0 md:gap-8">
             {/* Call Now Button */}
             <Button
               asChild
               className={cn(
-                "w-[220px] sm:w-auto px-6 py-3.5 sm:px-8 sm:py-4.5 rounded-xl font-bold text-white bg-[#0D421B] hover:bg-[#072d11]! transition-transform active:scale-[0.97] duration-150 border-[2.25px] border-[#1A1C19] flex items-center justify-center gap-3 h-auto select-none shadow-[4.5px_4.5px_0px_0px_#1A1C19]",
-                "text-sm sm:text-base cursor-pointer"
+                "flex h-auto w-[220px] items-center justify-center gap-3 rounded-xl border-[2.25px] border-[#1A1C19] bg-[#0D421B] px-6 py-3.5 font-bold text-white shadow-[4.5px_4.5px_0px_0px_#1A1C19] transition-transform duration-150 select-none hover:bg-[#072d11]! active:scale-[0.97] sm:w-auto sm:px-8 sm:py-4.5",
+                "cursor-pointer text-sm sm:text-base"
               )}
             >
               <a href={telLink}>
-                <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-white" strokeWidth={2.5} />
+                <Phone
+                  className="h-4 w-4 text-white sm:h-5 sm:w-5"
+                  strokeWidth={2.5}
+                />
                 <span>{phoneLabel}</span>
               </a>
             </Button>
@@ -88,8 +91,8 @@ export function OneCallCTA({
             <Button
               asChild
               className={cn(
-                "w-[220px] sm:w-auto px-8 py-3.5 sm:px-10 sm:py-4.5 rounded-xl font-bold text-[#E94E6B] bg-white hover:bg-slate-50! transition-transform active:scale-[0.97] duration-150 border-[2.25px] border-[#1A1C19] flex items-center justify-center h-auto select-none shadow-[4.5px_4.5px_0px_0px_#1A1C19]",
-                "text-sm sm:text-base cursor-pointer"
+                "flex h-auto w-[220px] items-center justify-center rounded-xl border-[2.25px] border-[#1A1C19] bg-white px-8 py-3.5 font-bold text-[#E94E6B] shadow-[4.5px_4.5px_0px_0px_#1A1C19] transition-transform duration-150 select-none hover:bg-slate-50! active:scale-[0.97] sm:w-auto sm:px-10 sm:py-4.5",
+                "cursor-pointer text-sm sm:text-base"
               )}
             >
               <Link href={enquiryHref}>

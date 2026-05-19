@@ -1,4 +1,4 @@
-'use client'
+"use client"
 
 import * as React from "react"
 import { ShieldCheck, Play } from "lucide-react"
@@ -49,7 +49,9 @@ export function EnquiryForm({
       if (onSubmit) {
         onSubmit(formData)
       } else {
-        alert(`Thank you ${formData.name}! Your enquiry has been received. Our team will contact you shortly.`)
+        alert(
+          `Thank you ${formData.name}! Your enquiry has been received. Our team will contact you shortly.`
+        )
       }
       setFormData({ name: "", email: "", phone: "" })
       setIsSubmitting(false)
@@ -57,26 +59,28 @@ export function EnquiryForm({
   }
 
   return (
-    <div className={cn("w-full flex flex-col items-center select-none", className)}>
+    <div
+      className={cn("flex w-full flex-col items-center select-none", className)}
+    >
       {/* White Form Box */}
       <form
         onSubmit={handleSubmit}
         className={cn(
-          "w-full bg-white rounded-2xl p-6 md:p-8 flex flex-col text-center",
+          "flex w-full flex-col rounded-2xl bg-white p-6 text-center md:p-8",
           "border-[1.2px] border-[#E2E2E2]",
           "shadow-[0px_4.8px_36.02px_0px_rgba(0,0,0,0.09)]"
         )}
       >
         {/* Form Title & Subtitle */}
-        <h3 className="text-[#111111] text-lg sm:text-xl md:text-[22px] font-bold tracking-tight mb-2">
+        <h3 className="mb-2 text-lg font-bold tracking-tight text-[#111111] sm:text-xl md:text-[22px]">
           {title}
         </h3>
-        <p className="text-[#888888] text-xs sm:text-sm leading-relaxed mb-6 px-1 font-normal">
+        <p className="mb-6 px-1 text-xs leading-relaxed font-normal text-[#888888] sm:text-sm">
           {subtitle}
         </p>
 
         {/* Input stack */}
-        <div className="flex flex-col gap-3.5 mb-5 text-left">
+        <div className="mb-5 flex flex-col gap-3.5 text-left">
           {/* Full Name */}
           <Input
             required
@@ -85,8 +89,8 @@ export function EnquiryForm({
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             className={cn(
-              "w-full h-auto px-4 py-3 rounded-lg text-sm transition-colors text-[#111111] placeholder:text-[#888888] outline-none",
-              "border-[1.2px] border-[#E2E2E2] focus:border-[#E6405E] bg-white focus-visible:ring-0 focus-visible:border-[#E6405E]"
+              "h-auto w-full rounded-lg px-4 py-3 text-sm text-[#111111] transition-colors outline-none placeholder:text-[#888888]",
+              "border-[1.2px] border-[#E2E2E2] bg-white focus:border-[#E6405E] focus-visible:border-[#E6405E] focus-visible:ring-0"
             )}
           />
 
@@ -96,10 +100,12 @@ export function EnquiryForm({
             type="email"
             placeholder="Email Address"
             value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, email: e.target.value })
+            }
             className={cn(
-              "w-full h-auto px-4 py-3 rounded-lg text-sm transition-colors text-[#111111] placeholder:text-[#888888] outline-none",
-              "border-[1.2px] border-[#E2E2E2] focus:border-[#E6405E] bg-white focus-visible:ring-0 focus-visible:border-[#E6405E]"
+              "h-auto w-full rounded-lg px-4 py-3 text-sm text-[#111111] transition-colors outline-none placeholder:text-[#888888]",
+              "border-[1.2px] border-[#E2E2E2] bg-white focus:border-[#E6405E] focus-visible:border-[#E6405E] focus-visible:ring-0"
             )}
           />
 
@@ -109,10 +115,12 @@ export function EnquiryForm({
             type="tel"
             placeholder="Phone Number"
             value={formData.phone}
-            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, phone: e.target.value })
+            }
             className={cn(
-              "w-full h-auto px-4 py-3 rounded-lg text-sm transition-colors text-[#111111] placeholder:text-[#888888] outline-none",
-              "border-[1.2px] border-[#E2E2E2] focus:border-[#E6405E] bg-white focus-visible:ring-0 focus-visible:border-[#E6405E]"
+              "h-auto w-full rounded-lg px-4 py-3 text-sm text-[#111111] transition-colors outline-none placeholder:text-[#888888]",
+              "border-[1.2px] border-[#E2E2E2] bg-white focus:border-[#E6405E] focus-visible:border-[#E6405E] focus-visible:ring-0"
             )}
           />
         </div>
@@ -122,18 +130,20 @@ export function EnquiryForm({
           type="submit"
           disabled={isSubmitting}
           className={cn(
-            "w-full h-auto py-3.5 rounded-lg font-bold transition-all duration-200 cursor-pointer text-white flex items-center justify-center gap-2",
-            "bg-[#E6405E] hover:bg-[#d03350]! border-none shadow-none disabled:opacity-50 select-none text-[15px]"
+            "flex h-auto w-full cursor-pointer items-center justify-center gap-2 rounded-lg py-3.5 font-bold text-white transition-all duration-200",
+            "border-none bg-[#E6405E] text-[15px] shadow-none select-none hover:bg-[#d03350]! disabled:opacity-50"
           )}
         >
           <span>{isSubmitting ? "Submitting..." : "Submit Enquiry"}</span>
-          {!isSubmitting && <Play className="w-3.5 h-3.5 fill-white text-white translate-x-0.5" />}
+          {!isSubmitting && (
+            <Play className="h-3.5 w-3.5 translate-x-0.5 fill-white text-white" />
+          )}
         </Button>
 
         {/* Security Warning Footer */}
-        <div className="flex items-center justify-center gap-2 mt-4.5 text-[#888888]">
-          <ShieldCheck className="w-4 h-4 shrink-0 text-[#888888]" />
-          <span className="text-[11.5px] font-normal leading-none">
+        <div className="mt-4.5 flex items-center justify-center gap-2 text-[#888888]">
+          <ShieldCheck className="h-4 w-4 shrink-0 text-[#888888]" />
+          <span className="text-[11.5px] leading-none font-normal">
             Your data is secure and will never be shared.
           </span>
         </div>
@@ -141,12 +151,13 @@ export function EnquiryForm({
 
       {/* Under-form Trust Badges */}
       <div className="mt-4 text-center">
-        <p className="text-[#111111] text-[13px] font-bold">
-          Excellent Rating on <span className="text-[#E6405E]">Google Reviews</span>
+        <p className="text-[13px] font-bold text-[#111111]">
+          Excellent Rating on{" "}
+          <span className="text-[#E6405E]">Google Reviews</span>
         </p>
       </div>
     </div>
   )
 }
 
-export default EnquiryForm;
+export default EnquiryForm

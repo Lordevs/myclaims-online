@@ -28,30 +28,33 @@ export function TrustBanner({
   return (
     <section
       className={cn(
-        "bg-[#CEEE8D] py-8 md:py-20 border-b-[2.25px] border-[#0F172A] w-full font-sans select-none overflow-hidden",
+        "w-full overflow-hidden border-b-[2.25px] border-[#0F172A] bg-[#CEEE8D] py-8 font-sans select-none md:py-20",
         className
       )}
     >
       <Container>
-        <FadeIn delay={0.1} className="flex flex-col items-center text-center gap-4 md:gap-12">
+        <FadeIn
+          delay={0.1}
+          className="flex flex-col items-center gap-4 text-center md:gap-12"
+        >
           {/* Centered Rating Stars */}
           <div className="flex items-center gap-1.5">
             {Array.from({ length: Math.max(0, rating) }).map((_, idx) => (
               <Star
                 key={idx}
-                className="w-5 h-5 text-[#E94E6B] fill-[#E94E6B]"
+                className="h-5 w-5 fill-[#E94E6B] text-[#E94E6B]"
                 strokeWidth={1.5}
               />
             ))}
           </div>
 
           {/* Primary Trust Message */}
-          <h3 className="text-[#0F172A] text-base md:text-[28px] font-extrabold tracking-tight mb-2 leading-tight">
+          <h3 className="mb-2 text-base leading-tight font-extrabold tracking-tight text-[#0F172A] md:text-[28px]">
             {title}
           </h3>
 
           {/* Secondary Subtitle Tagline */}
-          <p className="text-[#064E3B] text-xs md:text-[23px] font-normal tracking-wide uppercase leading-none opacity-90">
+          <p className="text-xs leading-none font-normal tracking-wide text-[#064E3B] uppercase opacity-90 md:text-[23px]">
             {subtitle}
           </p>
         </FadeIn>

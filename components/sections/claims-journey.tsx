@@ -1,5 +1,9 @@
 import { Container } from "@/components/layout/container"
-import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/animations"
+import {
+  FadeIn,
+  StaggerContainer,
+  StaggerItem,
+} from "@/components/ui/animations"
 import { cn } from "@/lib/utils"
 
 export interface JourneyStep {
@@ -33,84 +37,94 @@ export function ClaimsJourney({
     {
       number: "01",
       title: "Review Details",
-      description: "Our triage team instantly assesses your information for eligibility and case strength.",
+      description:
+        "Our triage team instantly assesses your information for eligibility and case strength.",
     },
     {
       number: "02",
       title: "Expert Contact",
-      description: "A senior specialist calls you to discuss strategy and explain your legal rights clearly.",
+      description:
+        "A senior specialist calls you to discuss strategy and explain your legal rights clearly.",
     },
     {
       number: "03",
       title: "Action Phase",
-      description: "We immediately arrange replacement vehicles and medical care if needed.",
+      description:
+        "We immediately arrange replacement vehicles and medical care if needed.",
     },
     {
       number: "04",
       title: "Settlement",
-      description: "We handle all insurer negotiations to secure your maximum entitled compensation.",
+      description:
+        "We handle all insurer negotiations to secure your maximum entitled compensation.",
     },
   ],
   className,
 }: ClaimsJourneyProps) {
   return (
-    <section className={cn("py-20 md:py-28 bg-white font-sans w-full select-none overflow-hidden relative", className)}>
+    <section
+      className={cn(
+        "relative w-full overflow-hidden bg-white py-20 font-sans select-none md:py-28",
+        className
+      )}
+    >
       <Container>
         <div className="flex flex-col items-center">
-
           {/* Section Heading */}
           <FadeIn delay={0.1}>
-            <h2 className="text-[#064E3B] text-3xl md:text-[48px] font-extrabold tracking-tight text-center mb-16 md:mb-24 leading-none">
+            <h2 className="mb-16 text-center text-3xl leading-none font-extrabold tracking-tight text-[#064E3B] md:mb-24 md:text-[48px]">
               {title}
             </h2>
           </FadeIn>
 
           {/* Steps Grid and Connector Block */}
-          <StaggerContainer delayChildren={0.2} staggerDelay={0.12} className="w-full relative">
-
+          <StaggerContainer
+            delayChildren={0.2}
+            staggerDelay={0.12}
+            className="relative w-full"
+          >
             {/* Horizontal Connector Line for Desktop/Tablets */}
-            <div className="hidden md:block absolute top-[43px] left-[12.5%] right-[12.5%] h-[1.5px] bg-[#E2E3DE] z-0 pointer-events-none" />
+            <div className="pointer-events-none absolute top-[43px] right-[12.5%] left-[12.5%] z-0 hidden h-[1.5px] bg-[#E2E3DE] md:block" />
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 md:gap-6 lg:gap-12 w-full relative z-10">
+            <div className="relative z-10 grid w-full grid-cols-1 gap-12 sm:grid-cols-2 md:grid-cols-4 md:gap-6 lg:gap-12">
               {steps.map((step, idx) => {
                 const isGreenStep = step.number === "04"
 
                 return (
-                  <StaggerItem key={idx} className="flex flex-col items-center text-center group">
-
+                  <StaggerItem
+                    key={idx}
+                    className="group flex flex-col items-center text-center"
+                  >
                     {/* Step Badge / Number Card */}
                     <div
                       className={cn(
-                        "w-20 h-20 sm:w-[86px] sm:h-[86px] rounded-3xl flex items-center justify-center font-extrabold text-xl sm:text-2xl transition-transform duration-200 group-hover:scale-105 mb-6 z-10 relative",
+                        "relative z-10 mb-6 flex h-20 w-20 items-center justify-center rounded-3xl text-xl font-extrabold transition-transform duration-200 group-hover:scale-105 sm:h-[86px] sm:w-[86px] sm:text-2xl",
                         isGreenStep
-                          ? "bg-[#064E3B] border-[2.2px] border-[#064E3B] text-white"
-                          : "bg-white border-[2.2px] border-[#064E3B1A] text-[#AF2144] shadow-[0px_1.1px_2.2px_rgba(0,0,0,0.05)]"
+                          ? "border-[2.2px] border-[#064E3B] bg-[#064E3B] text-white"
+                          : "border-[2.2px] border-[#064E3B1A] bg-white text-[#AF2144] shadow-[0px_1.1px_2.2px_rgba(0,0,0,0.05)]"
                       )}
                     >
                       {step.number}
                     </div>
 
                     {/* Step Title */}
-                    <h3 className="text-[#064E3B] text-lg sm:text-2xl font-extrabold tracking-tight mb-3 leading-snug">
+                    <h3 className="mb-3 text-lg leading-snug font-extrabold tracking-tight text-[#064E3B] sm:text-2xl">
                       {step.title}
                     </h3>
 
                     {/* Step Description */}
-                    <p className="text-[#4C6549] text-base sm:text-lg font-medium leading-relaxed max-w-[240px] px-1 md:px-0">
+                    <p className="max-w-[240px] px-1 text-base leading-relaxed font-medium text-[#4C6549] sm:text-lg md:px-0">
                       {step.description}
                     </p>
-
                   </StaggerItem>
                 )
               })}
             </div>
-
           </StaggerContainer>
-
         </div>
       </Container>
     </section>
   )
 }
 
-export default ClaimsJourney;
+export default ClaimsJourney

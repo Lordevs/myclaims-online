@@ -18,7 +18,11 @@ interface DesktopNavProps {
   onClick?: () => void
 }
 
-export function DesktopNav({ className, itemClassName, onClick }: DesktopNavProps) {
+export function DesktopNav({
+  className,
+  itemClassName,
+  onClick,
+}: DesktopNavProps) {
   const { isActive } = useNavigationState()
 
   return (
@@ -33,22 +37,20 @@ export function DesktopNav({ className, itemClassName, onClick }: DesktopNavProp
               <NavigationMenuItem key={link.label}>
                 <NavigationMenuTrigger
                   className={cn(
-                    "relative flex items-center text-[13px] font-extrabold tracking-wider uppercase transition-all duration-200 cursor-pointer select-none focus:outline-hidden",
+                    "relative flex cursor-pointer items-center text-[13px] font-extrabold tracking-wider uppercase transition-all duration-200 select-none focus:outline-hidden",
                     "bg-transparent hover:bg-transparent focus:bg-transparent active:bg-transparent data-[state=open]:bg-transparent!",
-                    "h-auto py-2 px-0 rounded-none border-0 text-white/80 hover:text-white data-[state=open]:text-white [&_svg]:hidden",
+                    "h-auto rounded-none border-0 px-0 py-2 text-white/80 hover:text-white data-[state=open]:text-white [&_svg]:hidden",
                     isDropdownActive ? "text-white" : "text-white/80",
                     itemClassName
                   )}
                 >
                   {link.label}
                   {isDropdownActive && (
-                    <span className="absolute bottom-[4px] left-0 right-0 h-[3px] bg-[#F58220] rounded-full" />
+                    <span className="absolute right-0 bottom-[4px] left-0 h-[3px] rounded-full bg-[#F58220]" />
                   )}
                 </NavigationMenuTrigger>
-                <NavigationMenuContent
-                  className="mt-[20px]! w-[340px]! min-w-[340px]! rounded-xl! overflow-hidden! shadow-none! border border-white/10! bg-primary! p-0! text-white! z-50 animate-in fade-in-0 zoom-in-95 left-1/2 -translate-x-1/2"
-                >
-                  <div className="flex flex-col py-1.5 bg-primary">
+                <NavigationMenuContent className="left-1/2 z-50 mt-[20px]! w-[340px]! min-w-[340px]! -translate-x-1/2 animate-in overflow-hidden! rounded-xl! border border-white/10! bg-primary! p-0! text-white! shadow-none! fade-in-0 zoom-in-95">
+                  <div className="flex flex-col bg-primary py-1.5">
                     {subItems.map((subItem, idx) => {
                       const SubIcon = subItem.icon
                       const isSubActive = isActive(subItem.href)
@@ -58,19 +60,23 @@ export function DesktopNav({ className, itemClassName, onClick }: DesktopNavProp
                             href={subItem.href}
                             onClick={onClick}
                             className={cn(
-                              "flex items-center justify-between px-6 py-4.5 transition-all duration-150 border-b border-white/5 cursor-pointer rounded-none text-left w-full outline-hidden bg-transparent",
-                              "hover:bg-white/5! hover:text-white! focus:bg-white/5! focus:text-white! text-white/80!",
+                              "flex w-full cursor-pointer items-center justify-between rounded-none border-b border-white/5 bg-transparent px-6 py-4.5 text-left outline-hidden transition-all duration-150",
+                              "text-white/80! hover:bg-white/5! hover:text-white! focus:bg-white/5! focus:text-white!",
                               idx === subItems.length - 1 && "border-b-0",
                               isSubActive
-                                ? "bg-white/10! text-white! font-bold"
+                                ? "bg-white/10! font-bold text-white!"
                                 : ""
                             )}
                           >
                             <div className="flex items-center gap-4">
-                              {SubIcon && <SubIcon className="w-5 h-5 text-white/85" />}
-                              <span className="text-sm font-semibold tracking-wide">{subItem.label}</span>
+                              {SubIcon && (
+                                <SubIcon className="h-5 w-5 text-white/85" />
+                              )}
+                              <span className="text-sm font-semibold tracking-wide">
+                                {subItem.label}
+                              </span>
                             </div>
-                            <ChevronRight className="w-4 h-4 text-white/30" />
+                            <ChevronRight className="h-4 w-4 text-white/30" />
                           </Link>
                         </NavigationMenuLink>
                       )
@@ -89,15 +95,15 @@ export function DesktopNav({ className, itemClassName, onClick }: DesktopNavProp
                 <Link
                   href={link.href || "#"}
                   className={cn(
-                    "relative py-2 text-[13px] font-extrabold tracking-wider uppercase transition-all duration-200 cursor-pointer select-none",
-                    "bg-transparent hover:bg-transparent focus:bg-transparent active:bg-transparent p-0 rounded-none border-0 text-white/80 hover:text-white",
+                    "relative cursor-pointer py-2 text-[13px] font-extrabold tracking-wider uppercase transition-all duration-200 select-none",
+                    "rounded-none border-0 bg-transparent p-0 text-white/80 hover:bg-transparent hover:text-white focus:bg-transparent active:bg-transparent",
                     isLinkActive ? "text-white" : "text-white/80",
                     itemClassName
                   )}
                 >
                   {link.label}
                   {isLinkActive && (
-                    <span className="absolute bottom-[-4px] left-0 right-0 h-[3px] bg-[#F58220] rounded-full" />
+                    <span className="absolute right-0 bottom-[-4px] left-0 h-[3px] rounded-full bg-[#F58220]" />
                   )}
                 </Link>
               </NavigationMenuLink>

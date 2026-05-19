@@ -1,7 +1,11 @@
 import * as React from "react"
 import { Handshake, PiggyBank } from "lucide-react"
 import { Container } from "@/components/layout/container"
-import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/animations"
+import {
+  FadeIn,
+  StaggerContainer,
+  StaggerItem,
+} from "@/components/ui/animations"
 import { cn } from "@/lib/utils"
 
 export interface BentoCardProps {
@@ -41,24 +45,26 @@ export function BentoCard({
       <StaggerItem>
         <div
           className={cn(
-            "bg-[#F9FAF5] border-[2.25px] border-[#064E3B] rounded-2xl md:rounded-[20px] shadow-[4.5px_4.5px_0px_0px_#064E3B]",
-            "p-6 md:p-8 h-full text-left transition-transform active:scale-[0.99] duration-150 flex",
-            Icon ? "flex-row items-center gap-5 md:gap-6" : "flex-col justify-center"
+            "rounded-2xl border-[2.25px] border-[#064E3B] bg-[#F9FAF5] shadow-[4.5px_4.5px_0px_0px_#064E3B] md:rounded-[20px]",
+            "flex h-full p-6 text-left transition-transform duration-150 active:scale-[0.99] md:p-8",
+            Icon
+              ? "flex-row items-center gap-5 md:gap-6"
+              : "flex-col justify-center"
           )}
         >
           {/* Circular Left Icon Wrapper */}
           {Icon && (
             <div
               className={cn(
-                "w-14 h-14 md:w-16 md:h-16 rounded-full shrink-0 flex items-center justify-center",
+                "flex h-14 w-14 shrink-0 items-center justify-center rounded-full md:h-16 md:w-16",
                 iconVariant === "pink"
                   ? "bg-[#E94E6B]"
-                  : "bg-[#064E3B] border-2 border-[#064E3B] shadow-[2px_2px_0px_0px_#064E3B]"
+                  : "border-2 border-[#064E3B] bg-[#064E3B] shadow-[2px_2px_0px_0px_#064E3B]"
               )}
             >
               <Icon
                 className={cn(
-                  "w-7 h-7 md:w-8 md:h-8",
+                  "h-7 w-7 md:h-8 md:w-8",
                   iconVariant === "pink" ? "text-white" : "text-[#A3E635]"
                 )}
                 strokeWidth={iconVariant === "pink" ? 2 : 2.25}
@@ -68,10 +74,20 @@ export function BentoCard({
 
           {/* Text Content block */}
           <div className="flex flex-col">
-            <h3 className={cn("font-bold text-[#1A1C19] mb-1.5 leading-snug", headingClass)}>
+            <h3
+              className={cn(
+                "mb-1.5 leading-snug font-bold text-[#1A1C19]",
+                headingClass
+              )}
+            >
               {title}
             </h3>
-            <p className={cn("leading-relaxed text-[#1A1C19] font-normal", descriptionClass)}>
+            <p
+              className={cn(
+                "leading-relaxed font-normal text-[#1A1C19]",
+                descriptionClass
+              )}
+            >
               {description}
             </p>
           </div>
@@ -93,22 +109,21 @@ export function WhyChooseUs({ className }: WhyChooseUsProps) {
   return (
     <section
       className={cn(
-        "py-16 md:py-24 bg-white w-full select-none overflow-hidden",
+        "w-full overflow-hidden bg-white py-16 select-none md:py-24",
         className
       )}
     >
       <Container>
         {/* Animated Main Section Header */}
-        <FadeIn delay={0.1} className="text-center mb-12 md:mb-20">
-          <h2 className="text-[#064E3B] text-3xl md:text-5xl font-extrabold tracking-tight leading-tight">
+        <FadeIn delay={0.1} className="mb-12 text-center md:mb-20">
+          <h2 className="text-3xl leading-tight font-extrabold tracking-tight text-[#064E3B] md:text-5xl">
             Why Choose My Claims Online
           </h2>
         </FadeIn>
 
         {/* Animated 12-Column Bento Grid */}
         <StaggerContainer>
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 max-w-6xl mx-auto">
-
+          <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 md:gap-8 lg:grid-cols-12">
             {/* ROW 1 CARD 1: No win no fee (Pink Handshake, 6 Columns) */}
             <BentoCard
               colSpanClass="lg:col-span-6"

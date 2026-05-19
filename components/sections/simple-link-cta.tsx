@@ -36,19 +36,18 @@ export function SimpleLinkCTA({
   return (
     <section
       className={cn(
-        "bg-white py-14 md:py-16 w-full select-none overflow-hidden border-none shadow-none",
+        "w-full overflow-hidden border-none bg-white py-14 shadow-none select-none md:py-16",
         className
       )}
     >
       <Container className="max-w-4xl">
         <FadeIn delay={0.1}>
-          <div className="flex flex-col items-center text-center gap-5 md:gap-6">
-            
+          <div className="flex flex-col items-center gap-5 text-center md:gap-6">
             {/* Pill Badge utilizing Shadcn Badge component */}
             <Badge
               className={cn(
-                "rounded-full h-auto px-6 py-2 font-semibold text-sm select-none pointer-events-none",
-                "bg-[#CEEBC7] text-[#022C22] border-2 border-[#022C22]",
+                "pointer-events-none h-auto rounded-full px-6 py-2 text-sm font-semibold select-none",
+                "border-2 border-[#022C22] bg-[#CEEBC7] text-[#022C22]",
                 "shadow-none hover:bg-[#CEEBC7]!"
               )}
             >
@@ -56,9 +55,7 @@ export function SimpleLinkCTA({
             </Badge>
 
             {/* Central Statement Heading */}
-            <h3
-              className="text-[#1A1C19] text-base md:text-xl lg:text-2xl font-semibold tracking-tight max-w-2xl leading-relaxed"
-            >
+            <h3 className="max-w-2xl text-base leading-relaxed font-semibold tracking-tight text-[#1A1C19] md:text-xl lg:text-2xl">
               {headingText}
             </h3>
 
@@ -66,13 +63,12 @@ export function SimpleLinkCTA({
             <Link
               href={linkHref}
               className={cn(
-                "text-[#AF2144] text-sm md:text-base lg:text-[17px] font-bold leading-none tracking-tight",
-                "underline underline-offset-[6px] decoration-[1.5px] hover:opacity-90 transition-opacity"
+                "text-sm leading-none font-bold tracking-tight text-[#AF2144] md:text-base lg:text-[17px]",
+                "underline decoration-[1.5px] underline-offset-[6px] transition-opacity hover:opacity-90"
               )}
             >
               {linkText}
             </Link>
-
           </div>
         </FadeIn>
       </Container>
@@ -80,4 +76,4 @@ export function SimpleLinkCTA({
   )
 }
 
-export default SimpleLinkCTA;
+export default SimpleLinkCTA

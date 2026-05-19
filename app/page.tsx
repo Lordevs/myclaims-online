@@ -18,7 +18,7 @@ import Hero from "@/components/sections/hero"
 
 export default function Page() {
   return (
-    <div className="w-full min-h-screen bg-[#F9FAF5] flex flex-col">
+    <div className="flex min-h-screen w-full flex-col bg-[#F9FAF5]">
       {/* High-converting Form Hero Section with 2-column checklist and lead form */}
       <FormHero
         title="Had an Accident? Need a Replacement Vehicle Fast?"
@@ -39,7 +39,10 @@ export default function Page() {
 
       <WhatWeOffer />
       <ClaimsSupport />
-      <Hero title="Electric Vehicle Accident Claim" description="If you have been involved in a non fault car accident, we manage your claim, provide a like for like Electric vehicle, and deal with insurers so you do not have to." />
+      <Hero
+        title="Electric Vehicle Accident Claim"
+        description="If you have been involved in a non fault car accident, we manage your claim, provide a like for like Electric vehicle, and deal with insurers so you do not have to."
+      />
 
       {/* Specialist Vehicle Support Section with Offset Decorative Image */}
       <ImageWithListSection
@@ -98,7 +101,7 @@ export default function Page() {
         title="Non-Fault Car Accident Claims UK"
         paragraphs={[
           "If you have been involved in a car accident that was not your fault, you have specific legal rights under UK law. Many drivers believe they must only contact their insurance company, but using a dedicated claims management service often results in better replacement vehicle options and more personalized support.",
-          "We specialize in the recovery of reasonable expenses, including car hire costs and loss of earnings. Our legal partners ensure that the negligent party's insurance company fulfills their obligations to return you to the position you were in before the incident occurred."
+          "We specialize in the recovery of reasonable expenses, including car hire costs and loss of earnings. Our legal partners ensure that the negligent party's insurance company fulfills their obligations to return you to the position you were in before the incident occurred.",
         ]}
       />
 
@@ -112,7 +115,7 @@ export default function Page() {
 
       <OneCallCTA />
       <TrustBanner />
-      
+
       {/* Detailed Neobrutalist Enquiry Contact form section */}
       <DetailedEnquirySection />
 
@@ -121,7 +124,3 @@ export default function Page() {
     </div>
   )
 }
-
-
-
-

@@ -41,7 +41,7 @@ export function ClaimsCardCTA({
   return (
     <section
       className={cn(
-        "bg-white py-16 md:py-24 w-full select-none overflow-hidden border-none shadow-none",
+        "w-full overflow-hidden border-none bg-white py-16 shadow-none select-none md:py-24",
         className
       )}
     >
@@ -50,30 +50,29 @@ export function ClaimsCardCTA({
           {/* Inner Rounded Red Card */}
           <div
             className={cn(
-              "w-full bg-[#E94E6B] border-[2.25px] border-[#064E3B] rounded-[20px] md:rounded-[24px] shadow-[4.5px_4.5px_0px_0px_#064E3B]",
-              "p-8 py-12 md:p-12 md:py-16 text-center text-white flex flex-col items-center max-w-5xl mx-auto"
+              "w-full rounded-[20px] border-[2.25px] border-[#064E3B] bg-[#E94E6B] shadow-[4.5px_4.5px_0px_0px_#064E3B] md:rounded-[24px]",
+              "mx-auto flex max-w-5xl flex-col items-center p-8 py-12 text-center text-white md:p-12 md:py-16"
             )}
           >
             {/* Bold White Heading */}
-            <h2 className="text-white text-2xl md:text-4xl lg:text-[42px] font-extrabold tracking-tight mb-4 leading-tight max-w-4xl">
+            <h2 className="mb-4 max-w-4xl text-2xl leading-tight font-extrabold tracking-tight text-white md:text-4xl lg:text-[42px]">
               {title}
             </h2>
 
             {/* Description Text */}
-            <p className="text-[#FFFFFFE6] text-sm md:text-base lg:text-2xl font-normal leading-relaxed max-w-[850px] mb-8 md:mb-10">
+            <p className="mb-8 max-w-[850px] text-sm leading-relaxed font-normal text-[#FFFFFFE6] md:mb-10 md:text-base lg:text-2xl">
               {description}
             </p>
 
             {/* Reusable Action Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-5 sm:gap-6 w-full sm:w-auto px-4 sm:px-0">
-
+            <div className="flex w-full flex-col items-center justify-center gap-5 px-4 sm:w-auto sm:flex-row sm:gap-6 sm:px-0">
               {/* White Button with offset Green Shadow */}
               <Button
                 asChild
                 className={cn(
-                  "w-[220px] sm:w-auto px-8 py-3.5 sm:px-10 rounded-xl font-bold transition-transform active:scale-[0.97] duration-150 flex items-center justify-center h-auto select-none",
-                  "bg-white text-[#E94E6B] border-[2.25px] border-[#064E3B] shadow-[4.5px_4.5px_0px_0px_#064E3B] hover:bg-slate-50!",
-                  "text-sm sm:text-base cursor-pointer"
+                  "flex h-auto w-[220px] items-center justify-center rounded-xl px-8 py-3.5 font-bold transition-transform duration-150 select-none active:scale-[0.97] sm:w-auto sm:px-10",
+                  "border-[2.25px] border-[#064E3B] bg-white text-[#E94E6B] shadow-[4.5px_4.5px_0px_0px_#064E3B] hover:bg-slate-50!",
+                  "cursor-pointer text-sm sm:text-base"
                 )}
               >
                 <Link href={primaryBtnHref}>
@@ -85,16 +84,15 @@ export function ClaimsCardCTA({
               <Button
                 asChild
                 className={cn(
-                  "w-[220px] sm:w-auto px-8 py-3.5 sm:px-10 rounded-xl font-bold transition-transform active:scale-[0.97] duration-150 flex items-center justify-center h-auto select-none",
-                  "bg-[#064E3B] text-white border-[2.25px] border-[#FFFFFF33] hover:bg-[#043326]!",
-                  "text-sm sm:text-base cursor-pointer"
+                  "flex h-auto w-[220px] items-center justify-center rounded-xl px-8 py-3.5 font-bold transition-transform duration-150 select-none active:scale-[0.97] sm:w-auto sm:px-10",
+                  "border-[2.25px] border-[#FFFFFF33] bg-[#064E3B] text-white hover:bg-[#043326]!",
+                  "cursor-pointer text-sm sm:text-base"
                 )}
               >
                 <a href={secondaryBtnHref}>
                   <span>{secondaryBtnText}</span>
                 </a>
               </Button>
-
             </div>
           </div>
         </FadeIn>
@@ -103,4 +101,4 @@ export function ClaimsCardCTA({
   )
 }
 
-export default ClaimsCardCTA;
+export default ClaimsCardCTA

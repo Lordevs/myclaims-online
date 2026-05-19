@@ -12,7 +12,11 @@ interface NavCTAButtonProps {
   ctaButton?: LinkComponent | null
 }
 
-export function NavCTAButton({ className, onClick, ctaButton }: NavCTAButtonProps) {
+export function NavCTAButton({
+  className,
+  onClick,
+  ctaButton,
+}: NavCTAButtonProps) {
   const label = ctaButton?.label ?? "Start My Claim"
   const resolvedLink = resolveStrapiLink(ctaButton)
   const href = resolvedLink === "#" ? ROUTES.START_MY_CLAIM : resolvedLink
@@ -22,14 +26,16 @@ export function NavCTAButton({ className, onClick, ctaButton }: NavCTAButtonProp
       asChild
       variant="secondary"
       className={cn(
-        "cursor-pointer font-extrabold tracking-wide text-[13px] uppercase px-6 h-11 rounded-xl shadow-md transition-all duration-300 hover:opacity-95 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97]",
+        "h-11 cursor-pointer rounded-xl px-6 text-[13px] font-extrabold tracking-wide uppercase shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:opacity-95 hover:shadow-lg active:translate-y-0 active:scale-[0.97]",
         className
       )}
     >
       <Link
         href={href}
         onClick={onClick}
-        {...(ctaButton?.isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+        {...(ctaButton?.isExternal
+          ? { target: "_blank", rel: "noopener noreferrer" }
+          : {})}
       >
         {label}
       </Link>

@@ -1,7 +1,11 @@
 import * as React from "react"
 import { LucideIcon } from "lucide-react"
 import { Container } from "@/components/layout/container"
-import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/animations"
+import {
+  FadeIn,
+  StaggerContainer,
+  StaggerItem,
+} from "@/components/ui/animations"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
@@ -76,26 +80,40 @@ export function FeaturesGridSection({
   button,
 }: FeaturesGridSectionProps) {
   return (
-    <section className={cn("py-20 md:py-28 font-sans w-full select-none overflow-hidden", bgClass)}>
+    <section
+      className={cn(
+        "w-full overflow-hidden py-20 font-sans select-none md:py-28",
+        bgClass
+      )}
+    >
       <Container>
         <div className="flex flex-col items-center">
           {/* Section Centered Heading */}
           <FadeIn delay={0.1}>
-            <h2 className={cn("text-3xl md:text-5xl font-extrabold tracking-tight text-center mb-12 md:mb-20", titleColorClass)}>
+            <h2
+              className={cn(
+                "mb-12 text-center text-3xl font-extrabold tracking-tight md:mb-20 md:text-5xl",
+                titleColorClass
+              )}
+            >
               {title}
             </h2>
           </FadeIn>
 
           {/* Staggered Grid Content */}
-          <StaggerContainer delayChildren={0.2} staggerDelay={0.08} className="w-full">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 lg:gap-10 w-full mb-12 md:mb-16">
+          <StaggerContainer
+            delayChildren={0.2}
+            staggerDelay={0.08}
+            className="w-full"
+          >
+            <div className="mb-12 grid w-full grid-cols-1 gap-6 md:mb-16 md:grid-cols-3 md:gap-8 lg:gap-10">
               {items.map((item, idx) => {
                 const Icon = item.icon
                 return (
                   <StaggerItem key={idx} className="h-full">
                     <div
                       className={cn(
-                        "flex flex-col items-center text-center transition-transform duration-200 hover:scale-[1.01] h-full",
+                        "flex h-full flex-col items-center text-center transition-transform duration-200 hover:scale-[1.01]",
                         cardRadiusClass,
                         cardPaddingClass,
                         cardBgClass,
@@ -105,20 +123,44 @@ export function FeaturesGridSection({
                     >
                       {/* Icon Rendering - Circular container wrapper vs Raw centered icon */}
                       {iconBgClass ? (
-                        <div className={cn("w-14 h-14 rounded-full flex items-center justify-center mb-6 shrink-0", iconBgClass)}>
-                          <Icon className={cn("w-6 h-6 shrink-0", iconColorClass)} strokeWidth={2.25} />
+                        <div
+                          className={cn(
+                            "mb-6 flex h-14 w-14 shrink-0 items-center justify-center rounded-full",
+                            iconBgClass
+                          )}
+                        >
+                          <Icon
+                            className={cn("h-6 w-6 shrink-0", iconColorClass)}
+                            strokeWidth={2.25}
+                          />
                         </div>
                       ) : (
-                        <Icon className={cn("w-10 h-10 mb-6 shrink-0", iconColorClass)} strokeWidth={2} />
+                        <Icon
+                          className={cn(
+                            "mb-6 h-10 w-10 shrink-0",
+                            iconColorClass
+                          )}
+                          strokeWidth={2}
+                        />
                       )}
 
                       {/* Card Header Title */}
-                      <h3 className={cn("text-lg md:text-2xl font-bold tracking-tight mb-3 leading-snug", cardHeadingColorClass)}>
+                      <h3
+                        className={cn(
+                          "mb-3 text-lg leading-snug font-bold tracking-tight md:text-2xl",
+                          cardHeadingColorClass
+                        )}
+                      >
                         {item.title}
                       </h3>
 
                       {/* Card Body Description */}
-                      <p className={cn("text-sm md:text-base font-normal leading-relaxed max-w-xs", cardDescColorClass)}>
+                      <p
+                        className={cn(
+                          "max-w-xs text-sm leading-relaxed font-normal md:text-base",
+                          cardDescColorClass
+                        )}
+                      >
                         {item.description}
                       </p>
                     </div>
@@ -134,7 +176,7 @@ export function FeaturesGridSection({
               <Button
                 asChild
                 className={cn(
-                  "px-12 py-3.5 rounded-lg font-bold text-sm md:text-base h-auto transition-transform active:scale-[0.97] duration-150 cursor-pointer select-none",
+                  "h-auto cursor-pointer rounded-lg px-12 py-3.5 text-sm font-bold transition-transform duration-150 select-none active:scale-[0.97] md:text-base",
                   button.bgClass || "bg-[#E6405E]",
                   button.borderClass || "border border-white",
                   button.textColorClass || "text-white",

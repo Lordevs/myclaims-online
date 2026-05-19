@@ -38,7 +38,7 @@ export function InfoBanner({
   return (
     <section
       className={cn(
-        "py-16 md:py-20 border-t-[2.25px] border-b-[2.25px] border-[#064E3B] w-full font-sans select-none overflow-hidden",
+        "w-full overflow-hidden border-t-[2.25px] border-b-[2.25px] border-[#064E3B] py-16 font-sans select-none md:py-20",
         sectionBg,
         className
       )}
@@ -49,7 +49,7 @@ export function InfoBanner({
           <FadeIn delay={0.1}>
             <h2
               className={cn(
-                "text-2xl md:text-4xl lg:text-[40px] font-extrabold tracking-tight mb-6 md:mb-8 leading-tight",
+                "mb-6 text-2xl leading-tight font-extrabold tracking-tight md:mb-8 md:text-4xl lg:text-[40px]",
                 headingColor
               )}
             >
@@ -64,7 +64,7 @@ export function InfoBanner({
                 <p
                   key={idx}
                   className={cn(
-                    "text-sm md:text-base lg:text-[17px] font-normal leading-relaxed max-w-[850px] mx-auto",
+                    "mx-auto max-w-[850px] text-sm leading-relaxed font-normal md:text-base lg:text-[17px]",
                     paraColor
                   )}
                 >
@@ -79,4 +79,4 @@ export function InfoBanner({
   )
 }
 
-export default InfoBanner;
+export default InfoBanner

@@ -1,4 +1,4 @@
-'use client'
+"use client"
 
 import * as React from "react"
 import { LockKeyhole, Clock, ShieldCheck } from "lucide-react"
@@ -11,7 +11,12 @@ import { Separator } from "../ui/separator"
 
 export interface DetailedEnquiryFormProps {
   /** Custom submit handler */
-  onSubmit?: (data: { name: string; email: string; phone: string; message: string }) => void
+  onSubmit?: (data: {
+    name: string
+    email: string
+    phone: string
+    message: string
+  }) => void
   /** Additional styling class */
   className?: string
 }
@@ -47,7 +52,9 @@ export function DetailedEnquiryForm({
       if (onSubmit) {
         onSubmit(formData)
       } else {
-        alert(`Thank you, ${formData.name}! Your claims enquiry has been sent. We'll be in touch shortly.`)
+        alert(
+          `Thank you, ${formData.name}! Your claims enquiry has been sent. We'll be in touch shortly.`
+        )
       }
       setFormData({ name: "", email: "", phone: "", message: "" })
       setIsSubmitting(false)
@@ -58,19 +65,22 @@ export function DetailedEnquiryForm({
     <form
       onSubmit={handleSubmit}
       className={cn(
-        "w-full bg-white rounded-[24px] flex flex-col text-left overflow-hidden",
+        "flex w-full flex-col overflow-hidden rounded-[24px] bg-white text-left",
         "border-[2.25px] border-[#0F172A]",
         "shadow-[4.5px_4.5px_0px_0px_#1A1C19]",
         className
       )}
     >
       {/* Form Inputs Content Padding */}
-      <div className="p-6 sm:p-8 flex flex-col gap-5">
+      <div className="flex flex-col gap-5 p-6 sm:p-8">
         {/* Name and Email side-by-side on larger screens */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {/* Full Name */}
           <div className="flex flex-col">
-            <Label htmlFor="detail-name" className="text-[#0F172A] font-bold text-sm mb-2 leading-none">
+            <Label
+              htmlFor="detail-name"
+              className="mb-2 text-sm leading-none font-bold text-[#0F172A]"
+            >
               Name
             </Label>
             <Input
@@ -79,17 +89,22 @@ export function DetailedEnquiryForm({
               type="text"
               placeholder="John Doe"
               value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
               className={cn(
-                "w-full h-auto px-4 py-3 rounded-lg text-sm transition-colors text-[#0F172A] placeholder:text-[#888888] outline-none",
-                "border-[2.25px] border-[#0F172A] bg-white focus-visible:ring-0 focus-visible:border-[#E94E6B]"
+                "h-auto w-full rounded-lg px-4 py-3 text-sm text-[#0F172A] transition-colors outline-none placeholder:text-[#888888]",
+                "border-[2.25px] border-[#0F172A] bg-white focus-visible:border-[#E94E6B] focus-visible:ring-0"
               )}
             />
           </div>
 
           {/* Email Address */}
           <div className="flex flex-col">
-            <Label htmlFor="detail-email" className="text-[#0F172A] font-bold text-sm mb-2 leading-none">
+            <Label
+              htmlFor="detail-email"
+              className="mb-2 text-sm leading-none font-bold text-[#0F172A]"
+            >
               Email
             </Label>
             <Input
@@ -98,10 +113,12 @@ export function DetailedEnquiryForm({
               type="email"
               placeholder="john@example.com"
               value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
               className={cn(
-                "w-full h-auto px-4 py-3 rounded-lg text-sm transition-colors text-[#0F172A] placeholder:text-[#888888] outline-none",
-                "border-[2.25px] border-[#0F172A] bg-white focus-visible:ring-0 focus-visible:border-[#E94E6B]"
+                "h-auto w-full rounded-lg px-4 py-3 text-sm text-[#0F172A] transition-colors outline-none placeholder:text-[#888888]",
+                "border-[2.25px] border-[#0F172A] bg-white focus-visible:border-[#E94E6B] focus-visible:ring-0"
               )}
             />
           </div>
@@ -109,7 +126,10 @@ export function DetailedEnquiryForm({
 
         {/* Phone Number */}
         <div className="flex flex-col">
-          <Label htmlFor="detail-phone" className="text-[#0F172A] font-bold text-sm mb-2 leading-none">
+          <Label
+            htmlFor="detail-phone"
+            className="mb-2 text-sm leading-none font-bold text-[#0F172A]"
+          >
             Phone Number
           </Label>
           <Input
@@ -118,17 +138,22 @@ export function DetailedEnquiryForm({
             type="tel"
             placeholder="07123 456 789"
             value={formData.phone}
-            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, phone: e.target.value })
+            }
             className={cn(
-              "w-full h-auto px-4 py-3 rounded-lg text-sm transition-colors text-[#0F172A] placeholder:text-[#888888] outline-none",
-              "border-[2.25px] border-[#0F172A] bg-white focus-visible:ring-0 focus-visible:border-[#E94E6B]"
+              "h-auto w-full rounded-lg px-4 py-3 text-sm text-[#0F172A] transition-colors outline-none placeholder:text-[#888888]",
+              "border-[2.25px] border-[#0F172A] bg-white focus-visible:border-[#E94E6B] focus-visible:ring-0"
             )}
           />
         </div>
 
         {/* Brief Message / Claim Details */}
         <div className="flex flex-col">
-          <Label htmlFor="detail-message" className="text-[#0F172A] font-bold text-sm mb-2 leading-none">
+          <Label
+            htmlFor="detail-message"
+            className="mb-2 text-sm leading-none font-bold text-[#0F172A]"
+          >
             Brief Message / Claim Details
           </Label>
           <Textarea
@@ -136,11 +161,13 @@ export function DetailedEnquiryForm({
             id="detail-message"
             placeholder="Tell us about your incident..."
             value={formData.message}
-            onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, message: e.target.value })
+            }
             rows={4}
             className={cn(
-              "w-full px-4 py-3 rounded-lg text-sm transition-colors text-[#0F172A] placeholder:text-[#888888] outline-none min-h-[100px]",
-              "border-[2.25px] border-[#0F172A] bg-white focus-visible:ring-0 focus-visible:border-[#E94E6B]"
+              "min-h-[100px] w-full rounded-lg px-4 py-3 text-sm text-[#0F172A] transition-colors outline-none placeholder:text-[#888888]",
+              "border-[2.25px] border-[#0F172A] bg-white focus-visible:border-[#E94E6B] focus-visible:ring-0"
             )}
           />
         </div>
@@ -150,9 +177,9 @@ export function DetailedEnquiryForm({
           type="submit"
           disabled={isSubmitting}
           className={cn(
-            "w-full h-auto py-3.5 sm:py-4 rounded-xl font-extrabold text-[16px] sm:text-[17px] tracking-wide transition-all active:scale-[0.98] duration-150 cursor-pointer text-white flex items-center justify-center gap-2 select-none",
-            "bg-[#E94E6B] hover:bg-[#d0425c]! text-white",
-            "shadow-[4.5px_4.5px_0px_0px_#1A1C19] disabled:opacity-50 mt-2"
+            "flex h-auto w-full cursor-pointer items-center justify-center gap-2 rounded-xl py-3.5 text-[16px] font-extrabold tracking-wide text-white transition-all duration-150 select-none active:scale-[0.98] sm:py-4 sm:text-[17px]",
+            "bg-[#E94E6B] text-white hover:bg-[#d0425c]!",
+            "mt-2 shadow-[4.5px_4.5px_0px_0px_#1A1C19] disabled:opacity-50"
           )}
         >
           <span>{isSubmitting ? "Submitting..." : "Submit Enquiry"}</span>
@@ -162,33 +189,32 @@ export function DetailedEnquiryForm({
       {/* Footer Security Badges Block inside the card */}
       <div
         className={cn(
-          "w-full px-6 py-4 flex flex-row flex-wrap items-center justify-center gap-y-2 gap-x-4 md:gap-x-6 text-[#594143]",
+          "flex w-full flex-row flex-wrap items-center justify-center gap-x-4 gap-y-2 px-6 py-4 text-[#594143] md:gap-x-6",
           "rounded-b-[21px]"
         )}
       >
-        <Separator className="bg-[#E2E2E2] mb-4" />
+        <Separator className="mb-4 bg-[#E2E2E2]" />
         <div className="flex items-center gap-1.5">
-          <LockKeyhole className="w-4 h-4 shrink-0 text-[#594143]" />
-          <span className="text-base font-bold leading-none tracking-tight">
+          <LockKeyhole className="h-4 w-4 shrink-0 text-[#594143]" />
+          <span className="text-base leading-none font-bold tracking-tight">
             No obligation
           </span>
         </div>
         <div className="flex items-center gap-1.5">
-          <Clock className="w-4 h-4 shrink-0 text-[#594143]" />
-          <span className="text-base font-bold leading-none tracking-tight">
+          <Clock className="h-4 w-4 shrink-0 text-[#594143]" />
+          <span className="text-base leading-none font-bold tracking-tight">
             Free consultation
           </span>
         </div>
         <div className="flex items-center gap-1.5">
-          <ShieldCheck className="w-4 h-4 shrink-0 text-[#594143]" />
-          <span className="text-base font-bold leading-none tracking-tight">
+          <ShieldCheck className="h-4 w-4 shrink-0 text-[#594143]" />
+          <span className="text-base leading-none font-bold tracking-tight">
             Data secure & never shared
           </span>
         </div>
       </div>
-
     </form>
   )
 }
 
-export default DetailedEnquiryForm;
+export default DetailedEnquiryForm

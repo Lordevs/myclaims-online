@@ -1,11 +1,11 @@
-import Image, { type ImageProps } from "next/image";
-import { getStrapiMedia } from "@/lib/strapi/utils";
-import type { StrapiMediaComponent } from "@/lib/strapi/types/media";
+import Image, { type ImageProps } from "next/image"
+import { getStrapiMedia } from "@/lib/strapi/utils"
+import type { StrapiMediaComponent } from "@/lib/strapi/types/media"
 
 interface StrapiImageProps extends Omit<ImageProps, "src" | "alt"> {
-  image: StrapiMediaComponent | null | undefined;
-  alt?: string;
-  fallbackSrc?: string;
+  image: StrapiMediaComponent | null | undefined
+  alt?: string
+  fallbackSrc?: string
 }
 
 /**
@@ -21,17 +21,15 @@ export function StrapiImage({
   fallbackSrc,
   ...props
 }: StrapiImageProps) {
-  const src = getStrapiMedia(image?.file?.url) ?? fallbackSrc;
+  const src = getStrapiMedia(image?.file?.url) ?? fallbackSrc
 
-  if (!src) return null;
+  if (!src) return null
 
   const resolvedAlt =
-    alt ?? image?.file?.alternativeText ?? image?.file?.name ?? "";
+    alt ?? image?.file?.alternativeText ?? image?.file?.name ?? ""
 
-  const width =
-    (props.width as number) ?? image?.file?.width ?? undefined;
-  const height =
-    (props.height as number) ?? image?.file?.height ?? undefined;
+  const width = (props.width as number) ?? image?.file?.width ?? undefined
+  const height = (props.height as number) ?? image?.file?.height ?? undefined
 
   return (
     <Image
@@ -42,5 +40,5 @@ export function StrapiImage({
       unoptimized={process.env.NODE_ENV === "development" || props.unoptimized}
       {...props}
     />
-  );
+  )
 }

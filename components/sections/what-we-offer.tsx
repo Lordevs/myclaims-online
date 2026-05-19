@@ -1,5 +1,12 @@
 import * as React from "react"
-import { HeartHandshake, Car, Wrench, RefreshCw, PoundSterling, Key } from "lucide-react"
+import {
+  HeartHandshake,
+  Car,
+  Wrench,
+  RefreshCw,
+  PoundSterling,
+  Key,
+} from "lucide-react"
 import { FeaturesGridSection, FeatureCardItem } from "./features-grid-section"
 
 /**
@@ -12,22 +19,26 @@ export function WhatWeOffer() {
     {
       icon: HeartHandshake,
       title: "Personal Injury Support",
-      description: "Expert guidance to help you and your passengers claim compensation for any injuries sustained.",
+      description:
+        "Expert guidance to help you and your passengers claim compensation for any injuries sustained.",
     },
     {
       icon: Car,
       title: "Like-for-Like Replacement Vehicles",
-      description: "Get a similar replacement vehicle to keep you moving without disruption.",
+      description:
+        "Get a similar replacement vehicle to keep you moving without disruption.",
     },
     {
       icon: Wrench,
       title: "Approved Repairs",
-      description: "Your vehicle is repaired by trusted, certified professionals to the highest standards.",
+      description:
+        "Your vehicle is repaired by trusted, certified professionals to the highest standards.",
     },
     {
       icon: RefreshCw,
       title: "24/7 Recovery",
-      description: "Round-the-clock vehicle recovery whenever and wherever you need it.",
+      description:
+        "Round-the-clock vehicle recovery whenever and wherever you need it.",
     },
     {
       icon: PoundSterling,
@@ -37,7 +48,8 @@ export function WhatWeOffer() {
     {
       icon: Key,
       title: "Fully Managed Claim",
-      description: "We manage your claim so you don't have to and keep you updated along the way.",
+      description:
+        "We manage your claim so you don't have to and keep you updated along the way.",
     },
   ]
 

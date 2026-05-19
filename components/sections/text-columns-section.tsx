@@ -30,7 +30,7 @@ export function TextColumnsSection({
   return (
     <section
       className={cn(
-        "bg-white py-16 md:py-20 w-full select-none overflow-hidden",
+        "w-full overflow-hidden bg-white py-16 select-none md:py-20",
         "border-b-[1.13px] border-[#E2E3DE]",
         className
       )}
@@ -38,27 +38,23 @@ export function TextColumnsSection({
       <Container>
         <FadeIn delay={0.1}>
           <div className="flex flex-col text-left">
-
             {/* Bold Left-aligned Heading */}
-            <h2 className="text-[#022C22] text-2xl md:text-3xl lg:text-[48px] font-bold tracking-tight leading-tight mb-8 md:mb-10">
+            <h2 className="mb-8 text-2xl leading-tight font-bold tracking-tight text-[#022C22] md:mb-10 md:text-3xl lg:text-[48px]">
               {title}
             </h2>
 
             {/* Split Paragraph Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 w-full">
-
+            <div className="grid w-full grid-cols-1 gap-8 md:grid-cols-2 md:gap-12 lg:gap-16">
               {/* Left Column Text */}
-              <p className="text-[#594143] text-sm md:text-base lg:text-2xl leading-relaxed font-normal">
+              <p className="text-sm leading-relaxed font-normal text-[#594143] md:text-base lg:text-2xl">
                 {col1Text}
               </p>
 
               {/* Right Column Text */}
-              <p className="text-[#594143] text-sm md:text-base lg:text-2xl leading-relaxed font-normal">
+              <p className="text-sm leading-relaxed font-normal text-[#594143] md:text-base lg:text-2xl">
                 {col2Text}
               </p>
-
             </div>
-
           </div>
         </FadeIn>
       </Container>
@@ -66,4 +62,4 @@ export function TextColumnsSection({
   )
 }
 
-export default TextColumnsSection;
+export default TextColumnsSection

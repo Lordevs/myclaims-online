@@ -30,14 +30,17 @@ export function MobileNav({ ctaButton }: MobileNavProps) {
           <span className="sr-only">Toggle menu</span>
         </Button>
       </SheetTrigger>
-      <SheetContent side="right" className="bg-primary border-white/10 text-white w-[300px] sm:w-[400px] p-0 flex flex-col">
-        <SheetHeader className="text-left px-6 pt-6">
+      <SheetContent
+        side="right"
+        className="flex w-[300px] flex-col border-white/10 bg-primary p-0 text-white sm:w-[400px]"
+      >
+        <SheetHeader className="px-6 pt-6 text-left">
           <SheetTitle className="text-left">
             <Logo />
           </SheetTitle>
         </SheetHeader>
 
-        <div className="relative flex-1 overflow-hidden px-6 mt-8">
+        <div className="relative mt-8 flex-1 overflow-hidden px-6">
           <MobileNavContent
             className="flex-col items-start gap-8"
             itemClassName="text-xl font-medium text-white/80 hover:text-white transition-colors"
@@ -45,7 +48,7 @@ export function MobileNav({ ctaButton }: MobileNavProps) {
           />
         </div>
 
-        <div className="p-6 mt-auto border-t border-white/10 bg-primary">
+        <div className="mt-auto border-t border-white/10 bg-primary p-6">
           <NavCTAButton
             className="w-full"
             onClick={() => setIsOpen(false)}

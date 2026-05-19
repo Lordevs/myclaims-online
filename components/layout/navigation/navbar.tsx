@@ -27,8 +27,10 @@ export function Navbar({ globalData }: NavbarProps) {
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 font-heading",
-        scrolled ? "bg-primary/95 backdrop-blur-md py-4 shadow-md" : "bg-primary py-5 border-b border-white/5"
+        "fixed top-0 right-0 left-0 z-50 font-heading transition-all duration-300",
+        scrolled
+          ? "bg-primary/95 py-4 shadow-md backdrop-blur-md"
+          : "border-b border-white/5 bg-primary py-5"
       )}
     >
       <Container className="flex items-center justify-between md:px-0">
@@ -41,9 +43,7 @@ export function Navbar({ globalData }: NavbarProps) {
             itemClassName="text-white/80 hover:text-white"
           />
           <div className="flex items-center gap-4">
-            <NavCTAButton
-              ctaButton={ctaButton}
-            />
+            <NavCTAButton ctaButton={ctaButton} />
 
             {/* Mobile Navigation */}
             <MobileNav ctaButton={ctaButton} />

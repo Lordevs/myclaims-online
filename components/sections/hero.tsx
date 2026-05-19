@@ -54,35 +54,41 @@ export function Hero({
 }: HeroProps) {
   return (
     <section
-      className={cn("w-full pt-20 pb-16 md:pt-28 md:pb-24 overflow-hidden text-left relative", className)}
+      className={cn(
+        "relative w-full overflow-hidden pt-20 pb-16 text-left md:pt-28 md:pb-24",
+        className
+      )}
       style={{
-        background: "linear-gradient(109.99deg, #F4F8E5 0%, #F4F8E5 35%, #F4F8E5 70%, #FFFFFF 100%)",
+        background:
+          "linear-gradient(109.99deg, #F4F8E5 0%, #F4F8E5 35%, #F4F8E5 70%, #FFFFFF 100%)",
       }}
     >
       <Container className="relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-
+        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
           {/* LEFT COLUMN: Content, List and Actions */}
-          <div className="col-span-1 lg:col-span-7 flex flex-col justify-center">
+          <div className="col-span-1 flex flex-col justify-center lg:col-span-7">
             <FadeIn delay={0.1}>
               {/* Bold Pine Green Heading */}
-              <h1 className="text-[#064E3B] text-3xl md:text-5xl lg:text-[54px] font-extrabold tracking-tight leading-[1.1] mb-6">
+              <h1 className="mb-6 text-3xl leading-[1.1] font-extrabold tracking-tight text-[#064E3B] md:text-5xl lg:text-[54px]">
                 {title}
               </h1>
 
               {/* Sub-paragraph description */}
-              <p className="text-[#444444] text-sm md:text-base lg:text-[17px] leading-relaxed mb-8 max-w-2xl font-normal">
+              <p className="mb-8 max-w-2xl text-sm leading-relaxed font-normal text-[#444444] md:text-base lg:text-[17px]">
                 {description}
               </p>
 
               {/* Vertical Check-mark Item List */}
-              <div className="flex flex-col gap-3.5 mb-10">
+              <div className="mb-10 flex flex-col gap-3.5">
                 {listItems.map((item, idx) => (
                   <div key={idx} className="flex items-center gap-3.5">
-                    <div className="w-6 h-6 rounded-full shrink-0 flex items-center justify-center bg-[#1B6E3F] shadow-none">
-                      <Check className="w-3.5 h-3.5 text-white" strokeWidth={3} />
+                    <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#1B6E3F] shadow-none">
+                      <Check
+                        className="h-3.5 w-3.5 text-white"
+                        strokeWidth={3}
+                      />
                     </div>
-                    <span className="text-[#111111] text-sm md:text-base font-semibold leading-none">
+                    <span className="text-sm leading-none font-semibold text-[#111111] md:text-base">
                       {item}
                     </span>
                   </div>
@@ -95,9 +101,9 @@ export function Hero({
                 <Button
                   asChild
                   className={cn(
-                    "px-8 py-3.5 sm:px-10 rounded-xl font-bold transition-transform active:scale-[0.97] duration-150 flex items-center justify-center h-auto cursor-pointer",
-                    "bg-[#E94E6B] text-white border-2 border-[#064E3B] shadow-[4px_4px_0px_0px_#064E3B] hover:bg-[#d0425c]!",
-                    "text-sm sm:text-base select-none"
+                    "flex h-auto cursor-pointer items-center justify-center rounded-xl px-8 py-3.5 font-bold transition-transform duration-150 active:scale-[0.97] sm:px-10",
+                    "border-2 border-[#064E3B] bg-[#E94E6B] text-white shadow-[4px_4px_0px_0px_#064E3B] hover:bg-[#d0425c]!",
+                    "text-sm select-none sm:text-base"
                   )}
                 >
                   <Link href={primaryBtnHref}>
@@ -109,9 +115,9 @@ export function Hero({
                 <Button
                   asChild
                   className={cn(
-                    "px-8 py-3.5 sm:px-10 rounded-xl font-bold transition-transform active:scale-[0.97] duration-150 flex items-center justify-center h-auto cursor-pointer",
-                    "bg-white text-[#064E3B] border-2 border-[#064E3B] hover:bg-slate-50! shadow-none",
-                    "text-sm sm:text-base select-none"
+                    "flex h-auto cursor-pointer items-center justify-center rounded-xl px-8 py-3.5 font-bold transition-transform duration-150 active:scale-[0.97] sm:px-10",
+                    "border-2 border-[#064E3B] bg-white text-[#064E3B] shadow-none hover:bg-slate-50!",
+                    "text-sm select-none sm:text-base"
                   )}
                 >
                   <a href={secondaryBtnHref}>
@@ -123,19 +129,19 @@ export function Hero({
           </div>
 
           {/* RIGHT COLUMN: Interactive Rotated Frame Illustration */}
-          <div className="col-span-1 lg:col-span-5 relative">
+          <div className="relative col-span-1 lg:col-span-5">
             <FadeIn delay={0.25}>
-              <div className="relative w-full max-w-[600px] lg:max-w-none aspect-[1.15/1] mx-auto">
+              <div className="relative mx-auto aspect-[1.15/1] w-full max-w-[600px] lg:max-w-none">
                 {/* Lime Decorative rotated div behind */}
                 <div
                   className={cn(
-                    "absolute -inset-4 bg-[#CEEE8D] border-[1.81px] border-[#064E3B] rounded-xl",
-                    "-rotate-2 transform translate-x-1 translate-y-0 z-0"
+                    "absolute -inset-4 rounded-xl border-[1.81px] border-[#064E3B] bg-[#CEEE8D]",
+                    "z-0 translate-x-1 translate-y-0 -rotate-2 transform"
                   )}
                 />
 
                 {/* Front Image Canvas */}
-                <div className="absolute inset-0 bg-white rounded-xl overflow-hidden z-10">
+                <div className="absolute inset-0 z-10 overflow-hidden rounded-xl bg-white">
                   <Image
                     src={imageSrc}
                     alt={imageAlt}
@@ -148,11 +154,10 @@ export function Hero({
               </div>
             </FadeIn>
           </div>
-
         </div>
       </Container>
     </section>
   )
 }
 
-export default Hero;
+export default Hero

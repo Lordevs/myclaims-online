@@ -16,4 +16,4 @@ export const ROUTES = {
     COOKIE_POLICY: "/cookie-policy",
     COMPLAINTS: "/complaints",
   },
-} as const;
+} as const
