@@ -10,12 +10,14 @@ function ThemeProvider({
   return (
     <NextThemesProvider
       attribute="class"
-      defaultTheme="system"
-      enableSystem
+      defaultTheme="light"
+      forcedTheme="light"
+      enableSystem={false}
       disableTransitionOnChange
       {...props}
     >
-      <ThemeHotkey />
+      {/* TODO: Re-add ThemeHotkey when we have a theme switcher */}
+      {/* <ThemeHotkey /> */}
       {children}
     </NextThemesProvider>
   )
@@ -34,6 +36,7 @@ function isTypingTarget(target: EventTarget | null) {
   )
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function ThemeHotkey() {
   const { resolvedTheme, setTheme } = useTheme()
 
