@@ -9,7 +9,6 @@ import { cn } from "@/lib/utils"
 import { Separator } from "@/components/ui/separator"
 import type { FAQSection } from "@/lib/strapi/types/sections"
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/animations"
-import { ChevronDown } from "lucide-react"
 
 const defaultFaqData = [
   {
