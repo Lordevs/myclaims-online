@@ -1,0 +1,19 @@
+import { cn } from "@/lib/utils"
+
+interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
+  children: React.ReactNode
+}
+
+/**
+ * A responsive container component that centers content and provides consistent horizontal padding.
+ */
+export function Container({ children, className, ...props }: ContainerProps) {
+  return (
+    <div 
+      className={cn("mx-auto w-full max-w-7xl px-4 md:px-6", className)} 
+      {...props}
+    >
+      {children}
+    </div>
+  )
+}
