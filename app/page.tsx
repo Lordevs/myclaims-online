@@ -11,12 +11,33 @@ import { ImageWithListSection } from "@/components/sections/image-with-list-sect
 import { ClaimsCardCTA } from "@/components/sections/claims-card-cta"
 import { SimpleLinkCTA } from "@/components/sections/simple-link-cta"
 import { TextColumnsSection } from "@/components/sections/text-columns-section"
+import { FormHero } from "@/components/sections/form-hero"
+import Hero from "@/components/sections/hero"
 
 export default function Page() {
   return (
     <div className="w-full min-h-screen bg-[#F9FAF5] flex flex-col">
+      {/* High-converting Form Hero Section with 2-column checklist and lead form */}
+      <FormHero
+        title="Had an Accident? Need a Replacement Vehicle Fast?"
+        description="We manage your entire claim, provide a like for like replacement vehicle, and deal with insurers so you don't have to."
+        listItems={[
+          "Car, Taxi, Motorbike, Cycle & E-Scooter Claims",
+          "Replacement Vehicles Within 24 Hours",
+          "Approved Repairs at Trusted Garages",
+          "No Upfront Costs & Nationwide Service",
+          "Expert Claims Management & Support",
+          "Direct Insurance Company Liaison",
+          "Vehicle Recovery & Towing Services",
+          "Free Legal Consultation & Advice",
+        ]}
+        imageSrc="/form-hero-placeholder.avif"
+        imageAlt="Instant Vehicle Replacement Diagram"
+      />
+
       <WhatWeOffer />
       <ClaimsSupport />
+      <Hero title="Electric Vehicle Accident Claim" description="If you have been involved in a non fault car accident, we manage your claim, provide a like for like Electric vehicle, and deal with insurers so you do not have to." />
 
       {/* Specialist Vehicle Support Section with Offset Decorative Image */}
       <ImageWithListSection
@@ -38,7 +59,7 @@ export default function Page() {
         col1Text="For most drivers, an accident is an inconvenience. For a taxi or private hire driver, it's a potential disaster for their livelihood. Our mission is to minimize downtime and ensure that professional drivers are not unfairly penalized for non-fault accidents. Whether you operate in London, Manchester, Birmingham, or any other UK city, our nationwide network provides local support with the power of a national organization."
         col2Text="Minimizing downtime is our priority. We understand that every day your car is in the garage is a day you aren't earning. That's why we focus on immediate replacement vehicle provision and rapid repair authorization. Our dedicated handlers are experts in the specific requirements of licensing authorities, ensuring that your replacement vehicle is fully compliant and ready for work the moment it arrives."
       />
-      
+
       {/* Green Variant: Car Accident Claims Made Simple */}
       <InfoBanner
         variant="green"
