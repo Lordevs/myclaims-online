@@ -5,11 +5,13 @@ import { WhatWeOffer } from "@/components/sections/what-we-offer"
 import { WhyChooseUs } from "@/components/sections/why-choose-us"
 import { FAQSection } from "@/components/sections/faq"
 import { GetInTouch } from "@/components/sections/get-in-touch"
+import { ClaimsSupport } from "@/components/sections/claims-support"
 
 export default function Page() {
   return (
     <div className="w-full min-h-screen bg-[#F9FAF5] flex flex-col">
       <WhatWeOffer />
+      <ClaimsSupport />
       <HowItWorks />
       <WhyChooseUs />
       <OneCallCTA />
@@ -19,3 +21,4 @@ export default function Page() {
     </div>
   )
 }
+
