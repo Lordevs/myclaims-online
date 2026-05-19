@@ -12,6 +12,7 @@ import { ClaimsCardCTA } from "@/components/sections/claims-card-cta"
 import { SimpleLinkCTA } from "@/components/sections/simple-link-cta"
 import { TextColumnsSection } from "@/components/sections/text-columns-section"
 import { FormHero } from "@/components/sections/form-hero"
+import { DetailedEnquirySection } from "@/components/sections/detailed-enquiry-section"
 import Hero from "@/components/sections/hero"
 
 export default function Page() {
@@ -101,6 +102,10 @@ export default function Page() {
 
       <OneCallCTA />
       <TrustBanner />
+      
+      {/* Detailed Neobrutalist Enquiry Contact form section */}
+      <DetailedEnquirySection />
+
       <FAQSection />
       <GetInTouch />
     </div>

@@ -2,7 +2,7 @@ import Image from "next/image"
 import { Check } from "lucide-react"
 import { Container } from "@/components/layout/container"
 import { FadeIn } from "@/components/ui/animations"
-import { EnquiryForm } from "./enquiry-form"
+import { EnquiryForm } from "@/components/forms/enquiry-form"
 import { cn } from "@/lib/utils"
 
 export interface FormHeroProps {
