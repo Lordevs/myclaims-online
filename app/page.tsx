@@ -7,12 +7,27 @@ import { FAQSection } from "@/components/sections/faq"
 import { GetInTouch } from "@/components/sections/get-in-touch"
 import { ClaimsSupport } from "@/components/sections/claims-support"
 import { InfoBanner } from "@/components/sections/info-banner"
+import { ImageWithListSection } from "@/components/sections/image-with-list-section"
 
 export default function Page() {
   return (
     <div className="w-full min-h-screen bg-[#F9FAF5] flex flex-col">
       <WhatWeOffer />
       <ClaimsSupport />
+
+      {/* Specialist Vehicle Support Section with Offset Decorative Image */}
+      <ImageWithListSection
+        title="Specialist Car Vehicle Support"
+        imageSrc="/car_claims_illustration.png"
+        imageAlt="Specialist Car Vehicle Support Collision Graphic"
+        listItems={[
+          "Safe handling of high voltage battery systems",
+          "Recovery by trained EV specialists",
+          "Repairs by EV approved centres",
+          "Correct assessment of battery damage",
+          "Compliance with manufacturer standards",
+        ]}
+      />
       
       {/* Green Variant: Car Accident Claims Made Simple */}
       <InfoBanner
@@ -41,5 +56,6 @@ export default function Page() {
     </div>
   )
 }
+
 
 
