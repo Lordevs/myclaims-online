@@ -1,5 +1,6 @@
 import { Phone, Mail, Clock } from "lucide-react"
 import { Container } from "@/components/layout/container"
+import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/animations"
 
 /**
  * High-fidelity "Get In Touch" contact section built in a Neo-Brutalism design style.
@@ -37,50 +38,54 @@ export function GetInTouch() {
             boxShadow: "4.5px 4.5px 0px 0px #1A1C19",
           }}
         >
-          {/* Section Heading */}
-          <h2 className="text-[#0F172A] text-3xl md:text-5xl font-extrabold tracking-tight leading-none mb-3.5">
-            Get In Touch
-          </h2>
+          {/* Section Heading & Tagline wrapped in FadeIn */}
+          <FadeIn delay={0.1} className="flex flex-col items-center">
+            <h2 className="text-[#0F172A] text-3xl md:text-5xl font-extrabold tracking-tight leading-none mb-3.5">
+              Get In Touch
+            </h2>
+            <p className="text-[#594143] text-sm md:text-lg font-normal leading-relaxed md:mb-10 mb-5 max-w-lg">
+              Available 24/7 for all your claims questions and support.
+            </p>
+          </FadeIn>
 
-          {/* Section Description */}
-          <p className="text-[#594143] text-sm md:text-lg font-normal leading-relaxed md:mb-10 mb-5 max-w-lg">
-            Available 24/7 for all your claims questions and support.
-          </p>
+          {/* Grid of Contact Elements with Stagger entry */}
+          <StaggerContainer delayChildren={0.2} staggerDelay={0.1} className="w-full">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 lg:gap-10 w-full">
+              {contactItems.map((item, idx) => {
+                const Icon = item.icon
+                return (
+                  <StaggerItem key={idx}>
+                    <div className="flex flex-col items-center group">
+                      {/* Premium Circle Icon Link */}
+                      <a
+                        href={item.href}
+                        target={item.href.startsWith("http") ? "_blank" : undefined}
+                        rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                        className="w-14 h-14 rounded-full bg-[#ECFCCB] border-[2.25px] border-[#0F172A] flex items-center justify-center text-[#0F172A] transition-transform duration-200 group-hover:scale-105 active:scale-95 mb-4"
+                      >
+                        <Icon className="w-5 h-5" strokeWidth={2.25} />
+                      </a>
 
-          {/* Grid of Contact Elements */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 lg:gap-10 w-full">
-            {contactItems.map((item, idx) => {
-              const Icon = item.icon
-              return (
-                <div key={idx} className="flex flex-col items-center group">
-                  {/* Premium Circle Icon Link */}
-                  <a
-                    href={item.href}
-                    target={item.href.startsWith("http") ? "_blank" : undefined}
-                    rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                    className="w-14 h-14 rounded-full bg-[#ECFCCB] border-[2.25px] border-[#0F172A] flex items-center justify-center text-[#0F172A] transition-transform duration-200 group-hover:scale-105 active:scale-95 mb-4"
-                  >
-                    <Icon className="w-5 h-5" strokeWidth={2.25} />
-                  </a>
+                      {/* Value Link */}
+                      <a
+                        href={item.href}
+                        target={item.href.startsWith("http") ? "_blank" : undefined}
+                        rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                        className="text-[#0F172A] text-sm md:text-lg font-bold hover:underline tracking-tight mb-1"
+                      >
+                        {item.value}
+                      </a>
 
-                  {/* Value Link */}
-                  <a
-                    href={item.href}
-                    target={item.href.startsWith("http") ? "_blank" : undefined}
-                    rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                    className="text-[#0F172A] text-sm md:text-lg font-bold hover:underline tracking-tight mb-1"
-                  >
-                    {item.value}
-                  </a>
-
-                  {/* Description Label */}
-                  <span className="text-[#594143] text-xs md:text-base font-normal leading-none">
-                    {item.label}
-                  </span>
-                </div>
-              )
-            })}
-          </div>
+                      {/* Description Label */}
+                      <span className="text-[#594143] text-xs md:text-base font-normal leading-none">
+                        {item.label}
+                      </span>
+                    </div>
+                  </StaggerItem>
+                )
+              })}
+            </div>
+          </StaggerContainer>
         </div>
       </Container>
     </section>
