@@ -17,6 +17,7 @@ import { FormHero } from "@/components/sections/form-hero"
 import Hero from "@/components/sections/hero"
 import DetailedEnquirySection from "@/components/sections/detailed-enquiry-section"
 import { StrategicHubSection } from "@/components/sections/strategic-hub-section"
+import { ClaimsQuizSection } from "@/components/sections/claims-quiz-section"
 
 export default function Page() {
   return (
@@ -114,6 +115,7 @@ export default function Page() {
         linkText="Check your eligibility now in 60 seconds"
         linkHref="#enquiry-form"
       />
+      <ClaimsQuizSection />
       <ClaimFormSection />
       <OneCallCTA />
       <TrustBanner />
