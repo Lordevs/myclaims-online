@@ -40,7 +40,7 @@ export function MobileNav({ ctaButton }: MobileNavProps) {
           </SheetTitle>
         </SheetHeader>
 
-        <div className="relative mt-8 flex-1 overflow-hidden px-6">
+        <div className="relative mt-8 flex-1 overflow-y-auto px-6">
           <MobileNavContent
             className="flex-col items-start gap-8"
             itemClassName="text-xl font-medium text-white/80 hover:text-white transition-colors"

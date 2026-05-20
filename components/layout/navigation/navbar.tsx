@@ -43,7 +43,7 @@ export function Navbar({ globalData }: NavbarProps) {
             itemClassName="text-white/80 hover:text-white"
           />
           <div className="flex items-center gap-4">
-            <NavCTAButton ctaButton={ctaButton} />
+            <NavCTAButton ctaButton={ctaButton} className="hidden md:block" />
 
             {/* Mobile Navigation */}
             <MobileNav ctaButton={ctaButton} />
