@@ -1,7 +1,4 @@
-"use client"
-
 import * as React from "react"
-import Link from "next/link"
 import { Phone } from "lucide-react"
 import { Container } from "@/components/layout/container"
 import { FadeIn } from "@/components/ui/animations"

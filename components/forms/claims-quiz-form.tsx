@@ -45,7 +45,11 @@ const defaultQuestions: QuizQuestion[] = [
     options: [
       { id: "2a", text: "No, it was someone else's fault", value: "no_fault" },
       { id: "2b", text: "Yes, it was my fault", value: "fault" },
-      { id: "2c", text: "It was split liability / Not sure", value: "split_unsure" },
+      {
+        id: "2c",
+        text: "It was split liability / Not sure",
+        value: "split_unsure",
+      },
     ],
   },
   {
@@ -54,7 +58,11 @@ const defaultQuestions: QuizQuestion[] = [
     category: "Incident timeframe",
     options: [
       { id: "3a", text: "Within the last 3 months", value: "last_3_months" },
-      { id: "3b", text: "Between 3 and 12 months ago", value: "last_12_months" },
+      {
+        id: "3b",
+        text: "Between 3 and 12 months ago",
+        value: "last_12_months",
+      },
       { id: "3c", text: "Over 12 months ago", value: "older" },
     ],
   },
@@ -66,7 +74,11 @@ const defaultQuestions: QuizQuestion[] = [
       { id: "4a", text: "Car", value: "car" },
       { id: "4b", text: "Taxi / Uber / Private Hire", value: "taxi" },
       { id: "4c", text: "Motorcycle", value: "motorcycle" },
-      { id: "4d", text: "Bicycle / E-Scooter / Pedestrian", value: "cyclist_pedestrian" },
+      {
+        id: "4d",
+        text: "Bicycle / E-Scooter / Pedestrian",
+        value: "cyclist_pedestrian",
+      },
     ],
   },
   {
@@ -74,7 +86,11 @@ const defaultQuestions: QuizQuestion[] = [
     questionText: "Did you or any passenger sustain any injuries?",
     category: "Injury assessment",
     options: [
-      { id: "5a", text: "Yes, minor or major injuries sustained", value: "yes_injuries" },
+      {
+        id: "5a",
+        text: "Yes, minor or major injuries sustained",
+        value: "yes_injuries",
+      },
       { id: "5b", text: "No injuries", value: "no_injuries" },
     ],
   },
@@ -95,13 +111,18 @@ export function ClaimsQuizForm({
   const [answers, setAnswers] = useState<Record<string | number, string>>({})
   // Complete lead form state
   const [isFormStep, setIsFormStep] = useState(false)
-  const [contactInfo, setContactInfo] = useState({ name: "", phone: "", email: "" })
+  const [contactInfo, setContactInfo] = useState({
+    name: "",
+    phone: "",
+    email: "",
+  })
   const [isSubmitted, setIsSubmitted] = useState(false)
 
   const activeQuestion = questions[currentStepIndex]
   const totalSteps = questions.length
   // Progress calculations
-  const progressPercent = totalSteps > 0 ? (currentStepIndex / totalSteps) * 100 : 0
+  const progressPercent =
+    totalSteps > 0 ? (currentStepIndex / totalSteps) * 100 : 0
   const selectedValue = activeQuestion ? answers[activeQuestion.id] : undefined
 
   // Navigation handlers
@@ -153,45 +174,57 @@ export function ClaimsQuizForm({
   }
 
   return (
-    <div className={cn("flex flex-col gap-6 w-full col-span-1 lg:col-span-8", className)}>
+    <div
+      className={cn(
+        "col-span-1 flex w-full flex-col gap-6 lg:col-span-8",
+        className
+      )}
+    >
       {/* Step & Progress Header */}
       {!isSubmitted && (
         <div className="flex flex-col gap-2">
-          <div className="text-xs sm:text-sm font-extrabold tracking-widest text-[#AF2144] uppercase">
-            {isFormStep ? "Final Step" : `Step ${currentStepIndex + 1} of ${totalSteps}`}
+          <div className="text-xs font-extrabold tracking-widest text-[#AF2144] uppercase sm:text-sm">
+            {isFormStep
+              ? "Final Step"
+              : `Step ${currentStepIndex + 1} of ${totalSteps}`}
           </div>
 
           {/* Shadcn Neobrutalist Progress Bar */}
           <Progress
             value={isFormStep ? 100 : progressPercent}
-            className="h-4 w-full rounded-full bg-[#E7E9E4] border-2 border-[#4C6549] p-[2px] [&>[data-slot=progress-indicator]]:bg-[#AF2144]"
+            className="h-4 w-full rounded-full border-2 border-[#4C6549] bg-[#E7E9E4] p-[2px] [&>[data-slot=progress-indicator]]:bg-[#AF2144]"
           />
 
-          <div className="text-xs sm:text-sm font-normal text-[#594143] tracking-wide">
-            {isFormStep ? "Submit contact information to check claim eligibility" : activeQuestion?.category}
+          <div className="text-xs font-normal tracking-wide text-[#594143] sm:text-sm">
+            {isFormStep
+              ? "Submit contact information to check claim eligibility"
+              : activeQuestion?.category}
           </div>
         </div>
       )}
 
       {/* MAIN QUIZ CARD */}
-      <div
-        className="bg-[#F9FAF5] border-2 border-[#4C6549] rounded-3xl p-6 sm:p-10 md:p-12 shadow-[4px_4px_0px_0px_#344D32] transition-all duration-300"
-      >
+      <div className="rounded-3xl border-2 border-[#4C6549] bg-[#F9FAF5] p-6 shadow-[4px_4px_0px_0px_#344D32] transition-all duration-300 sm:p-10 md:p-12">
         {isSubmitted ? (
           /* Success Screen */
-          <FadeIn delay={0.1} y={20} className="flex flex-col items-center text-center py-10">
-            <div className="size-20 rounded-full bg-[#627E2A] flex items-center justify-center text-[#FAFFE7] mb-6 border-2 border-[#4C6549] shadow-[3px_3px_0px_0px_#344D32]">
+          <FadeIn
+            delay={0.1}
+            y={20}
+            className="flex flex-col items-center py-10 text-center"
+          >
+            <div className="mb-6 flex size-20 items-center justify-center rounded-full border-2 border-[#4C6549] bg-[#627E2A] text-[#FAFFE7] shadow-[3px_3px_0px_0px_#344D32]">
               <ShieldCheck className="size-10" />
             </div>
-            <h3 className="text-2xl sm:text-3xl font-black text-[#1A1C19] mb-4">
+            <h3 className="mb-4 text-2xl font-black text-[#1A1C19] sm:text-3xl">
               Claim Details Received!
             </h3>
-            <p className="text-[#594143] text-sm sm:text-base leading-relaxed max-w-lg mb-8 font-medium">
-              Thank you! Your assessment has been completed. A claims specialist will review your file and call you directly within 15 minutes.
+            <p className="mb-8 max-w-lg text-sm leading-relaxed font-medium text-[#594143] sm:text-base">
+              Thank you! Your assessment has been completed. A claims specialist
+              will review your file and call you directly within 15 minutes.
             </p>
             <button
               onClick={handleReset}
-              className="flex items-center gap-2 px-6 py-3.5 bg-[#AF2144] hover:bg-[#961a37] text-white border-2 border-[#4C6549] rounded-xl font-bold shadow-[4px_4px_0px_0px_#344D32] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#344D32] transition-all duration-200"
+              className="flex items-center gap-2 rounded-xl border-2 border-[#4C6549] bg-[#AF2144] px-6 py-3.5 font-bold text-white shadow-[4px_4px_0px_0px_#344D32] transition-all duration-200 hover:translate-x-[2px] hover:translate-y-[2px] hover:bg-[#961a37] hover:shadow-[2px_2px_0px_0px_#344D32]"
             >
               <RefreshCw className="size-4" /> Start Over
             </button>
@@ -199,16 +232,20 @@ export function ClaimsQuizForm({
         ) : isFormStep ? (
           /* Premium Contact Details Form Step */
           <FadeIn delay={0.05} y={15}>
-            <h3 className="text-2xl sm:text-3xl font-black text-[#1A1C19] tracking-tight leading-tight mb-3">
+            <h3 className="mb-3 text-2xl leading-tight font-black tracking-tight text-[#1A1C19] sm:text-3xl">
               Almost Eligible! Lock in your claim evaluation
             </h3>
-            <p className="text-sm font-semibold text-[#594143] leading-relaxed mb-8">
-              We have successfully captured your claim responses. Please share your contact info so we can assign an advisor.
+            <p className="mb-8 text-sm leading-relaxed font-semibold text-[#594143]">
+              We have successfully captured your claim responses. Please share
+              your contact info so we can assign an advisor.
             </p>
 
             <form onSubmit={handleFormSubmit} className="flex flex-col gap-5">
               <div className="flex flex-col gap-2">
-                <label className="text-xs sm:text-sm font-black text-[#1A1C19]" htmlFor="fullName">
+                <label
+                  className="text-xs font-black text-[#1A1C19] sm:text-sm"
+                  htmlFor="fullName"
+                >
                   Full Name
                 </label>
                 <input
@@ -217,13 +254,21 @@ export function ClaimsQuizForm({
                   required
                   placeholder="John Doe"
                   value={contactInfo.name}
-                  onChange={(e) => setContactInfo((prev) => ({ ...prev, name: e.target.value }))}
-                  className="w-full px-5 py-4 bg-[#F3F4EF] border-2 border-[#4C6549] rounded-xl text-[#1A1C19] font-bold placeholder-[#594143]/50 focus:outline-none focus:ring-2 focus:ring-[#AF2144]/20 transition-all"
+                  onChange={(e) =>
+                    setContactInfo((prev) => ({
+                      ...prev,
+                      name: e.target.value,
+                    }))
+                  }
+                  className="w-full rounded-xl border-2 border-[#4C6549] bg-[#F3F4EF] px-5 py-4 font-bold text-[#1A1C19] placeholder-[#594143]/50 transition-all focus:ring-2 focus:ring-[#AF2144]/20 focus:outline-none"
                 />
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="text-xs sm:text-sm font-black text-[#1A1C19]" htmlFor="phoneNumber">
+                <label
+                  className="text-xs font-black text-[#1A1C19] sm:text-sm"
+                  htmlFor="phoneNumber"
+                >
                   Phone Number
                 </label>
                 <input
@@ -232,13 +277,21 @@ export function ClaimsQuizForm({
                   required
                   placeholder="07123 456789"
                   value={contactInfo.phone}
-                  onChange={(e) => setContactInfo((prev) => ({ ...prev, phone: e.target.value }))}
-                  className="w-full px-5 py-4 bg-[#F3F4EF] border-2 border-[#4C6549] rounded-xl text-[#1A1C19] font-bold placeholder-[#594143]/50 focus:outline-none focus:ring-2 focus:ring-[#AF2144]/20 transition-all"
+                  onChange={(e) =>
+                    setContactInfo((prev) => ({
+                      ...prev,
+                      phone: e.target.value,
+                    }))
+                  }
+                  className="w-full rounded-xl border-2 border-[#4C6549] bg-[#F3F4EF] px-5 py-4 font-bold text-[#1A1C19] placeholder-[#594143]/50 transition-all focus:ring-2 focus:ring-[#AF2144]/20 focus:outline-none"
                 />
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="text-xs sm:text-sm font-black text-[#1A1C19]" htmlFor="emailAddress">
+                <label
+                  className="text-xs font-black text-[#1A1C19] sm:text-sm"
+                  htmlFor="emailAddress"
+                >
                   Email Address
                 </label>
                 <input
@@ -247,24 +300,29 @@ export function ClaimsQuizForm({
                   required
                   placeholder="john@example.com"
                   value={contactInfo.email}
-                  onChange={(e) => setContactInfo((prev) => ({ ...prev, email: e.target.value }))}
-                  className="w-full px-5 py-4 bg-[#F3F4EF] border-2 border-[#4C6549] rounded-xl text-[#1A1C19] font-bold placeholder-[#594143]/50 focus:outline-none focus:ring-2 focus:ring-[#AF2144]/20 transition-all"
+                  onChange={(e) =>
+                    setContactInfo((prev) => ({
+                      ...prev,
+                      email: e.target.value,
+                    }))
+                  }
+                  className="w-full rounded-xl border-2 border-[#4C6549] bg-[#F3F4EF] px-5 py-4 font-bold text-[#1A1C19] placeholder-[#594143]/50 transition-all focus:ring-2 focus:ring-[#AF2144]/20 focus:outline-none"
                 />
               </div>
 
               {/* Navigation buttons */}
-              <div className="flex items-center justify-between mt-8 pt-6 border-t border-[#4C6549]/10">
+              <div className="mt-8 flex items-center justify-between border-t border-[#4C6549]/10 pt-6">
                 <button
                   type="button"
                   onClick={handleBack}
-                  className="flex items-center gap-2 text-sm font-black text-[#594143] hover:text-[#1A1C19] transition-colors focus:outline-none"
+                  className="flex items-center gap-2 text-sm font-black text-[#594143] transition-colors hover:text-[#1A1C19] focus:outline-none"
                 >
                   <ArrowLeft className="size-4" /> Back to questions
                 </button>
 
                 <button
                   type="submit"
-                  className="flex items-center gap-2 px-6 py-4 bg-[#AF2144] hover:bg-[#961a37] text-white border-2 border-[#4C6549] rounded-2xl font-black shadow-[4px_4px_0px_0px_#344D32] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#344D32] transition-all duration-200 focus:outline-none"
+                  className="flex items-center gap-2 rounded-2xl border-2 border-[#4C6549] bg-[#AF2144] px-6 py-4 font-black text-white shadow-[4px_4px_0px_0px_#344D32] transition-all duration-200 hover:translate-x-[2px] hover:translate-y-[2px] hover:bg-[#961a37] hover:shadow-[2px_2px_0px_0px_#344D32] focus:outline-none"
                 >
                   Submit My Claim <ArrowRight className="size-4" />
                 </button>
@@ -274,7 +332,7 @@ export function ClaimsQuizForm({
         ) : (
           /* Dynamic Question Step */
           <FadeIn key={currentStepIndex} delay={0.05} y={15}>
-            <h3 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#1A1C19] tracking-tight leading-snug sm:leading-tight mb-8">
+            <h3 className="mb-8 text-2xl leading-snug font-extrabold tracking-tight text-[#1A1C19] sm:text-3xl sm:leading-tight md:text-4xl">
               {activeQuestion?.questionText}
             </h3>
 
@@ -287,22 +345,20 @@ export function ClaimsQuizForm({
                     key={option.id}
                     onClick={() => handleSelectOption(option.value)}
                     className={cn(
-                      "flex items-center gap-4 px-6 py-5 rounded-2xl border-2 border-[#4C6549] text-left cursor-pointer transition-all duration-200 select-none",
+                      "flex cursor-pointer items-center gap-4 rounded-2xl border-2 border-[#4C6549] px-6 py-5 text-left transition-all duration-200 select-none",
                       isSelected
-                        ? "bg-[#E7E9E4] border-[#4C6549] ring-2 ring-[#4C6549]/15"
-                        : "bg-[#F3F4EF] hover:bg-[#EAECE5] hover:border-[#4C6549] border-[#4C6549]"
+                        ? "border-[#4C6549] bg-[#E7E9E4] ring-2 ring-[#4C6549]/15"
+                        : "border-[#4C6549] bg-[#F3F4EF] hover:border-[#4C6549] hover:bg-[#EAECE5]"
                     )}
                   >
                     {/* Premium Custom Radio Circle */}
-                    <div
-                      className="flex-shrink-0 w-6 h-6 rounded-full border-2 border-[#4C6549] bg-white flex items-center justify-center transition-all duration-200"
-                    >
+                    <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full border-2 border-[#4C6549] bg-white transition-all duration-200">
                       {isSelected && (
-                        <div className="w-3.5 h-3.5 rounded-full bg-[#AF2144] animate-in zoom-in-50 duration-200" />
+                        <div className="h-3.5 w-3.5 animate-in rounded-full bg-[#AF2144] duration-200 zoom-in-50" />
                       )}
                     </div>
 
-                    <span className="text-[#1A1C19] text-sm sm:text-base font-extrabold leading-tight">
+                    <span className="text-sm leading-tight font-extrabold text-[#1A1C19] sm:text-base">
                       {option.text}
                     </span>
                   </div>
@@ -311,11 +367,11 @@ export function ClaimsQuizForm({
             </div>
 
             {/* Navigation row */}
-            <div className="flex items-center justify-between mt-10 pt-6 border-t border-[#4C6549]/10">
+            <div className="mt-10 flex items-center justify-between border-t border-[#4C6549]/10 pt-6">
               {currentStepIndex > 0 ? (
                 <button
                   onClick={handleBack}
-                  className="flex items-center gap-2 text-sm sm:text-base font-extrabold text-[#594143] hover:text-[#1A1C19] transition-colors focus:outline-none"
+                  className="flex items-center gap-2 text-sm font-extrabold text-[#594143] transition-colors hover:text-[#1A1C19] focus:outline-none sm:text-base"
                 >
                   <ArrowLeft className="size-4" /> Back
                 </button>
@@ -327,10 +383,10 @@ export function ClaimsQuizForm({
                 onClick={handleNext}
                 disabled={!selectedValue}
                 className={cn(
-                  "flex items-center gap-2 px-6 py-4 text-white border-2 border-[#4C6549] rounded-2xl font-black transition-all duration-200 focus:outline-none",
+                  "flex items-center gap-2 rounded-2xl border-2 border-[#4C6549] px-6 py-4 font-black text-white transition-all duration-200 focus:outline-none",
                   selectedValue
-                    ? "bg-[#AF2144] hover:bg-[#961a37] shadow-[4px_4px_0px_0px_#344D32] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#344D32] cursor-pointer"
-                    : "bg-[#AF2144]/40 border-[#4C6549]/40 text-white/50 cursor-not-allowed shadow-none"
+                    ? "cursor-pointer bg-[#AF2144] shadow-[4px_4px_0px_0px_#344D32] hover:translate-x-[2px] hover:translate-y-[2px] hover:bg-[#961a37] hover:shadow-[2px_2px_0px_0px_#344D32]"
+                    : "cursor-not-allowed border-[#4C6549]/40 bg-[#AF2144]/40 text-white/50 shadow-none"
                 )}
               >
                 Next <ArrowRight className="size-4" />

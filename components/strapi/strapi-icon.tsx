@@ -1,5 +1,3 @@
-"use client"
-
 import { Icon } from "@iconify/react"
 import type { IconhubField } from "@/lib/strapi/types/shared"
 

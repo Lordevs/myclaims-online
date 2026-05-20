@@ -2,7 +2,10 @@ import { ShieldCheck, Check, Phone } from "lucide-react"
 import { Container } from "@/components/layout/container"
 import { FadeIn } from "@/components/ui/animations"
 import { cn } from "@/lib/utils"
-import { ClaimsQuizForm, QuizQuestion } from "@/components/forms/claims-quiz-form"
+import {
+  ClaimsQuizForm,
+  QuizQuestion,
+} from "@/components/forms/claims-quiz-form"
 
 export interface ClaimsQuizSectionProps {
   /** Dynamic array of questions */
@@ -40,33 +43,31 @@ export function ClaimsQuizSection({
 }: ClaimsQuizSectionProps) {
   return (
     <section
-      className={cn("py-20 md:py-28 select-none overflow-hidden font-sans", className)}
+      className={cn(
+        "overflow-hidden py-20 font-sans select-none md:py-28",
+        className
+      )}
       style={{
-        background: "linear-gradient(109.99deg, #F4F8E5 0%, #F4F8E5 35%, #F4F8E5 70%, #FFFFFF 100%)",
+        background:
+          "linear-gradient(109.99deg, #F4F8E5 0%, #F4F8E5 35%, #F4F8E5 70%, #FFFFFF 100%)",
       }}
     >
       <Container>
-        <div className="grid grid-cols-1 gap-x-10 gap-y-10 lg:grid-cols-12 items-start">
-
+        <div className="grid grid-cols-1 items-start gap-x-10 gap-y-10 lg:grid-cols-12">
           {/* LEFT QUIZ COLUMN: Delegated to Form Subsystem */}
-          <ClaimsQuizForm
-            questions={questions}
-            onComplete={onComplete}
-          />
+          <ClaimsQuizForm questions={questions} onComplete={onComplete} />
 
           {/* RIGHT SIDEBAR COLUMN */}
-          <div className="col-span-1 lg:col-span-4 flex flex-col gap-6 h-full justify-start">
-
+          <div className="col-span-1 flex h-full flex-col justify-start gap-6 lg:col-span-4">
             {/* Why Trust Us Card */}
             <FadeIn delay={0.15} y={20} className="w-full">
-              <div className="bg-[#F9FAF5] border-2 border-[#4C6549] rounded-3xl p-6 sm:p-8 flex flex-col gap-6">
-
+              <div className="flex flex-col gap-6 rounded-3xl border-2 border-[#4C6549] bg-[#F9FAF5] p-6 sm:p-8">
                 {/* Heading with Custom Green Shield Icon */}
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-[#627E2A] flex items-center justify-center text-[#FAFFE7] flex-shrink-0 border-2 border-[#4C6549]">
+                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border-2 border-[#4C6549] bg-[#627E2A] text-[#FAFFE7]">
                     <ShieldCheck className="size-5" />
                   </div>
-                  <h4 className="text-lg sm:text-xl font-black text-[#1A1C19]">
+                  <h4 className="text-lg font-black text-[#1A1C19] sm:text-xl">
                     Why trust us?
                   </h4>
                 </div>
@@ -75,10 +76,10 @@ export function ClaimsQuizSection({
                 <ul className="flex flex-col gap-4">
                   {trustItems.map((item, idx) => (
                     <li key={idx} className="flex items-start gap-3">
-                      <div className="text-[#4A6412] mt-0.5 flex-shrink-0">
+                      <div className="mt-0.5 flex-shrink-0 text-[#4A6412]">
                         <Check className="size-5 stroke-[3px]" />
                       </div>
-                      <span className="text-sm font-semibold leading-relaxed text-[#594143]">
+                      <span className="text-sm leading-relaxed font-semibold text-[#594143]">
                         {item}
                       </span>
                     </li>
@@ -89,22 +90,20 @@ export function ClaimsQuizSection({
 
             {/* Speak to a Specialist Card */}
             <FadeIn delay={0.2} y={25} className="w-full">
-              <div
-                className="bg-[#CEEBC7] border-2 border-[#4C6549] rounded-3xl p-6 sm:p-8 relative overflow-hidden flex flex-col gap-6"
-              >
+              <div className="relative flex flex-col gap-6 overflow-hidden rounded-3xl border-2 border-[#4C6549] bg-[#CEEBC7] p-6 sm:p-8">
                 {/* Layered Document Illustration in Top Right */}
-                <div className="absolute -top-12 -right-8 w-44 h-28 pointer-events-none select-none">
+                <div className="pointer-events-none absolute -top-12 -right-8 h-28 w-44 select-none">
                   {/* Dark Green/Sage Layer */}
-                  <div className="absolute top-0 right-0 w-32 h-20 bg-[#657E61] border-2 border-[#4C6549] rounded-lg transform -rotate-12 translate-x-4 translate-y-2" />
+                  <div className="absolute top-0 right-0 h-20 w-32 translate-x-4 translate-y-2 -rotate-12 transform rounded-lg border-2 border-[#4C6549] bg-[#657E61]" />
                   {/* Rose Layer */}
-                  <div className="absolute top-0 right-0 w-32 h-20 bg-[#B87C84] border-2 border-[#4C6549] rounded-lg transform -rotate-[22deg] translate-x-2 translate-y-6" />
+                  <div className="absolute top-0 right-0 h-20 w-32 translate-x-2 translate-y-6 -rotate-[22deg] transform rounded-lg border-2 border-[#4C6549] bg-[#B87C84]" />
                 </div>
 
-                <div className="relative z-10 flex flex-col gap-4 max-w-[80%]">
-                  <h4 className="text-xl sm:text-2xl font-black text-[#111111] leading-tight">
+                <div className="relative z-10 flex max-w-[80%] flex-col gap-4">
+                  <h4 className="text-xl leading-tight font-black text-[#111111] sm:text-2xl">
                     Speak to a specialist
                   </h4>
-                  <p className="text-sm font-bold text-[#09200A] leading-relaxed">
+                  <p className="text-sm leading-relaxed font-bold text-[#09200A]">
                     {specialistDescription}
                   </p>
                 </div>
@@ -112,7 +111,7 @@ export function ClaimsQuizSection({
                 <div className="relative z-10">
                   <a
                     href={`tel:${specialistPhone.replace(/\s+/g, "")}`}
-                    className="inline-flex items-center gap-3 px-5 py-4 bg-[#09200A] hover:bg-[#153a17] text-[#F9FAF5] border-2 border-[#4C6549] rounded-2xl font-black shadow-[4px_4px_0px_0px_#344D32] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#344D32] transition-all duration-200 focus:outline-none"
+                    className="inline-flex items-center gap-3 rounded-2xl border-2 border-[#4C6549] bg-[#09200A] px-5 py-4 font-black text-[#F9FAF5] shadow-[4px_4px_0px_0px_#344D32] transition-all duration-200 hover:translate-x-[2px] hover:translate-y-[2px] hover:bg-[#153a17] hover:shadow-[2px_2px_0px_0px_#344D32] focus:outline-none"
                   >
                     <Phone className="size-5 fill-current" />
                     <span>{specialistPhone}</span>
@@ -120,9 +119,7 @@ export function ClaimsQuizSection({
                 </div>
               </div>
             </FadeIn>
-
           </div>
-
         </div>
       </Container>
     </section>

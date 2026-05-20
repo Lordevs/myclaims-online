@@ -123,9 +123,7 @@ export default function Page() {
       {/* Detailed Neobrutalist Enquiry Contact form section */}
       <DetailedEnquirySection />
 
-      <StrategicHubSection
-        mapEmbedUrl="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2751425.615026245!2d10.70729312483807!3d47.66617990769023!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4772450c52567ecd%3A0xe5f31a6eaf21f6c8!2sMyClaims%20Schadensregulierung%20e.U.!5e0!3m2!1sen!2s!4v1779262825760!5m2!1sen!2s"
-      />
+      <StrategicHubSection mapEmbedUrl="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2751425.615026245!2d10.70729312483807!3d47.66617990769023!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4772450c52567ecd%3A0xe5f31a6eaf21f6c8!2sMyClaims%20Schadensregulierung%20e.U.!5e0!3m2!1sen!2s!4v1779262825760!5m2!1sen!2s" />
 
       <FAQSection />
       <GetInTouch />

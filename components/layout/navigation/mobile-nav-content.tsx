@@ -45,7 +45,7 @@ export function MobileNavContent({
                 <AccordionTrigger
                   className={cn(
                     "flex w-full cursor-pointer items-center justify-between border-b border-white/5 py-1.5 text-left text-lg font-bold tracking-wider uppercase transition-all duration-200",
-                    "border-0 border-b-1 p-0 rounded-none hover:no-underline",
+                    "rounded-none border-0 border-b-1 p-0 hover:no-underline",
                     "text-white/80 hover:text-white data-[state=open]:text-white",
                     "**:data-[slot=accordion-trigger-icon]:size-5! **:data-[slot=accordion-trigger-icon]:text-white! **:data-[slot=accordion-trigger-icon]:opacity-80!",
                     isDropdownActive ? "text-white" : "text-white/80",
@@ -54,7 +54,7 @@ export function MobileNavContent({
                 >
                   <span>{link.label}</span>
                 </AccordionTrigger>
-                <AccordionContent className="pt-0 pb-0 h-auto">
+                <AccordionContent className="h-auto pt-0 pb-0">
                   <div className="mt-4 flex flex-col gap-4 pl-4 transition-all duration-200">
                     {link.subItems.map((subItem) => {
                       const SubIcon = subItem.icon
