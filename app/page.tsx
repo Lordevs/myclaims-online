@@ -12,9 +12,10 @@ import { ImageWithListSection } from "@/components/sections/image-with-list-sect
 import { ClaimsCardCTA } from "@/components/sections/claims-card-cta"
 import { SimpleLinkCTA } from "@/components/sections/simple-link-cta"
 import { TextColumnsSection } from "@/components/sections/text-columns-section"
+import { ClaimFormSection } from "@/components/sections/claim-form-section"
 import { FormHero } from "@/components/sections/form-hero"
-import { DetailedEnquirySection } from "@/components/sections/detailed-enquiry-section"
 import Hero from "@/components/sections/hero"
+import DetailedEnquirySection from "@/components/sections/detailed-enquiry-section"
 
 export default function Page() {
   return (
@@ -112,7 +113,7 @@ export default function Page() {
         linkText="Check your eligibility now in 60 seconds"
         linkHref="#enquiry-form"
       />
-
+      <ClaimFormSection />
       <OneCallCTA />
       <TrustBanner />
 
