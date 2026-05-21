@@ -202,9 +202,9 @@ const SECTION_MAP: {
         button={
           ctaBtn
             ? {
-              label: ctaBtn.label,
-              href: resolveStrapiLink(ctaBtn),
-            }
+                label: ctaBtn.label,
+                href: resolveStrapiLink(ctaBtn),
+              }
             : undefined
         }
       />
@@ -213,11 +213,7 @@ const SECTION_MAP: {
 
   "sections.faq-section": (section: FAQSectionType) => {
     return (
-      <FAQSection
-        key={section.id}
-        title={section.title}
-        faqs={section.faqs}
-      />
+      <FAQSection key={section.id} title={section.title} faqs={section.faqs} />
     )
   },
 
@@ -226,19 +222,21 @@ const SECTION_MAP: {
     if (!cta) return null
 
     if (cta.layout === "full_width_banner") {
-      const phoneBtn = cta.buttons?.find(
-        (btn) =>
-          btn.externalLink?.startsWith("tel:") ||
-          btn.label?.toLowerCase().includes("call") ||
-          btn.label?.match(/\d/)
-      ) || cta.buttons?.[0]
+      const phoneBtn =
+        cta.buttons?.find(
+          (btn) =>
+            btn.externalLink?.startsWith("tel:") ||
+            btn.label?.toLowerCase().includes("call") ||
+            btn.label?.match(/\d/)
+        ) || cta.buttons?.[0]
 
-      const enquiryBtn = cta.buttons?.find(
-        (btn) =>
-          !btn.externalLink?.startsWith("tel:") &&
-          !btn.label?.toLowerCase().includes("call") &&
-          !btn.label?.match(/\d/)
-      ) || cta.buttons?.[1]
+      const enquiryBtn =
+        cta.buttons?.find(
+          (btn) =>
+            !btn.externalLink?.startsWith("tel:") &&
+            !btn.label?.toLowerCase().includes("call") &&
+            !btn.label?.match(/\d/)
+        ) || cta.buttons?.[1]
 
       return (
         <CtaFullWidth
@@ -329,13 +327,14 @@ const SECTION_MAP: {
         id: step.id,
         questionText: field?.label || step.title || "",
         category: step.description || step.title || "Assessment",
-        options: field?.selectOptions?.map((opt) => ({
-          id: opt.id,
-          text: opt.text,
-          value: opt.text,
-          additionalInfo: opt.additionalInfo,
-          isDisqualifying: opt.isDisqualifying,
-        })) || [],
+        options:
+          field?.selectOptions?.map((opt) => ({
+            id: opt.id,
+            text: opt.text,
+            value: opt.text,
+            additionalInfo: opt.additionalInfo,
+            isDisqualifying: opt.isDisqualifying,
+          })) || [],
       }
     })
 
@@ -405,8 +404,9 @@ export function DynamicZoneRenderer({ sections }: DynamicZoneRendererProps) {
 
   return (
     <>
-      {sections.map((section, index) => {
+      {sections.map((section) => {
         const renderSection = SECTION_MAP[section.__component] as (
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           sec: any
         ) => React.ReactNode
 

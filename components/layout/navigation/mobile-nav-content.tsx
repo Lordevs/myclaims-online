@@ -37,10 +37,17 @@ export function MobileNavContent({
         // shared.dropdown
         if (item.__component === "shared.dropdown") {
           const isDropdownActive = item.items.some(
-            (sub) => sub.page && isActive(`/${sub.page!.slug === "home" ? "" : sub.page!.slug}`)
+            (sub) =>
+              sub.page &&
+              isActive(`/${sub.page!.slug === "home" ? "" : sub.page!.slug}`)
           )
           return (
-            <Accordion type="single" collapsible className="w-full" key={`dropdown-${item.id}`}>
+            <Accordion
+              type="single"
+              collapsible
+              className="w-full"
+              key={`dropdown-${item.id}`}
+            >
               <AccordionItem value={item.label} className="border-0">
                 <AccordionTrigger
                   className={cn(
@@ -58,7 +65,9 @@ export function MobileNavContent({
                   <div className="mt-4 flex flex-col gap-4 pl-4 transition-all duration-200">
                     {item.items.map((subItem) => {
                       const href = subItem.page
-                        ? subItem.page.slug === "home" ? "/" : `/${subItem.page.slug}`
+                        ? subItem.page.slug === "home"
+                          ? "/"
+                          : `/${subItem.page.slug}`
                         : "#"
                       const isSubActive = isActive(href)
                       return (
@@ -68,14 +77,22 @@ export function MobileNavContent({
                           onClick={onClick}
                           className={cn(
                             "flex items-center gap-3.5 py-1.5 text-base transition-all",
-                            isSubActive ? "font-bold text-white" : "text-white/70 hover:text-white"
+                            isSubActive
+                              ? "font-bold text-white"
+                              : "text-white/70 hover:text-white"
                           )}
                         >
                           {subItem.icon && (
-                            <StrapiIcon icon={subItem.icon} size={20} className="text-white/90" />
+                            <StrapiIcon
+                              icon={subItem.icon}
+                              size={20}
+                              className="text-white/90"
+                            />
                           )}
                           <span className="font-medium">{subItem.label}</span>
-                          {isSubActive && <span className="h-2 w-2 rounded-full bg-[#F58220]" />}
+                          {isSubActive && (
+                            <span className="h-2 w-2 rounded-full bg-[#F58220]" />
+                          )}
                         </Link>
                       )
                     })}
@@ -99,11 +116,15 @@ export function MobileNavContent({
               isLinkActive ? "text-white" : "text-white/80 hover:text-white",
               itemClassName
             )}
-            {...(item.isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+            {...(item.isExternal
+              ? { target: "_blank", rel: "noopener noreferrer" }
+              : {})}
           >
             <div className="flex items-center justify-between">
               <span>{item.label}</span>
-              {isLinkActive && <span className="h-2.5 w-2.5 rounded-full bg-[#F58220]" />}
+              {isLinkActive && (
+                <span className="h-2.5 w-2.5 rounded-full bg-[#F58220]" />
+              )}
             </div>
           </Link>
         )

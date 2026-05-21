@@ -16,13 +16,9 @@ import type {
   LinkComponent,
   ContactItemComponent,
   FormStepComponent,
-  ListItemComponent,
-  FeatureCardComponent,
-  FileLinkComponent,
   ListItemComponent as ListItem,
   IconhubField,
 } from "./shared"
-import type { StrapiMediaComponent } from "./media"
 
 // ─── Strapi Blocks (rich-text) ────────────────────────────────────────────────
 

@@ -1,4 +1,3 @@
-import { Phone, Mail, Clock } from "lucide-react"
 import { Container } from "@/components/layout/container"
 import {
   FadeIn,
@@ -25,11 +24,7 @@ export interface CtaGridProps {
  * Displays interactive cards, custom thick borders (2.25px), custom sharp offsets,
  * and high-contrast color tokens specified for this section.
  */
-export function CtaGrid({
-  title,
-  subtitle,
-  contactItems,
-}: CtaGridProps) {
+export function CtaGrid({ title, subtitle, contactItems }: CtaGridProps) {
   return (
     <section className="bg-[#F9FAF5] py-20 font-sans md:py-28">
       <Container>
@@ -49,7 +44,7 @@ export function CtaGrid({
               )}
             </FadeIn>
           )}
- 
+
           {/* Grid of Contact Elements with Stagger entry */}
           {contactItems && contactItems.length > 0 && (
             <StaggerContainer
@@ -72,9 +67,13 @@ export function CtaGrid({
                           rel={isHttp ? "noopener noreferrer" : undefined}
                           className="mb-4 flex h-14 w-14 items-center justify-center rounded-full border-[2.25px] border-[#0F172A] bg-[#ECFCCB] text-[#0F172A] transition-transform duration-200 group-hover:scale-105 active:scale-95"
                         >
-                          <StrapiIcon icon={item.icon} size={20} className="h-5 w-5 text-[#0F172A]" />
+                          <StrapiIcon
+                            icon={item.icon}
+                            size={20}
+                            className="h-5 w-5 text-[#0F172A]"
+                          />
                         </a>
- 
+
                         {/* Value Link */}
                         <a
                           href={linkHref}
@@ -84,7 +83,7 @@ export function CtaGrid({
                         >
                           {item.title}
                         </a>
- 
+
                         {/* Description Label */}
                         {item.subtitle && (
                           <span className="text-xs leading-none font-normal text-[#594143] md:text-base">
@@ -105,4 +104,3 @@ export function CtaGrid({
 }
 
 export default CtaGrid
-

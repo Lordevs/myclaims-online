@@ -39,7 +39,9 @@ export function DesktopNav({
           // ── shared.dropdown → dropdown with menu items ──
           if (item.__component === "shared.dropdown") {
             const isDropdownActive = item.items.some(
-              (sub) => sub.page && isActive(`/${sub.page.slug === "home" ? "" : sub.page.slug}`)
+              (sub) =>
+                sub.page &&
+                isActive(`/${sub.page.slug === "home" ? "" : sub.page.slug}`)
             )
             return (
               <NavigationMenuItem key={`dropdown-${item.id}`}>
@@ -61,7 +63,9 @@ export function DesktopNav({
                   <div className="flex flex-col bg-primary py-1.5">
                     {item.items.map((subItem, idx) => {
                       const href = subItem.page
-                        ? subItem.page.slug === "home" ? "/" : `/${subItem.page.slug}`
+                        ? subItem.page.slug === "home"
+                          ? "/"
+                          : `/${subItem.page.slug}`
                         : "#"
                       const isSubActive = isActive(href)
                       return (
@@ -73,12 +77,18 @@ export function DesktopNav({
                               "flex w-full cursor-pointer items-center justify-between rounded-none border-b border-white/5 bg-transparent px-6 py-4.5 text-left outline-hidden transition-all duration-150",
                               "text-white/80! hover:bg-white/5! hover:text-white! focus:bg-white/5! focus:text-white!",
                               idx === item.items.length - 1 && "border-b-0",
-                              isSubActive ? "bg-white/10! font-bold text-white!" : ""
+                              isSubActive
+                                ? "bg-white/10! font-bold text-white!"
+                                : ""
                             )}
                           >
                             <div className="flex items-center gap-4">
                               {subItem.icon && (
-                                <StrapiIcon icon={subItem.icon} size={20} className="text-white/85" />
+                                <StrapiIcon
+                                  icon={subItem.icon}
+                                  size={20}
+                                  className="text-white/85"
+                                />
                               )}
                               <span className="text-sm font-semibold tracking-wide">
                                 {subItem.label}
@@ -110,7 +120,9 @@ export function DesktopNav({
                     isLinkActive ? "text-white" : "text-white/80",
                     itemClassName
                   )}
-                  {...(item.isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                  {...(item.isExternal
+                    ? { target: "_blank", rel: "noopener noreferrer" }
+                    : {})}
                 >
                   {item.label}
                   {isLinkActive && (

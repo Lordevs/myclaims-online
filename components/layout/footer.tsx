@@ -53,7 +53,7 @@ export function Footer({ globalData }: FooterProps) {
               {footer.pageLinks.map((col) => (
                 <div key={col.id} className="flex flex-col gap-5">
                   {col.title && (
-                    <span className="text-xs font-bold uppercase tracking-widest text-white/40">
+                    <span className="text-xs font-bold tracking-widest text-white/40 uppercase">
                       {col.title}
                     </span>
                   )}
@@ -64,7 +64,9 @@ export function Footer({ globalData }: FooterProps) {
                         key={link.id}
                         href={href}
                         className="whitespace-nowrap text-white/90 transition-colors hover:text-[#A3E635]"
-                        {...(link.isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                        {...(link.isExternal
+                          ? { target: "_blank", rel: "noopener noreferrer" }
+                          : {})}
                       >
                         {link.label}
                       </Link>
@@ -77,7 +79,9 @@ export function Footer({ globalData }: FooterProps) {
         </div>
 
         {/* Subtle separator */}
-        {(footer.pageLinks?.length > 0 || footer.socialLinks?.length > 0 || footer.description) && (
+        {(footer.pageLinks?.length > 0 ||
+          footer.socialLinks?.length > 0 ||
+          footer.description) && (
           <div className="border-t border-white/10 pt-8" />
         )}
 
@@ -103,7 +107,8 @@ export function Footer({ globalData }: FooterProps) {
 
           <div className="flex items-end lg:text-right">
             <p className="text-[13px] font-semibold tracking-wide whitespace-nowrap text-[#A3E635]">
-              © {new Date().getFullYear()} {footer.copyright || "MyClaims Online. All rights reserved."}
+              © {new Date().getFullYear()}{" "}
+              {footer.copyright || "MyClaims Online. All rights reserved."}
             </p>
           </div>
         </div>

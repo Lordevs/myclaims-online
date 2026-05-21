@@ -48,7 +48,11 @@ export function Navbar({ globalData }: NavbarProps) {
             <NavCTAButton ctaButton={ctaButton} className="hidden md:flex" />
 
             {/* Mobile Navigation */}
-            <MobileNav ctaButton={ctaButton} navItems={navItems} logo={globalData?.logo} />
+            <MobileNav
+              ctaButton={ctaButton}
+              navItems={navItems}
+              logo={globalData?.logo}
+            />
           </div>
         </div>
       </Container>

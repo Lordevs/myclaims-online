@@ -8,7 +8,9 @@ interface PageProps {
 }
 
 // Generate metadata dynamically
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
   const { slug } = await params
 
   // Don't duplicate the home page route under /home

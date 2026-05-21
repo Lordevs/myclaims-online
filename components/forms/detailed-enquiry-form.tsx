@@ -57,8 +57,10 @@ export function DetailedEnquiryForm({
       if (onSubmit) {
         onSubmit(formData)
       }
-      setFormData({})
+      // Defer reset to avoid calling setState synchronously inside an effect
+      Promise.resolve().then(() => setFormData({}))
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.status, onSubmit])
 
   // Flat list of all fields across all steps
@@ -74,7 +76,7 @@ export function DetailedEnquiryForm({
           className
         )}
       >
-        <div className="flex flex-col items-center py-12 px-6 text-center select-none">
+        <div className="flex flex-col items-center px-6 py-12 text-center select-none">
           <div className="mb-6 flex size-20 items-center justify-center rounded-full border-[2.25px] border-[#0F172A] bg-[#10B981] text-white shadow-[3px_3px_0px_0px_#1A1C19]">
             <ShieldCheck className="size-10" />
           </div>
@@ -82,7 +84,9 @@ export function DetailedEnquiryForm({
             Enquiry Sent!
           </h3>
           <p className="mb-4 max-w-md text-sm leading-relaxed font-bold text-[#594143] sm:text-base">
-            {form?.successMessage || state.message || "Thank you! Your detailed claims enquiry has been received. We will contact you shortly."}
+            {form?.successMessage ||
+              state.message ||
+              "Thank you! Your detailed claims enquiry has been received. We will contact you shortly."}
           </p>
         </div>
       </div>
@@ -99,7 +103,11 @@ export function DetailedEnquiryForm({
         className
       )}
     >
-      <input type="hidden" name="formId" value={form?.formId || "detail-enquiry-form"} />
+      <input
+        type="hidden"
+        name="formId"
+        value={form?.formId || "detail-enquiry-form"}
+      />
 
       {/* Form Inputs Content Padding */}
       <div className="flex flex-col gap-5 p-6 sm:p-8">
@@ -163,11 +171,13 @@ export function DetailedEnquiryForm({
                       <SelectTrigger
                         id={fieldId}
                         className={cn(
-                          "!h-auto w-full cursor-pointer appearance-none rounded-lg px-4 py-3 text-sm text-[#0F172A] outline-hidden transition-all bg-white",
+                          "!h-auto w-full cursor-pointer appearance-none rounded-lg bg-white px-4 py-3 text-sm text-[#0F172A] outline-hidden transition-all",
                           "!focus-visible:ring-0 border-[2.25px] border-[#0F172A] font-bold focus:border-[#E94E6B] focus:bg-white focus-visible:border-[#E94E6B] data-[placeholder]:font-medium data-[placeholder]:text-[#888888] data-[state=open]:border-[#E94E6B]"
                         )}
                       >
-                        <SelectValue placeholder={`Select ${field.label || "Option"}`} />
+                        <SelectValue
+                          placeholder={`Select ${field.label || "Option"}`}
+                        />
                       </SelectTrigger>
                       <SelectContent
                         position="popper"
@@ -220,7 +230,11 @@ export function DetailedEnquiryForm({
             "mt-2 shadow-[4.5px_4.5px_0px_0px_#1A1C19] disabled:opacity-50"
           )}
         >
-          <span>{isPending ? "Submitting..." : (form?.submitButtonText || "Submit Enquiry")}</span>
+          <span>
+            {isPending
+              ? "Submitting..."
+              : form?.submitButtonText || "Submit Enquiry"}
+          </span>
         </Button>
       </div>
 
@@ -236,7 +250,11 @@ export function DetailedEnquiryForm({
           form.footerItems.map((item) => (
             <div key={item.id} className="flex items-center gap-1.5">
               {item.icon ? (
-                <StrapiIcon icon={item.icon} size={16} className="shrink-0 text-[#594143]" />
+                <StrapiIcon
+                  icon={item.icon}
+                  size={16}
+                  className="shrink-0 text-[#594143]"
+                />
               ) : (
                 <ShieldCheck className="h-4 w-4 shrink-0 text-[#594143]" />
               )}

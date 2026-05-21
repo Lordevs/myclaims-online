@@ -11,9 +11,10 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { StrapiIcon } from "@/components/strapi/strapi-icon"
+import type { IconhubField } from "@/lib/strapi/types/shared"
 
 export interface FeatureCardItem {
-  icon: any
+  icon: IconhubField | { name: string; selectIcon?: string } | null | undefined
   title: string
   description: string | null
 }
@@ -108,41 +109,57 @@ export function FeaturesGridSection({
                     >
                       {/* Icon Rendering - Circular container in green theme, raw in pink theme */}
                       {!isPink ? (
-                        <div
-                          className="mb-6 flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#EAF5EE]"
-                        >
-                          {typeof Icon === "function" || React.isValidElement(Icon) ? (
-                            <Icon
-                              className={cn("h-10 w-10 shrink-0", iconColorClass)}
-                              strokeWidth={2.25}
-                            />
+                        <div className="mb-6 flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#EAF5EE]">
+                          {typeof Icon === "function" ||
+                          React.isValidElement(Icon) ? (
+                            React.createElement(
+                              Icon as unknown as React.ComponentType<{
+                                className: string
+                                strokeWidth: number
+                              }>,
+                              {
+                                className: cn(
+                                  "h-10 w-10 shrink-0",
+                                  iconColorClass
+                                ),
+                                strokeWidth: 2.25,
+                              }
+                            )
                           ) : (
                             <StrapiIcon
                               icon={Icon}
                               size={24}
-                              className={cn("h-10 w-10 shrink-0", iconColorClass)}
+                              className={cn(
+                                "h-10 w-10 shrink-0",
+                                iconColorClass
+                              )}
                             />
                           )}
                         </div>
-                      ) : (
-                        typeof Icon === "function" || React.isValidElement(Icon) ? (
-                          <Icon
-                            className={cn(
+                      ) : typeof Icon === "function" ||
+                        React.isValidElement(Icon) ? (
+                        React.createElement(
+                          Icon as unknown as React.ComponentType<{
+                            className: string
+                            strokeWidth: number
+                          }>,
+                          {
+                            className: cn(
                               "mb-6 h-10 w-10 shrink-0",
                               iconColorClass
-                            )}
-                            strokeWidth={2}
-                          />
-                        ) : (
-                          <StrapiIcon
-                            icon={Icon}
-                            size={40}
-                            className={cn(
-                              "mb-6 h-10 w-10 shrink-0",
-                              iconColorClass
-                            )}
-                          />
+                            ),
+                            strokeWidth: 2,
+                          }
                         )
+                      ) : (
+                        <StrapiIcon
+                          icon={Icon}
+                          size={40}
+                          className={cn(
+                            "mb-6 h-10 w-10 shrink-0",
+                            iconColorClass
+                          )}
+                        />
                       )}
 
                       {/* Card Header Title */}

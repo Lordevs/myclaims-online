@@ -60,8 +60,10 @@ export function EnquiryForm({
       if (onSubmit) {
         onSubmit(formData)
       }
-      setFormData({})
+      // Defer reset to avoid calling setState synchronously inside an effect
+      Promise.resolve().then(() => setFormData({}))
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.status, onSubmit])
 
   // Flat list of all fields across all steps
@@ -87,7 +89,9 @@ export function EnquiryForm({
               Thank You!
             </h3>
             <p className="max-w-xs text-xs leading-relaxed font-semibold text-[#888888] sm:text-sm">
-              {form?.successMessage || state.message || "Your enquiry has been received. Our team will contact you shortly."}
+              {form?.successMessage ||
+                state.message ||
+                "Your enquiry has been received. Our team will contact you shortly."}
             </p>
           </div>
         </div>
@@ -101,7 +105,11 @@ export function EnquiryForm({
             "shadow-[0px_4.8px_36.02px_0px_rgba(0,0,0,0.09)]"
           )}
         >
-          <input type="hidden" name="formId" value={form?.formId || "contact-form"} />
+          <input
+            type="hidden"
+            name="formId"
+            value={form?.formId || "contact-form"}
+          />
 
           {/* Form Title & Subtitle */}
           <h3 className="mb-2 text-lg font-bold tracking-tight text-[#111111] sm:text-xl md:text-[22px]">
@@ -162,11 +170,13 @@ export function EnquiryForm({
                       >
                         <SelectTrigger
                           className={cn(
-                            "!h-auto w-full cursor-pointer appearance-none rounded-lg px-4 py-3 text-sm text-[#111111] outline-hidden transition-all bg-white",
+                            "!h-auto w-full cursor-pointer appearance-none rounded-lg bg-white px-4 py-3 text-sm text-[#111111] outline-hidden transition-all",
                             "!focus-visible:ring-0 border-[1.2px] border-[#E2E2E2] font-semibold focus:border-[#E6405E] focus:bg-white focus-visible:border-[#E6405E] data-[placeholder]:font-medium data-[placeholder]:text-[#888888] data-[state=open]:border-[#E6405E]"
                           )}
                         >
-                          <SelectValue placeholder={`Select ${field.label || "Option"}`} />
+                          <SelectValue
+                            placeholder={`Select ${field.label || "Option"}`}
+                          />
                         </SelectTrigger>
                         <SelectContent
                           position="popper"
@@ -217,7 +227,11 @@ export function EnquiryForm({
               "border-none bg-[#E6405E] text-[15px] shadow-none select-none hover:bg-[#d03350]! disabled:opacity-50"
             )}
           >
-            <span>{isPending ? "Submitting..." : (form?.submitButtonText || "Submit Enquiry")}</span>
+            <span>
+              {isPending
+                ? "Submitting..."
+                : form?.submitButtonText || "Submit Enquiry"}
+            </span>
             {!isPending && (
               <Play className="h-3.5 w-3.5 translate-x-0.5 fill-white text-white" />
             )}
@@ -229,7 +243,11 @@ export function EnquiryForm({
               form.footerItems.map((item) => (
                 <div key={item.id} className="flex items-center gap-1.5">
                   {item.icon ? (
-                    <StrapiIcon icon={item.icon} size={14} className="shrink-0 text-[#888888]" />
+                    <StrapiIcon
+                      icon={item.icon}
+                      size={14}
+                      className="shrink-0 text-[#888888]"
+                    />
                   ) : (
                     <ShieldCheck className="h-4 w-4 shrink-0 text-[#888888]" />
                   )}

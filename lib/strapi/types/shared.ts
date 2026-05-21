@@ -23,7 +23,11 @@
  *   cards.feature-card      → FeatureCardComponent
  */
 
-import type { StrapiMediaComponent, StrapiFileComponent, StrapiMediaFile } from "./media"
+import type {
+  StrapiMediaComponent,
+  StrapiFileComponent,
+  StrapiMediaFile,
+} from "./media"
 
 // ─── Iconhub custom field ─────────────────────────────────────────────────────
 
@@ -33,8 +37,8 @@ import type { StrapiMediaComponent, StrapiFileComponent, StrapiMediaFile } from 
  * Always use `iconName` on the frontend — pass it directly to <Icon icon={iconName} />.
  */
 export interface IconhubField {
-  iconName: string  // e.g. "mdi:home" — use with @iconify/react
-  iconData: string  // raw SVG string (fallback, rarely needed)
+  iconName: string // e.g. "mdi:home" — use with @iconify/react
+  iconData: string // raw SVG string (fallback, rarely needed)
 }
 
 // ─── Page relation stub ───────────────────────────────────────────────────────
@@ -160,8 +164,8 @@ export interface FormOptionComponent {
   id: number
   text: string
   type: FormOptionType
-  additionalInfo: string | null   // richtext, only for quiz_option
-  isDisqualifying: boolean        // only for quiz_option
+  additionalInfo: string | null // richtext, only for quiz_option
+  isDisqualifying: boolean // only for quiz_option
 }
 
 // ─── shared.form-fields ──────────────────────────────────────────────────────
@@ -174,7 +178,7 @@ export interface FormFieldComponent {
   label: string | null
   type: FormFieldType
   required: boolean
-  selectOptions: FormOptionComponent[]  // populated only when type === "select"
+  selectOptions: FormOptionComponent[] // populated only when type === "select"
 }
 
 // ─── shared.form-step ────────────────────────────────────────────────────────

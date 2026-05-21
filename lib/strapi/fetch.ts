@@ -19,7 +19,11 @@ export class StrapiFetchError extends Error {
   status: number
   details?: Record<string, unknown>
 
-  constructor(message: string, status: number, details?: Record<string, unknown>) {
+  constructor(
+    message: string,
+    status: number,
+    details?: Record<string, unknown>
+  ) {
     super(message)
     this.name = "StrapiFetchError"
     this.status = status
@@ -42,7 +46,7 @@ export interface FetchStrapiOptions {
    * `{ next: { tags: ['global'] } }` for on-demand revalidation.
    * Defaults to `{ next: { revalidate: 60 } }`.
    */
-  nextOptions?: RequestInit["cache"] extends infer _ ? RequestInit : never
+  nextOptions?: RequestInit
   /** Override the default Authorization header (e.g. pass undefined for public routes) */
   token?: string | null
 }
@@ -63,11 +67,7 @@ export interface FetchStrapiOptions {
  */
 export async function fetchStrapi<T>(
   path: string,
-  {
-    params,
-    nextOptions,
-    token,
-  }: FetchStrapiOptions = {}
+  { params, nextOptions, token }: FetchStrapiOptions = {}
 ): Promise<T> {
   const queryString = params
     ? `?${qs.stringify(params, { encodeValuesOnly: true })}`
@@ -76,16 +76,14 @@ export async function fetchStrapi<T>(
   const url = getStrapiURL(`${path}${queryString}`)
 
   const authToken =
-    token !== undefined
-      ? token
-      : process.env.STRAPI_API_TOKEN ?? null
+    token !== undefined ? token : (process.env.STRAPI_API_TOKEN ?? null)
 
   const headers: HeadersInit = {
     "Content-Type": "application/json",
     ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
   }
 
-  const hasCacheProperty = nextOptions && "cache" in nextOptions;
+  const hasCacheProperty = nextOptions && "cache" in nextOptions
 
   const res = await fetch(url, {
     headers,
@@ -102,7 +100,8 @@ export async function fetchStrapi<T>(
       // ignore parse errors
     }
     throw new StrapiFetchError(
-      errorBody?.error?.message ?? `Strapi API error: ${res.status} ${res.statusText}`,
+      errorBody?.error?.message ??
+        `Strapi API error: ${res.status} ${res.statusText}`,
       res.status,
       errorBody?.error?.details
     )
@@ -126,9 +125,7 @@ export async function mutateStrapiData<T>(
   const url = getStrapiURL(path)
 
   const authToken =
-    token !== undefined
-      ? token
-      : process.env.STRAPI_API_TOKEN ?? null
+    token !== undefined ? token : (process.env.STRAPI_API_TOKEN ?? null)
 
   const headers: HeadersInit = {
     "Content-Type": "application/json",
@@ -150,7 +147,8 @@ export async function mutateStrapiData<T>(
       // ignore parse errors
     }
     throw new StrapiFetchError(
-      errorBody?.error?.message ?? `Strapi ${method} error: ${res.status} ${res.statusText}`,
+      errorBody?.error?.message ??
+        `Strapi ${method} error: ${res.status} ${res.statusText}`,
       res.status,
       errorBody?.error?.details
     )

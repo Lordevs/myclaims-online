@@ -64,7 +64,9 @@ export function ClaimFormSection({
               {(titleGreen || titleRed) && (
                 <h2 className="mb-6 text-[38px] leading-[1.1] font-extrabold tracking-tight text-[#064E3B] sm:text-[48px] md:text-[54px]">
                   {titleGreen} {titleGreen && titleRed && <br />}
-                  {titleRed && <span className="text-[#AF2144]">{titleRed}</span>}
+                  {titleRed && (
+                    <span className="text-[#AF2144]">{titleRed}</span>
+                  )}
                 </h2>
               )}
 

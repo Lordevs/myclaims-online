@@ -1,6 +1,5 @@
 "use client"
 
-import * as React from "react"
 import { Container } from "@/components/layout/container"
 import {
   FadeIn,
@@ -9,7 +8,10 @@ import {
 } from "@/components/ui/animations"
 import { cn } from "@/lib/utils"
 import { StrapiIcon } from "@/components/strapi/strapi-icon"
-import type { FeatureCardComponent } from "@/lib/strapi/types/shared"
+import type {
+  FeatureCardComponent,
+  IconhubField,
+} from "@/lib/strapi/types/shared"
 
 export interface BentoCardProps {
   /** Card heading text */
@@ -19,7 +21,7 @@ export interface BentoCardProps {
   /** Column span class for responsive grid layout */
   colSpanClass: string
   /** Optional icon to render on the left of row layout */
-  icon?: any
+  icon?: IconhubField | { name: string; selectIcon?: string } | null | undefined
   /** Icon circle container color theme */
   iconVariant?: "pink" | "green"
   /** Optional override heading font styling class */
@@ -111,7 +113,11 @@ export interface AsymmetricRowSectionProps {
  * High-fidelity Bento Grid section.
  * Renders BentoCards in an animated 12-column asymmetric grid layout.
  */
-export function AsymmetricRowSection({ title, items, className }: AsymmetricRowSectionProps) {
+export function AsymmetricRowSection({
+  title,
+  items,
+  className,
+}: AsymmetricRowSectionProps) {
   if (!items || items.length === 0) return null
 
   const getColSpan = (idx: number, total: number) => {
@@ -164,7 +170,9 @@ export function AsymmetricRowSection({ title, items, className }: AsymmetricRowS
                 title={item.title}
                 description={item.description}
                 headingClass="text-lg"
-                descriptionClass={idx < 2 ? "text-lg" : "text-sm md:text-[15px]"}
+                descriptionClass={
+                  idx < 2 ? "text-lg" : "text-sm md:text-[15px]"
+                }
               />
             ))}
           </div>

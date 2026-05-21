@@ -2,7 +2,10 @@ import { ShieldCheck, Check, Phone } from "lucide-react"
 import { Container } from "@/components/layout/container"
 import { FadeIn } from "@/components/ui/animations"
 import { cn } from "@/lib/utils"
-import type { FormStepComponent, ListItemComponent } from "@/lib/strapi/types/shared"
+import type {
+  FormStepComponent,
+  ListItemComponent,
+} from "@/lib/strapi/types/shared"
 import {
   ClaimsQuizForm,
   QuizQuestion,

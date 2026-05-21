@@ -7,7 +7,10 @@ import { Progress } from "@/components/ui/progress"
 import { cn } from "@/lib/utils"
 import { Markdown } from "@/components/shared/markdown"
 
-import type { FormStepComponent, ListItemComponent } from "@/lib/strapi/types/shared"
+import type {
+  FormStepComponent,
+  ListItemComponent,
+} from "@/lib/strapi/types/shared"
 import { StrapiIcon } from "@/components/strapi/strapi-icon"
 
 export interface QuizOption {
@@ -129,7 +132,10 @@ export function ClaimsQuizForm({
   const [contactInfo, setContactInfo] = useState<Record<string, string>>({})
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [state, setState] = useState<{ status: string; message: string | null }>({
+  const [state, setState] = useState<{
+    status: string
+    message: string | null
+  }>({
     status: "idle",
     message: null,
   })
@@ -140,7 +146,9 @@ export function ClaimsQuizForm({
   const progressPercent =
     totalSteps > 0 ? (currentStepIndex / totalSteps) * 100 : 0
   const selectedValue = activeQuestion ? answers[activeQuestion.id] : undefined
-  const selectedOption = activeQuestion?.options.find((opt) => opt.value === selectedValue)
+  const selectedOption = activeQuestion?.options.find(
+    (opt) => opt.value === selectedValue
+  )
   const isDisqualified = selectedOption?.isDisqualifying || false
 
   // Navigation handlers
@@ -206,14 +214,18 @@ export function ClaimsQuizForm({
       } else {
         setState({
           status: "error",
-          message: res.message || "Failed to submit claims quiz. Please try again.",
+          message:
+            res.message || "Failed to submit claims quiz. Please try again.",
         })
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("[ClaimsQuizForm] Submission error:", err)
       setState({
         status: "error",
-        message: err.message || "An unexpected error occurred during submission.",
+        message:
+          err instanceof Error
+            ? err.message
+            : "An unexpected error occurred during submission.",
       })
     } finally {
       setIsSubmitting(false)
@@ -275,7 +287,8 @@ export function ClaimsQuizForm({
               Claim Details Received!
             </h3>
             <p className="mb-8 max-w-lg text-sm leading-relaxed font-medium text-[#594143] sm:text-base">
-              {successMessage || "Thank you! Your assessment has been completed. A claims specialist will review your file and call you directly within 15 minutes."}
+              {successMessage ||
+                "Thank you! Your assessment has been completed. A claims specialist will review your file and call you directly within 15 minutes."}
             </p>
             <button
               onClick={handleReset}
@@ -288,11 +301,16 @@ export function ClaimsQuizForm({
           /* Premium Contact Details Form Step */
           <FadeIn delay={0.05} y={15}>
             <h3 className="mb-3 text-2xl leading-tight font-black tracking-tight text-[#1A1C19] sm:text-3xl">
-              {contactStep?.title || "Almost Eligible! Lock in your claim evaluation"}
+              {contactStep?.title ||
+                "Almost Eligible! Lock in your claim evaluation"}
             </h3>
             {contactStep?.description ? (
               <div className="mb-8 text-sm leading-relaxed font-semibold text-[#594143]">
-                <Markdown content={contactStep.description} variant="light" className="prose-sm max-w-none prose-[#594143]" />
+                <Markdown
+                  content={contactStep.description}
+                  variant="light"
+                  className="prose-[#594143] prose-sm max-w-none"
+                />
               </div>
             ) : (
               <p className="mb-8 text-sm leading-relaxed font-semibold text-[#594143]">
@@ -327,7 +345,7 @@ export function ClaimsQuizForm({
                             [fieldKey]: e.target.value,
                           }))
                         }
-                        className="w-full rounded-xl border-2 border-[#4C6549] bg-[#F3F4EF] px-5 py-4 font-bold text-[#1A1C19] placeholder-[#594143]/50 transition-all focus:ring-2 focus:ring-[#AF2144]/20 focus:outline-none min-h-[120px]"
+                        className="min-h-[120px] w-full rounded-xl border-2 border-[#4C6549] bg-[#F3F4EF] px-5 py-4 font-bold text-[#1A1C19] placeholder-[#594143]/50 transition-all focus:ring-2 focus:ring-[#AF2144]/20 focus:outline-none"
                       />
                     ) : (
                       <input
@@ -339,8 +357,8 @@ export function ClaimsQuizForm({
                           field.type === "email"
                             ? "john@example.com"
                             : field.type === "tel"
-                            ? "07123 456789"
-                            : `Enter your ${field.label?.toLowerCase() || ""}`
+                              ? "07123 456789"
+                              : `Enter your ${field.label?.toLowerCase() || ""}`
                         }
                         value={contactInfo[fieldKey] || ""}
                         onChange={(e) =>
@@ -358,11 +376,15 @@ export function ClaimsQuizForm({
 
               {/* Dynamic Footer Items inside contact form */}
               {footerItems && footerItems.length > 0 && (
-                <div className="mt-4 flex flex-wrap justify-start gap-x-4 gap-y-2 text-[#594143] text-xs font-semibold">
+                <div className="mt-4 flex flex-wrap justify-start gap-x-4 gap-y-2 text-xs font-semibold text-[#594143]">
                   {footerItems.map((item) => (
                     <div key={item.id} className="flex items-center gap-1.5">
                       {item.icon ? (
-                        <StrapiIcon icon={item.icon} size={14} className="shrink-0 text-[#594143]" />
+                        <StrapiIcon
+                          icon={item.icon}
+                          size={14}
+                          className="shrink-0 text-[#594143]"
+                        />
                       ) : (
                         <ShieldCheck className="h-4 w-4 shrink-0 text-[#594143]" />
                       )}
@@ -373,7 +395,7 @@ export function ClaimsQuizForm({
               )}
 
               {state.status === "error" && state.message && (
-                <div className="text-sm font-semibold text-[#AF2144] animate-in fade-in duration-200">
+                <div className="animate-in text-sm font-semibold text-[#AF2144] duration-200 fade-in">
                   {state.message}
                 </div>
               )}
@@ -443,8 +465,12 @@ export function ClaimsQuizForm({
 
             {/* Disqualifying Warning Panel */}
             {isDisqualified && selectedOption?.additionalInfo && (
-              <div className="mt-6 text-sm font-semibold leading-relaxed text-[#AF2144] animate-in fade-in slide-in-from-top-1 duration-300 w-full">
-                <Markdown content={selectedOption.additionalInfo} className="prose-sm max-w-none prose-[#AF2144]" variant="light" />
+              <div className="mt-6 w-full animate-in text-sm leading-relaxed font-semibold text-[#AF2144] duration-300 fade-in slide-in-from-top-1">
+                <Markdown
+                  content={selectedOption.additionalInfo}
+                  className="prose-[#AF2144] prose-sm max-w-none"
+                  variant="light"
+                />
               </div>
             )}
 

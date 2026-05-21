@@ -75,7 +75,7 @@ export function DetailedEnquirySection({
                       <div key={idx} className="flex items-center gap-3">
                         <div className="flex h-5.5 w-5.5 shrink-0 items-center justify-center rounded-full border border-[#4A6412] bg-[#F4F8E5] shadow-none">
                           <Check
-                             className="h-3.5 w-3.5 text-[#4A6412]"
+                            className="h-3.5 w-3.5 text-[#4A6412]"
                             strokeWidth={3}
                           />
                         </div>

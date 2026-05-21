@@ -33,14 +33,6 @@ const featureCardPopulate = true
 
 const listItemPopulate = true
 
-const formStepPopulate = {
-  fields: {
-    populate: {
-      selectOptions: true,
-    },
-  },
-}
-
 // ─── Form (with full nested steps) ──────────────────────────────────────────
 
 /**

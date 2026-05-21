@@ -8,6 +8,7 @@ import {
 import { cn } from "@/lib/utils"
 import { StrapiIcon } from "@/components/strapi/strapi-icon"
 import * as React from "react"
+import { IconhubField } from "@/lib/strapi/types/shared"
 
 const iconMap: Record<string, LucideIcon> = {
   "map-pin": MapPin,
@@ -19,7 +20,7 @@ export interface StrategicHubItem {
   id: string | number
   title: string
   details: string
-  icon: any
+  icon: IconhubField | { name: string; selectIcon?: string } | null | undefined
   iconBg: "pink" | "green" | string
 }
 
@@ -42,31 +43,6 @@ export interface StrategicHubSectionProps {
   className?: string
 }
 
-const defaultItems: StrategicHubItem[] = [
-  {
-    id: 1,
-    title: "Head Office",
-    details:
-      "The Point , 173 to 175 Cheetham Hill Road, Road, Manchester, M8 BLG",
-    icon: "map-pin",
-    iconBg: "pink",
-  },
-  {
-    id: 2,
-    title: "Freephone",
-    details: "0800 123 4567",
-    icon: "phone",
-    iconBg: "green",
-  },
-  {
-    id: 3,
-    title: "Email Support",
-    details: "support@myclaimsonline.co.uk",
-    icon: "mail",
-    iconBg: "pink",
-  },
-]
-
 /**
  * Reusable, high-fidelity Strategic Hub contact and map section.
  * Features a dual-layout white & cool-sage framed card:
@@ -78,13 +54,13 @@ const defaultItems: StrategicHubItem[] = [
  * - Custom structured SVG street mock map or responsive Google Map iframe fallback
  */
 export function StrategicHubSection({
-  title = "The Strategic Hub",
-  description = "Our central headquarters in Manchester coordinates all claims across the United Kingdom.",
-  items = defaultItems,
-  buttonText = "Download Claim Guide",
-  buttonLink = "#",
+  title,
+  description,
+  items = [],
+  buttonText,
+  buttonLink,
   mapEmbedUrl,
-  mapMarkerTitle = "Deansgate HQ",
+  mapMarkerTitle,
   className,
 }: StrategicHubSectionProps) {
   return (
@@ -99,12 +75,16 @@ export function StrategicHubSection({
           {/* LEFT COLUMN: Content & Contacts */}
           <div className="col-span-1 flex flex-col justify-start px-6 py-12 text-left sm:px-12 sm:py-16 lg:col-span-5">
             <FadeIn delay={0.1}>
-              <h2 className="mb-4 text-3xl font-extrabold tracking-tight text-[#064E3B] sm:text-4xl">
-                {title}
-              </h2>
-              <p className="mb-10 max-w-xl text-sm leading-relaxed font-medium text-[#4C6549] sm:text-base">
-                {description}
-              </p>
+              {title && (
+                <h2 className="mb-4 text-3xl font-extrabold tracking-tight text-[#064E3B] sm:text-4xl">
+                  {title}
+                </h2>
+              )}
+              {description && (
+                <p className="mb-10 max-w-xl text-sm leading-relaxed font-medium text-[#4C6549] sm:text-base">
+                  {description}
+                </p>
+              )}
             </FadeIn>
 
             {/* Staggered Contact List */}
@@ -115,9 +95,10 @@ export function StrategicHubSection({
             >
               {items.map((item) => {
                 const Icon = item.icon
-                const isComponent = typeof Icon === "function" || React.isValidElement(Icon)
+                const isComponent =
+                  typeof Icon === "function" || React.isValidElement(Icon)
                 const isString = typeof Icon === "string"
-                const ResolvedIcon = isString ? (iconMap[Icon] || MapPin) : null
+                const ResolvedIcon = isString ? iconMap[Icon] || MapPin : null
 
                 return (
                   <StaggerItem key={item.id}>
@@ -132,10 +113,15 @@ export function StrategicHubSection({
                         )}
                       >
                         {isComponent ? (
-                          React.createElement(Icon as any, {
-                            className: "h-5 w-5 text-[#1A1C19]",
-                            strokeWidth: 2.25,
-                          })
+                          React.createElement(
+                            Icon as unknown as React.ComponentType<
+                              Record<string, unknown>
+                            >,
+                            {
+                              className: "h-5 w-5 text-[#1A1C19]",
+                              strokeWidth: 2.25,
+                            }
+                          )
                         ) : ResolvedIcon ? (
                           <ResolvedIcon
                             className="h-5 w-5 text-[#1A1C19]"
@@ -166,17 +152,19 @@ export function StrategicHubSection({
             </StaggerContainer>
 
             {/* Custom Double-Border Button */}
-            <FadeIn delay={0.4} className="flex justify-start">
-              <a
-                href={buttonLink}
-                download
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex w-full cursor-pointer items-center justify-center rounded-lg border-2 border-[#064E3B] px-8 py-3.5 text-sm font-bold text-[#064E3B] transition-all hover:bg-[#064E3B] hover:text-white active:scale-98"
-              >
-                {buttonText}
-              </a>
-            </FadeIn>
+            {buttonText && (
+              <FadeIn delay={0.4} className="flex justify-start">
+                <a
+                  href={buttonLink || "#"}
+                  download
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex w-full cursor-pointer items-center justify-center rounded-lg border-2 border-[#064E3B] px-8 py-3.5 text-sm font-bold text-[#064E3B] transition-all hover:bg-[#064E3B] hover:text-white active:scale-98"
+                >
+                  {buttonText}
+                </a>
+              </FadeIn>
+            )}
           </div>
 
           {/* RIGHT COLUMN: Full-Bleed Map Canvas with Grayscale Toggle */}
@@ -276,30 +264,19 @@ export function StrategicHubSection({
                 </svg>
 
                 {/* Glowing Circular Hot-Spot Marker */}
-                <div className="absolute top-[50%] left-[50%] z-10 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center">
-                  <span className="absolute inline-flex h-10 w-10 animate-ping rounded-full bg-[#AF2144]/40 opacity-75" />
-                  <span className="relative inline-flex h-5 w-5 rounded-full border-2 border-white bg-[#AF2144] shadow-md" />
-                </div>
+                {mapMarkerTitle && (
+                  <>
+                    <div className="absolute top-[50%] left-[50%] z-10 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center">
+                      <span className="absolute inline-flex h-10 w-10 animate-ping rounded-full bg-[#AF2144]/40 opacity-75" />
+                      <span className="relative inline-flex h-5 w-5 rounded-full border-2 border-white bg-[#AF2144] shadow-md" />
+                    </div>
 
-                {/* Styled HQ Badge Tag */}
-                <div className="absolute top-[38%] left-[50%] z-10 -translate-x-1/2 -translate-y-1/2 rounded-md bg-[#064E3B] px-3 py-1 text-[10px] font-black tracking-widest whitespace-nowrap text-white uppercase shadow-md select-none">
-                  {mapMarkerTitle}
-                </div>
-
-                {/* Overlay Description Card */}
-                <div className="absolute bottom-6 left-6 max-w-[220px] rounded-xl border border-white/10 bg-[#2D3331]/95 p-4 text-left text-white shadow-xl backdrop-blur-sm">
-                  <h4 className="text-xs leading-tight font-black tracking-wider text-white uppercase">
-                    Deansgate,
-                  </h4>
-                  <p className="mt-1.5 text-[10px] leading-relaxed font-semibold text-white/75">
-                    173-175 Cheetham Hill Road, Manchester, M8 BLG
-                  </p>
-                  <div className="mt-3 flex gap-1.5">
-                    <span className="h-1.5 w-1.5 rounded-full bg-white/40" />
-                    <span className="h-1.5 w-1.5 rounded-full bg-white/40" />
-                    <span className="h-1.5 w-1.5 rounded-full bg-white/40" />
-                  </div>
-                </div>
+                    {/* Styled HQ Badge Tag */}
+                    <div className="absolute top-[38%] left-[50%] z-10 -translate-x-1/2 -translate-y-1/2 rounded-md bg-[#064E3B] px-3 py-1 text-[10px] font-black tracking-widest whitespace-nowrap text-white uppercase shadow-md select-none">
+                      {mapMarkerTitle}
+                    </div>
+                  </>
+                )}
               </div>
             )}
           </div>

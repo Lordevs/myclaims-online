@@ -1,7 +1,6 @@
 "use client"
 
 import * as React from "react"
-import { LucideIcon } from "lucide-react"
 import { Container } from "@/components/layout/container"
 import {
   FadeIn,
@@ -10,9 +9,10 @@ import {
 } from "@/components/ui/animations"
 import { cn } from "@/lib/utils"
 import { StrapiIcon } from "@/components/strapi/strapi-icon"
+import type { IconhubField } from "@/lib/strapi/types/shared"
 
 export interface StepItem {
-  icon: any
+  icon: IconhubField | { name: string; selectIcon?: string } | null | undefined
   title: string
   description: string
 }
@@ -100,11 +100,19 @@ export function StepsGridSection({
                         {idx + 1}
                       </span>
                       {/* Main Icon */}
-                      {typeof Icon === "function" || React.isValidElement(Icon) ? (
-                        <Icon
-                          className="relative z-10 h-14 w-14 shrink-0 text-[#E6405E] transition-transform duration-200 group-hover:scale-105"
-                          strokeWidth={1.75}
-                        />
+                      {typeof Icon === "function" ||
+                      React.isValidElement(Icon) ? (
+                        React.createElement(
+                          Icon as unknown as React.ComponentType<{
+                            className: string
+                            strokeWidth: number
+                          }>,
+                          {
+                            className:
+                              "relative z-10 h-14 w-14 shrink-0 text-[#E6405E] transition-transform duration-200 group-hover:scale-105",
+                            strokeWidth: 1.75,
+                          }
+                        )
                       ) : (
                         <StrapiIcon
                           icon={Icon}

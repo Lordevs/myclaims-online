@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
     // Standardize model name (Strapi v5 sends both singular uid e.g. "page" or full e.g. "api::page.page")
     const modelName = model.includes("::") ? model.split(".")[1] : model
 
-    const revalidate = revalidateTag as any
+    const revalidate = revalidateTag as (tag: string) => void
     const revalidatedTags: string[] = []
 
     switch (modelName) {
@@ -72,18 +72,19 @@ export async function POST(req: NextRequest) {
         break
     }
 
-    console.log(`[revalidate] Revalidated tags: ${revalidatedTags.join(", ")} for model: ${modelName}`)
+    console.log(
+      `[revalidate] Revalidated tags: ${revalidatedTags.join(", ")} for model: ${modelName}`
+    )
 
     return NextResponse.json({
       revalidated: true,
       model: modelName,
       tags: revalidatedTags,
     })
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message =
+      error instanceof Error ? error.message : "Internal server error"
     console.error("[revalidate] Error processing webhook:", error)
-    return NextResponse.json(
-      { message: error.message || "Internal server error" },
-      { status: 500 }
-    )
+    return NextResponse.json({ message }, { status: 500 })
   }
 }

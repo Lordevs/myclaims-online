@@ -57,15 +57,19 @@ export async function submitForm(
   for (const [key, value] of formData.entries()) {
     // Ignore internal Next.js action keys and the formId
     if (key === "formId" || key.startsWith("$ACTION_")) continue
-    
+
     // Extract core fields based on label matching
     const normalizedKey = key.toLowerCase().replace(/[^a-z0-9]/g, "")
-    
+
     if (normalizedKey.includes("fullname") || normalizedKey === "name") {
       fullName = value.toString()
     } else if (normalizedKey.includes("email")) {
       email = value.toString()
-    } else if (normalizedKey.includes("phone") || normalizedKey.includes("mobile") || normalizedKey.includes("telephone")) {
+    } else if (
+      normalizedKey.includes("phone") ||
+      normalizedKey.includes("mobile") ||
+      normalizedKey.includes("telephone")
+    ) {
       phone = value.toString()
     } else {
       // Handle multiple values for the same key (e.g. checkboxes)
@@ -82,13 +86,22 @@ export async function submitForm(
   const formId = formData.get("formId") as string
 
   // ── 2. Validate ────────────────────────────────────────────────────────────
-  const parsed = FormSubmissionSchema.safeParse({ formId, fullName, email, phone, data })
+  const parsed = FormSubmissionSchema.safeParse({
+    formId,
+    fullName,
+    email,
+    phone,
+    data,
+  })
 
   if (!parsed.success) {
     return {
       status: "validation_error",
       message: "Please check your inputs and try again.",
-      fieldErrors: parsed.error.flatten().fieldErrors as Record<string, string[]>,
+      fieldErrors: parsed.error.flatten().fieldErrors as Record<
+        string,
+        string[]
+      >,
     }
   }
 

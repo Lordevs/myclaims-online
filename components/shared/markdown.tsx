@@ -8,14 +8,19 @@ interface MarkdownProps {
   variant?: "light" | "dark"
 }
 
-const FONT_SIZE_REGEX = /(^|\s)(?:[a-z]+:)?text-(xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl|7xl|8xl|9xl|\[\d+(\.\d+)?(px|rem|em|%|vh|vw)\])/
+const FONT_SIZE_REGEX =
+  /(^|\s)(?:[a-z]+:)?text-(xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl|7xl|8xl|9xl|\[\d+(\.\d+)?(px|rem|em|%|vh|vw)\])/
 
 /**
  * Premium, reusable Markdown renderer driven by Tailwind's official @tailwindcss/typography (prose).
  * Simplifies rendering by relying on native utility classes while preserving custom theme accents,
  * font sizes, and Next.js SPA Link mapping for internal routes.
  */
-export function Markdown({ content, className, variant = "dark" }: MarkdownProps) {
+export function Markdown({
+  content,
+  className,
+  variant = "dark",
+}: MarkdownProps) {
   const isDark = variant === "dark"
 
   // Check if the caller provided any custom font-size utility class (including responsive prefixes)
@@ -27,7 +32,7 @@ export function Markdown({ content, className, variant = "dark" }: MarkdownProps
         "prose max-w-none leading-relaxed font-normal text-inherit",
         !hasCustomSize && "text-sm md:text-base",
         isDark ? "prose-invert" : "",
-        isDark 
+        isDark
           ? "prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-white"
           : "prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-[#064E3B]",
         "prose-h1:mt-8 prose-h1:mb-4 prose-h1:text-3xl md:prose-h1:text-4xl",
@@ -53,8 +58,12 @@ export function Markdown({ content, className, variant = "dark" }: MarkdownProps
         isDark
           ? "prose-hr:my-7 prose-hr:border-t prose-hr:border-white/10"
           : "prose-hr:my-7 prose-hr:border-t prose-hr:border-black/10",
-        isDark ? "prose-strong:font-bold prose-strong:text-white" : "prose-strong:font-bold prose-strong:text-gray-900",
-        isDark ? "prose-em:text-white/90 prose-em:italic" : "prose-em:text-gray-800 prose-em:italic",
+        isDark
+          ? "prose-strong:font-bold prose-strong:text-white"
+          : "prose-strong:font-bold prose-strong:text-gray-900",
+        isDark
+          ? "prose-em:text-white/90 prose-em:italic"
+          : "prose-em:text-gray-800 prose-em:italic",
         className
       )}
     >

@@ -70,7 +70,8 @@ export function FormHero({
 
   const firstStep = form?.steps?.[0]
   const resolvedFormTitle = firstStep?.title || formTitle || undefined
-  const resolvedFormSubtitle = firstStep?.description || formSubtitle || undefined
+  const resolvedFormSubtitle =
+    firstStep?.description || formSubtitle || undefined
 
   return (
     <section
@@ -98,7 +99,7 @@ export function FormHero({
                   <div key={idx} className="flex items-center gap-3">
                     <div className="flex h-5.5 w-5.5 shrink-0 items-center justify-center rounded-full bg-[#1B6E3F] shadow-none">
                       <Check
-                         className="h-3.5 w-3.5 text-white"
+                        className="h-3.5 w-3.5 text-white"
                         strokeWidth={3}
                       />
                     </div>

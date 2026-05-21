@@ -48,14 +48,16 @@ export function ClaimEnquiryForm({
 
   const [formData, setFormData] = React.useState<Record<string, string>>({})
 
-  // Trigger optional callback on successful submit
+  // Trigger optional callback on successful submit and reset form data
   useEffect(() => {
     if (state.status === "success") {
       if (onSubmit) {
         onSubmit(formData)
       }
-      setFormData({})
+      // Defer reset to avoid calling setState synchronously inside an effect
+      Promise.resolve().then(() => setFormData({}))
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.status, onSubmit])
 
   // Flat list of all fields across all steps
@@ -77,7 +79,9 @@ export function ClaimEnquiryForm({
             Enquiry Received!
           </h3>
           <p className="mb-8 max-w-lg text-sm leading-relaxed font-semibold text-[#4C6549] sm:text-base">
-            {form?.successMessage || state.message || "Thank you! Your claims enquiry has been received. Our team will contact you shortly."}
+            {form?.successMessage ||
+              state.message ||
+              "Thank you! Your claims enquiry has been received. Our team will contact you shortly."}
           </p>
         </div>
       </div>
@@ -92,7 +96,11 @@ export function ClaimEnquiryForm({
         className
       )}
     >
-      <input type="hidden" name="formId" value={form?.formId || "enquiry-form"} />
+      <input
+        type="hidden"
+        name="formId"
+        value={form?.formId || "enquiry-form"}
+      />
 
       {/* Form Heading */}
       <h3 className="mb-6 text-xl font-extrabold tracking-tight text-[#064E3B] sm:text-2xl">
@@ -159,7 +167,9 @@ export function ClaimEnquiryForm({
                           "!focus-visible:ring-0 border border-[#E0BEC1] bg-[#FFFFFF80] font-semibold focus:border-[#AF2144] focus:bg-white focus-visible:border-[#AF2144] data-[placeholder]:font-medium data-[placeholder]:text-[#A3A3A3] data-[state=open]:border-[#AF2144] data-[state=open]:bg-white [&_svg]:h-4 [&_svg]:w-4 [&_svg]:text-[#064E3B]"
                         )}
                       >
-                        <SelectValue placeholder={`Select ${field.label || "Option"}`} />
+                        <SelectValue
+                          placeholder={`Select ${field.label || "Option"}`}
+                        />
                       </SelectTrigger>
                       <SelectContent
                         position="popper"
@@ -211,24 +221,37 @@ export function ClaimEnquiryForm({
           "border-none bg-[#E6405E] hover:bg-[#d03350]! active:scale-[0.98] disabled:opacity-50"
         )}
       >
-        <span>{isPending ? "Submitting..." : (form?.submitButtonText || "Submit Enquiry")}</span>
+        <span>
+          {isPending
+            ? "Submitting..."
+            : form?.submitButtonText || "Submit Enquiry"}
+        </span>
         {!isPending && (
           <Play className="h-3.5 w-3.5 translate-x-0.5 fill-white text-white" />
         )}
       </Button>
 
       {/* Form Footer */}
-      <div className={cn(
-        "mt-6 items-center gap-4 border-t border-[#064E3B0D] pt-5 text-center",
-        form?.footerItems && form.footerItems.length > 0
-          ? "flex flex-wrap justify-center gap-x-6 gap-y-2"
-          : "grid grid-cols-2"
-      )}>
+      <div
+        className={cn(
+          "mt-6 items-center gap-4 border-t border-[#064E3B0D] pt-5 text-center",
+          form?.footerItems && form.footerItems.length > 0
+            ? "flex flex-wrap justify-center gap-x-6 gap-y-2"
+            : "grid grid-cols-2"
+        )}
+      >
         {form?.footerItems && form.footerItems.length > 0 ? (
           form.footerItems.map((item) => (
-            <div key={item.id} className="flex items-center justify-center gap-2 text-[#064E3B99] transition-opacity hover:opacity-80">
+            <div
+              key={item.id}
+              className="flex items-center justify-center gap-2 text-[#064E3B99] transition-opacity hover:opacity-80"
+            >
               {item.icon ? (
-                <StrapiIcon icon={item.icon} size={14} className="shrink-0 text-[#AF2144]" />
+                <StrapiIcon
+                  icon={item.icon}
+                  size={14}
+                  className="shrink-0 text-[#AF2144]"
+                />
               ) : (
                 <ShieldCheck className="h-4 w-4 shrink-0 text-[#AF2144]" />
               )}

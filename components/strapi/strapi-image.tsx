@@ -45,9 +45,7 @@ export function StrapiImage({
       alt={resolvedAlt}
       width={resolvedWidth}
       height={resolvedHeight}
-      unoptimized={
-        process.env.NODE_ENV === "development" || props.unoptimized
-      }
+      unoptimized={process.env.NODE_ENV === "development" || props.unoptimized}
       {...props}
     />
   )
