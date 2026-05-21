@@ -18,8 +18,16 @@ import Hero from "@/components/sections/hero"
 import DetailedEnquirySection from "@/components/sections/detailed-enquiry-section"
 import { StrategicHubSection } from "@/components/sections/strategic-hub-section"
 import { ClaimsQuizSection } from "@/components/sections/claims-quiz-section"
+import { getPageBySlug } from "@/lib/strapi/services/page"
+import { DynamicZoneRenderer } from "@/components/strapi/dynamic-zone-renderer"
 
-export default function Page() {
+export default async function Page() {
+  const page = await getPageBySlug("home").catch(() => null)
+
+  if (page?.blocks?.length) {
+    return <DynamicZoneRenderer sections={page.blocks} />
+  }
+
   return (
     <div className="flex min-h-screen w-full flex-col bg-[#F9FAF5]">
       {/* High-converting Form Hero Section with 2-column checklist and lead form */}

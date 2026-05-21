@@ -23,6 +23,7 @@ export function Navbar({ globalData }: NavbarProps) {
   const scrolled = useScroll(20)
 
   const ctaButton: LinkComponent | null = globalData?.navbarCta ?? null
+  const navItems = globalData?.navbarItems
 
   return (
     <header
@@ -41,12 +42,13 @@ export function Navbar({ globalData }: NavbarProps) {
           <DesktopNav
             className="hidden md:flex"
             itemClassName="text-white/80 hover:text-white"
+            navItems={navItems}
           />
           <div className="flex items-center gap-4">
             <NavCTAButton ctaButton={ctaButton} className="hidden md:flex" />
 
             {/* Mobile Navigation */}
-            <MobileNav ctaButton={ctaButton} />
+            <MobileNav ctaButton={ctaButton} navItems={navItems} />
           </div>
         </div>
       </Container>

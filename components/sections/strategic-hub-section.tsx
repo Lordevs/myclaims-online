@@ -6,6 +6,8 @@ import {
   StaggerItem,
 } from "@/components/ui/animations"
 import { cn } from "@/lib/utils"
+import { StrapiIcon } from "@/components/strapi/strapi-icon"
+import * as React from "react"
 
 const iconMap: Record<string, LucideIcon> = {
   "map-pin": MapPin,
@@ -17,7 +19,7 @@ export interface StrategicHubItem {
   id: string | number
   title: string
   details: string
-  icon: "map-pin" | "phone" | "mail" | string
+  icon: any
   iconBg: "pink" | "green" | string
 }
 
@@ -112,7 +114,11 @@ export function StrategicHubSection({
               className="mb-10 flex flex-col gap-6"
             >
               {items.map((item) => {
-                const IconComponent = iconMap[item.icon] || MapPin
+                const Icon = item.icon
+                const isComponent = typeof Icon === "function" || React.isValidElement(Icon)
+                const isString = typeof Icon === "string"
+                const ResolvedIcon = isString ? (iconMap[Icon] || MapPin) : null
+
                 return (
                   <StaggerItem key={item.id}>
                     <div className="group flex items-start">
@@ -125,10 +131,23 @@ export function StrategicHubSection({
                             : "bg-[#AF21441A]"
                         )}
                       >
-                        <IconComponent
-                          className="h-5 w-5 text-[#1A1C19]"
-                          strokeWidth={2.25}
-                        />
+                        {isComponent ? (
+                          React.createElement(Icon as any, {
+                            className: "h-5 w-5 text-[#1A1C19]",
+                            strokeWidth: 2.25,
+                          })
+                        ) : ResolvedIcon ? (
+                          <ResolvedIcon
+                            className="h-5 w-5 text-[#1A1C19]"
+                            strokeWidth={2.25}
+                          />
+                        ) : (
+                          <StrapiIcon
+                            icon={Icon}
+                            size={20}
+                            className="h-5 w-5 text-[#1A1C19]"
+                          />
+                        )}
                       </div>
 
                       {/* Contact Text Row */}

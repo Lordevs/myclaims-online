@@ -1,3 +1,5 @@
+"use client"
+
 import * as React from "react"
 import { Bike, Zap } from "lucide-react"
 import { Container } from "@/components/layout/container"
@@ -8,6 +10,8 @@ import {
 } from "@/components/ui/animations"
 import { Card, CardContent } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
+import { StrapiIcon } from "@/components/strapi/strapi-icon"
+import type { FeatureCardComponent } from "@/lib/strapi/types/shared"
 
 // A high-fidelity, custom front-facing car SVG
 function FrontCarIcon({ className }: { className?: string }) {
@@ -107,48 +111,61 @@ function FrontEVIcon({ className }: { className?: string }) {
 }
 
 export interface ClaimTypeItem {
-  icon: React.ComponentType<{ className?: string }>
+  icon: any
   title: string
-  description: string
+  description: string | null
+}
+
+interface ClaimsSupportProps {
+  title?: string
+  items?: FeatureCardComponent[]
 }
 
 /**
  * High-fidelity "Types of Claims We Support" section.
  * Configured in Neo-Brutalist design exactly to mockup specifications.
  */
-export function ClaimsSupport() {
-  const claimTypes: ClaimTypeItem[] = [
-    {
-      icon: FrontCarIcon,
-      title: "Private Car /\nCommercial Vehicle",
-      description:
-        "Full support for personal cars and business fleet vehicles involved in non-fault accidents.",
-    },
-    {
-      icon: FrontTaxiIcon,
-      title: "Taxi / Uber /\nPrivate Hire",
-      description:
-        "Specialist replacement plated vehicles to keep you working and earning after a collision.",
-    },
-    {
-      icon: MotorcycleIcon,
-      title: "Motorcycle\nClaims",
-      description:
-        "Expert handling for bikers, including protective gear replacement and like-for-like bike hire.",
-    },
-    {
-      icon: Bike,
-      title: "Cycle / E-Scooter\nClaims",
-      description:
-        "Dedicated support for vulnerable road users, ensuring fair compensation for injuries and equipment.",
-    },
-    {
-      icon: FrontEVIcon,
-      title: "Electric Vehicle\nClaims",
-      description:
-        "Specialized recovery and replacement services for EV and hybrid owners.",
-    },
-  ]
+export function ClaimsSupport({ title, items }: ClaimsSupportProps = {}) {
+  const claimTypes: ClaimTypeItem[] = items
+    ? items.map(item => ({
+        icon: item.icon,
+        title: item.title,
+        description: item.description,
+      }))
+    : [
+        {
+          icon: FrontCarIcon,
+          title: "Private Car /\nCommercial Vehicle",
+          description:
+            "Full support for personal cars and business fleet vehicles involved in non-fault accidents.",
+        },
+        {
+          icon: FrontTaxiIcon,
+          title: "Taxi / Uber /\nPrivate Hire",
+          description:
+            "Specialist replacement plated vehicles to keep you working and earning after a collision.",
+        },
+        {
+          icon: MotorcycleIcon,
+          title: "Motorcycle\nClaims",
+          description:
+            "Expert handling for bikers, including protective gear replacement and like-for-like bike hire.",
+        },
+        {
+          icon: Bike,
+          title: "Cycle / E-Scooter\nClaims",
+          description:
+            "Dedicated support for vulnerable road users, ensuring fair compensation for injuries and equipment.",
+        },
+        {
+          icon: FrontEVIcon,
+          title: "Electric Vehicle\nClaims",
+          description:
+            "Specialized recovery and replacement services for EV and hybrid owners.",
+        },
+      ]
+
+  const displayTitle = title || "Types of Claims We Support"
 
   return (
     <section className="w-full overflow-hidden border-t-[2.25px] border-b-[2.25px] border-[#0F172A] bg-white py-16 font-sans select-none md:py-24">
@@ -157,7 +174,7 @@ export function ClaimsSupport() {
           {/* Centered Heading */}
           <FadeIn delay={0.1}>
             <h2 className="mb-12 text-center text-3xl font-extrabold tracking-tight text-[#0F172A] md:mb-16 md:text-5xl">
-              Types of Claims We Support
+              {displayTitle}
             </h2>
           </FadeIn>
 
@@ -170,13 +187,19 @@ export function ClaimsSupport() {
             <div className="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 md:gap-4 lg:grid-cols-5 lg:gap-5">
               {claimTypes.map((item, idx) => {
                 const Icon = item.icon
+                const isComponent = typeof Icon === "function" || (Icon && React.isValidElement(Icon))
+
                 return (
                   <StaggerItem key={idx} className="h-full">
                     <Card className="flex h-full flex-col items-center rounded-xl border-2 border-[#064E3B] bg-[#F9FAF5] p-6 py-8 text-center shadow-none transition-transform duration-200 hover:scale-[1.01] md:p-5 md:py-10">
                       <CardContent className="flex h-full flex-col items-center p-0">
                         {/* Circular Icon Container */}
                         <div className="mb-2 flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-2 border-[#064E3B] bg-[#CEEBC7] text-[#064E3B] md:mb-4 md:h-16 md:w-16">
-                          <Icon className="h-6 w-6 shrink-0 text-[#064E3B] md:h-7 md:w-7" />
+                          {isComponent ? (
+                            React.createElement(Icon, { className: "h-6 w-6 shrink-0 text-[#064E3B] md:h-7 md:w-7" })
+                          ) : (
+                            <StrapiIcon icon={Icon} size={28} className="h-6 w-6 shrink-0 text-[#064E3B] md:h-7 md:w-7" />
+                          )}
                         </div>
 
                         {/* Card Heading */}
@@ -185,9 +208,11 @@ export function ClaimsSupport() {
                         </h3>
 
                         {/* Card Paragraph */}
-                        <p className="max-w-[200px] text-sm leading-relaxed font-normal text-[#594143] md:text-base">
-                          {item.description}
-                        </p>
+                        {item.description && (
+                          <p className="max-w-[200px] text-sm leading-relaxed font-normal text-[#594143] md:text-base">
+                            {item.description}
+                          </p>
+                        )}
                       </CardContent>
                     </Card>
                   </StaggerItem>

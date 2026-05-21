@@ -1,7 +1,7 @@
 "use client"
 
-import * as React from "react"
-import { ShieldCheck, Lock, Play } from "lucide-react"
+import React, { useActionState, useEffect } from "react"
+import { ShieldCheck, Lock, Play, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { submitForm } from "@/actions/form"
 
 export interface ClaimEnquiryFormProps {
   /** Optional callback handler for successful form submissions */
@@ -41,6 +42,11 @@ export function ClaimEnquiryForm({
   onSubmit,
   className,
 }: ClaimEnquiryFormProps) {
+  const [state, formAction, isPending] = useActionState(submitForm, {
+    status: "idle",
+    message: null,
+  })
+
   const [formData, setFormData] = React.useState({
     name: "",
     phone: "",
@@ -48,20 +54,12 @@ export function ClaimEnquiryForm({
     vehicleType: "",
     description: "",
   })
-  const [isSubmitting, setIsSubmitting] = React.useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-
-    // Simulate API request
-    setTimeout(() => {
+  // Trigger optional callback on successful submit
+  useEffect(() => {
+    if (state.status === "success") {
       if (onSubmit) {
         onSubmit(formData)
-      } else {
-        alert(
-          `Thank you, ${formData.name}! Your claims enquiry has been received. Our team will contact you shortly.`
-        )
       }
       setFormData({
         name: "",
@@ -70,22 +68,55 @@ export function ClaimEnquiryForm({
         vehicleType: "",
         description: "",
       })
-      setIsSubmitting(false)
-    }, 1000)
+    }
+  }, [state.status, onSubmit])
+
+  if (state.status === "success") {
+    return (
+      <div
+        className={cn(
+          "flex w-full flex-col overflow-hidden rounded-xl border border-[#FFFFFF80] bg-[#FFFFFFB2] p-6 shadow-[0px_10px_10px_-5px_#0000000A,0px_20px_25px_-5px_#0000001A,0px_2px_4px_-1px_#0000000F,0px_4px_6px_-1px_#0000001A] backdrop-blur-[12px] sm:p-10",
+          className
+        )}
+      >
+        <div className="flex flex-col items-center py-10 text-center select-none">
+          <div className="mb-6 flex size-20 items-center justify-center rounded-full border-2 border-[#064E3B] bg-[#10B981] text-white shadow-[0px_4px_10px_rgba(16,185,129,0.3)]">
+            <ShieldCheck className="size-10" />
+          </div>
+          <h3 className="mb-4 text-2xl font-black tracking-tight text-[#064E3B] sm:text-3xl">
+            Enquiry Received!
+          </h3>
+          <p className="mb-8 max-w-lg text-sm leading-relaxed font-semibold text-[#4C6549] sm:text-base">
+            {state.message || "Thank you! Your claims enquiry has been received. Our team will contact you shortly."}
+          </p>
+        </div>
+      </div>
+    )
   }
 
   return (
     <form
-      onSubmit={handleSubmit}
+      action={formAction}
       className={cn(
         "flex w-full flex-col overflow-hidden rounded-xl border border-[#FFFFFF80] bg-[#FFFFFFB2] p-6 shadow-[0px_10px_10px_-5px_#0000000A,0px_20px_25px_-5px_#0000001A,0px_2px_4px_-1px_#0000000F,0px_4px_6px_-1px_#0000001A] backdrop-blur-[12px] sm:p-10",
         className
       )}
     >
+      <input type="hidden" name="formId" value="enquiry-form" />
+      <input type="hidden" name="vehicleType" value={formData.vehicleType} />
+
       {/* Form Heading */}
       <h3 className="mb-6 text-xl font-extrabold tracking-tight text-[#064E3B] sm:text-2xl">
         Start Your Claim Now
       </h3>
+
+      {/* Global Error Banner */}
+      {state.status === "error" && state.message && (
+        <div className="mb-6 flex items-start gap-2.5 rounded-xl border-2 border-[#AF2144] bg-[#AF2144]/10 p-4 text-sm font-bold text-[#AF2144]">
+          <AlertCircle className="mt-0.5 size-4 shrink-0" />
+          <span>{state.message}</span>
+        </div>
+      )}
 
       {/* Input Stack */}
       <div className="mb-6 flex flex-col gap-4 text-left">
@@ -94,6 +125,7 @@ export function ClaimEnquiryForm({
           <Input
             required
             type="text"
+            name="name"
             placeholder="Full Name"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -111,6 +143,7 @@ export function ClaimEnquiryForm({
             <Input
               required
               type="tel"
+              name="phone"
               placeholder="Phone Number"
               value={formData.phone}
               onChange={(e) =>
@@ -128,6 +161,7 @@ export function ClaimEnquiryForm({
             <Input
               required
               type="email"
+              name="email"
               placeholder="Email Address"
               value={formData.email}
               onChange={(e) =>
@@ -149,7 +183,6 @@ export function ClaimEnquiryForm({
           <div className="relative w-full">
             <Select
               required
-              name="vehicleType"
               value={formData.vehicleType || undefined}
               onValueChange={(val) =>
                 setFormData({ ...formData, vehicleType: val })
@@ -212,6 +245,7 @@ export function ClaimEnquiryForm({
         <div className="relative">
           <Textarea
             required
+            name="description"
             placeholder="Accident Description"
             value={formData.description}
             onChange={(e) =>
@@ -229,14 +263,14 @@ export function ClaimEnquiryForm({
       {/* Submit Action Button */}
       <Button
         type="submit"
-        disabled={isSubmitting}
+        disabled={isPending}
         className={cn(
           "flex h-auto w-full cursor-pointer items-center justify-center gap-2 rounded-xl py-4 text-[15px] font-bold text-white transition-all duration-200 select-none",
           "border-none bg-[#E6405E] hover:bg-[#d03350]! active:scale-[0.98] disabled:opacity-50"
         )}
       >
-        <span>{isSubmitting ? "Submitting..." : "Submit Enquiry"}</span>
-        {!isSubmitting && (
+        <span>{isPending ? "Submitting..." : "Submit Enquiry"}</span>
+        {!isPending && (
           <Play className="h-3.5 w-3.5 translate-x-0.5 fill-white text-white" />
         )}
       </Button>
@@ -260,6 +294,7 @@ export function ClaimEnquiryForm({
         </div>
       </div>
     </form>
+
   )
 }
 

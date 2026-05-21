@@ -1,6 +1,20 @@
 /**
- * Returns the base Strapi URL.
- * Uses STRAPI_URL (server) or falls back to NEXT_PUBLIC_STRAPI_URL (client).
+ * Strapi URL and media utilities.
+ *
+ * getStrapiURL    — builds an absolute URL against the Strapi base
+ * getStrapiMedia  — resolves a media file URL (relative or absolute)
+ * resolveStrapiLink — converts a shared.link component to a Next.js href
+ */
+
+import type { LinkComponent } from "./types/shared"
+
+// ─── Base URL ─────────────────────────────────────────────────────────────────
+
+/**
+ * Returns the Strapi base URL.
+ * Server-side: uses STRAPI_URL (never exposed to client).
+ * Client-side: falls back to NEXT_PUBLIC_STRAPI_URL.
+ * Local fallback: http://localhost:1337.
  */
 export function getStrapiURL(path = ""): string {
   const base =
@@ -10,10 +24,13 @@ export function getStrapiURL(path = ""): string {
   return `${base.replace(/\/$/, "")}${path}`
 }
 
+// ─── Media ────────────────────────────────────────────────────────────────────
+
 /**
  * Resolves a Strapi media URL to an absolute URL.
- * Handles both relative paths (/uploads/...) and already-absolute URLs.
- * Returns null if the url is falsy.
+ * - Relative paths (/uploads/...) are prefixed with the Strapi base URL.
+ * - Already-absolute URLs (Strapi Cloud CDN, S3, etc.) are returned as-is.
+ * - Returns null if the url is falsy.
  */
 export function getStrapiMedia(url: string | null | undefined): string | null {
   if (!url) return null
@@ -21,18 +38,16 @@ export function getStrapiMedia(url: string | null | undefined): string | null {
   return getStrapiURL(url)
 }
 
-interface StrapiLinkField {
-  isExternal?: boolean | null
-  externalLink?: string | null
-  page?: { slug?: string } | null
-}
+// ─── Link resolver ────────────────────────────────────────────────────────────
 
 /**
- * Resolves a Strapi link component to a valid route.
- * Automatically maps the "home" slug to the root "/" path.
+ * Resolves a shared.link component to a valid Next.js route string.
+ * - External links → returned as-is.
+ * - Internal page links → "/{slug}" (home slug maps to "/").
+ * - Falls back to "#" if no valid href can be determined.
  */
 export function resolveStrapiLink(
-  link: StrapiLinkField | null | undefined
+  link: LinkComponent | null | undefined
 ): string {
   if (!link) return "#"
   if (link.isExternal && link.externalLink) return link.externalLink

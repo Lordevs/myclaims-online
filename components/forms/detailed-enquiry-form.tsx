@@ -1,13 +1,14 @@
 "use client"
 
-import * as React from "react"
-import { LockKeyhole, Clock, ShieldCheck } from "lucide-react"
+import React, { useActionState, useEffect } from "react"
+import { LockKeyhole, Clock, ShieldCheck, AlertCircle } from "lucide-react"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { Separator } from "../ui/separator"
+import { submitForm } from "@/actions/form"
 
 export interface DetailedEnquiryFormProps {
   /** Custom submit handler */
@@ -35,35 +36,56 @@ export function DetailedEnquiryForm({
   onSubmit,
   className,
 }: DetailedEnquiryFormProps) {
+  const [state, formAction, isPending] = useActionState(submitForm, {
+    status: "idle",
+    message: null,
+  })
+
   const [formData, setFormData] = React.useState({
     name: "",
     email: "",
     phone: "",
     message: "",
   })
-  const [isSubmitting, setIsSubmitting] = React.useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-
-    // Simulate API call
-    setTimeout(() => {
+  // Trigger optional callback on success
+  useEffect(() => {
+    if (state.status === "success") {
       if (onSubmit) {
         onSubmit(formData)
-      } else {
-        alert(
-          `Thank you, ${formData.name}! Your claims enquiry has been sent. We'll be in touch shortly.`
-        )
       }
       setFormData({ name: "", email: "", phone: "", message: "" })
-      setIsSubmitting(false)
-    }, 1000)
+    }
+  }, [state.status, onSubmit])
+
+  if (state.status === "success") {
+    return (
+      <div
+        className={cn(
+          "flex w-full flex-col overflow-hidden rounded-[24px] bg-white text-left",
+          "border-[2.25px] border-[#0F172A]",
+          "shadow-[4.5px_4.5px_0px_0px_#1A1C19]",
+          className
+        )}
+      >
+        <div className="flex flex-col items-center py-12 px-6 text-center select-none">
+          <div className="mb-6 flex size-20 items-center justify-center rounded-full border-[2.25px] border-[#0F172A] bg-[#10B981] text-white shadow-[3px_3px_0px_0px_#1A1C19]">
+            <ShieldCheck className="size-10" />
+          </div>
+          <h3 className="mb-4 text-2xl font-black text-[#0F172A] sm:text-3xl">
+            Enquiry Sent!
+          </h3>
+          <p className="mb-4 max-w-md text-sm leading-relaxed font-bold text-[#594143] sm:text-base">
+            {state.message || "Thank you! Your detailed claims enquiry has been received. We will contact you shortly."}
+          </p>
+        </div>
+      </div>
+    )
   }
 
   return (
     <form
-      onSubmit={handleSubmit}
+      action={formAction}
       className={cn(
         "flex w-full flex-col overflow-hidden rounded-[24px] bg-white text-left",
         "border-[2.25px] border-[#0F172A]",
@@ -71,8 +93,18 @@ export function DetailedEnquiryForm({
         className
       )}
     >
+      <input type="hidden" name="formId" value="detail-enquiry-form" />
+
       {/* Form Inputs Content Padding */}
       <div className="flex flex-col gap-5 p-6 sm:p-8">
+        {/* Global Error Banner */}
+        {state.status === "error" && state.message && (
+          <div className="flex items-start gap-2.5 rounded-xl border-[2.25px] border-[#0F172A] bg-[#AF2144]/10 p-4 text-sm font-bold text-[#AF2144]">
+            <AlertCircle className="mt-0.5 size-4 shrink-0 text-[#AF2144]" />
+            <span>{state.message}</span>
+          </div>
+        )}
+
         {/* Name and Email side-by-side on larger screens */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {/* Full Name */}
@@ -87,6 +119,7 @@ export function DetailedEnquiryForm({
               required
               id="detail-name"
               type="text"
+              name="name"
               placeholder="John Doe"
               value={formData.name}
               onChange={(e) =>
@@ -111,6 +144,7 @@ export function DetailedEnquiryForm({
               required
               id="detail-email"
               type="email"
+              name="email"
               placeholder="john@example.com"
               value={formData.email}
               onChange={(e) =>
@@ -136,6 +170,7 @@ export function DetailedEnquiryForm({
             required
             id="detail-phone"
             type="tel"
+            name="phone"
             placeholder="07123 456 789"
             value={formData.phone}
             onChange={(e) =>
@@ -159,6 +194,7 @@ export function DetailedEnquiryForm({
           <Textarea
             required
             id="detail-message"
+            name="message"
             placeholder="Tell us about your incident..."
             value={formData.message}
             onChange={(e) =>
@@ -175,14 +211,14 @@ export function DetailedEnquiryForm({
         {/* Neobrutalist Pink Submit Button */}
         <Button
           type="submit"
-          disabled={isSubmitting}
+          disabled={isPending}
           className={cn(
             "flex h-auto w-full cursor-pointer items-center justify-center gap-2 rounded-xl py-3.5 text-[16px] font-extrabold tracking-wide text-white transition-all duration-150 select-none active:scale-[0.98] sm:py-4 sm:text-[17px]",
             "bg-[#E94E6B] text-white hover:bg-[#d0425c]!",
             "mt-2 shadow-[4.5px_4.5px_0px_0px_#1A1C19] disabled:opacity-50"
           )}
         >
-          <span>{isSubmitting ? "Submitting..." : "Submit Enquiry"}</span>
+          <span>{isPending ? "Submitting..." : "Submit Enquiry"}</span>
         </Button>
       </div>
 

@@ -10,10 +10,15 @@ interface StrapiImageProps extends Omit<ImageProps, "src" | "alt"> {
 
 /**
  * Thin wrapper around next/image that resolves Strapi's relative media URLs.
- * Handles both localhost and Strapi Cloud absolute URLs transparently.
+ *
+ * - Handles both localhost (/uploads/...) and Strapi Cloud CDN (absolute URLs).
+ * - Uses the file's alternativeText as the default alt — falls back to file name.
+ * - Reads width/height from the media file if not provided as props.
+ * - Disables Next.js image optimisation in development to avoid domain whitelist issues.
  *
  * Usage:
- *   <StrapiImage image={section.heroImage} width={1200} height={600} />
+ *   <StrapiImage image={section.image} width={1200} height={600} />
+ *   <StrapiImage image={global.logo} fill className="object-contain" />
  */
 export function StrapiImage({
   image,
@@ -28,16 +33,21 @@ export function StrapiImage({
   const resolvedAlt =
     alt ?? image?.file?.alternativeText ?? image?.file?.name ?? ""
 
-  const width = (props.width as number) ?? image?.file?.width ?? undefined
-  const height = (props.height as number) ?? image?.file?.height ?? undefined
+  const resolvedWidth =
+    (props.width as number | undefined) ?? image?.file?.width ?? undefined
+
+  const resolvedHeight =
+    (props.height as number | undefined) ?? image?.file?.height ?? undefined
 
   return (
     <Image
       src={src}
       alt={resolvedAlt}
-      width={width}
-      height={height}
-      unoptimized={process.env.NODE_ENV === "development" || props.unoptimized}
+      width={resolvedWidth}
+      height={resolvedHeight}
+      unoptimized={
+        process.env.NODE_ENV === "development" || props.unoptimized
+      }
       {...props}
     />
   )

@@ -14,12 +14,14 @@ import { Logo } from "@/components/shared/logo"
 import { MobileNavContent } from "./mobile-nav-content"
 import { NavCTAButton } from "@/components/layout/navigation/nav-cta-button"
 import type { LinkComponent } from "@/lib/strapi/types/shared"
+import type { NavbarItem } from "@/lib/strapi/types/global"
 
 interface MobileNavProps {
   ctaButton?: LinkComponent | null
+  navItems?: NavbarItem[]
 }
 
-export function MobileNav({ ctaButton }: MobileNavProps) {
+export function MobileNav({ ctaButton, navItems }: MobileNavProps) {
   const [isOpen, setIsOpen] = React.useState(false)
 
   return (
@@ -45,6 +47,7 @@ export function MobileNav({ ctaButton }: MobileNavProps) {
             className="flex-col items-start gap-8"
             itemClassName="text-xl font-medium text-white/80 hover:text-white transition-colors"
             onClick={() => setIsOpen(false)}
+            navItems={navItems}
           />
         </div>
 

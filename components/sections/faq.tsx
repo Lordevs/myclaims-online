@@ -44,7 +44,6 @@ const defaultFaqData = [
  */
 export function FAQSection(props: Partial<FAQSection>) {
   const title = props.title || "FAQS"
-  const description = props.description || ""
   const faqData = props.faqs?.length ? props.faqs : defaultFaqData
 
   return (
@@ -55,11 +54,6 @@ export function FAQSection(props: Partial<FAQSection>) {
           <h2 className="text-3xl leading-none font-extrabold tracking-tight text-[#064E3B] md:text-5xl">
             {title}
           </h2>
-          {description && (
-            <p className="mt-3 text-base leading-relaxed font-normal text-[#594143] md:mt-5 md:text-lg">
-              {description}
-            </p>
-          )}
         </FadeIn>
 
         {/* Accordion List */}

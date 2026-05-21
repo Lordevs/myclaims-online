@@ -1,76 +1,80 @@
 /**
  * Global single-type data shape.
- * Mirrors api::global.global from contentTypes.d.ts EXACTLY.
+ * Mirrors api::global.global — the actual schema in the CMS.
  *
- * Key notes from the Strapi schema:
- * - navbarItems is a DynamicZone of ['shared.link', 'blocks.mega-menu']
- * - footer is a repeatable component (array) of layout.footer
- * - Logo is capital L (top-level field on global)
- * - navbarCta is a shared.link component
+ * Fields:
+ *   siteName         string (required)
+ *   siteDescription  text (required)
+ *   favicon          media
+ *   defaultSeo       shared.seo component
+ *   logo             shared.media component
+ *   navbarItems      DynamicZone of [shared.link, shared.dropdown]
+ *   navbarCta        shared.link component
+ *   footer           layout.footer component
  */
 
 import type {
-  SEOComponent,
-  FooterColumn,
-  ContactItem,
   LinkComponent,
+  DropdownComponent,
+  SocialMediaLinkComponent,
+  LinkColumnComponent,
+  SEOComponent,
 } from "./shared"
 import type { StrapiMediaComponent, StrapiMediaFile } from "./media"
-import type { MegaMenuBlock } from "./shared"
+import type { StrapiBlockContent } from "./collections"
 
-// ─── Navbar Dynamic Zone items ─────────────────────────────────────────────────
+// ─── Navbar Dynamic Zone ──────────────────────────────────────────────────────
 
-/** A simple link in the navbar (shared.link with __component discriminant) */
+/** A simple link in the navbar — shared.link with __component discriminant */
 export interface NavLinkItem extends LinkComponent {
   __component: "shared.link"
 }
 
-/** A mega-menu trigger in the navbar (blocks.mega-menu with __component) */
-export interface NavMegaMenuItem extends MegaMenuBlock {
-  __component: "blocks.mega-menu"
+/** A dropdown group in the navbar — shared.dropdown with __component discriminant */
+export interface NavDropdownItem extends DropdownComponent {
+  __component: "shared.dropdown"
 }
 
-/** Union of navbar dynamic zone items */
-export type NavbarItem = NavLinkItem | NavMegaMenuItem
+/** Union of all navbar dynamic zone items */
+export type NavbarItem = NavLinkItem | NavDropdownItem
 
-// ─── Footer ────────────────────────────────────────────────────────────────────
+// ─── Footer ───────────────────────────────────────────────────────────────────
 
 /**
  * layout.footer component.
- * The global.footer field is repeatable=true, so it's an array.
- * In practice you'll use index 0.
+ * The global.footer field is non-repeatable (single object).
  */
 export interface FooterData {
   id: number
-  logo: StrapiMediaComponent | null
   description: string | null
-  contactList: ContactItem[]
-  columns: FooterColumn[]
-  copyrightText: string | null
-  bgText: string | null
+  socialLinks: SocialMediaLinkComponent[]
+  companyDetails: StrapiBlockContent | null
+  disclaimer: StrapiBlockContent | null
+  copyright: string | null
+  pageLinks: LinkColumnComponent[]
 }
 
-// ─── Global ────────────────────────────────────────────────────────────────────
+// ─── Global ───────────────────────────────────────────────────────────────────
 
 /**
- * api::global.global — the full single-type response data.
- * Fields match the Strapi contentTypes.d.ts exactly.
+ * api::global.global — full single-type response data.
+ * Fields match the Strapi schema exactly.
  */
 export interface GlobalData {
   id: number
   documentId: string
   siteName: string
   siteDescription: string
-  /** Top-level Logo field (capital L) */
-  Logo: StrapiMediaComponent | null
-  /** Navbar CTA button */
-  navbarCta: LinkComponent | null
-  /** Navbar nav items — DynamicZone of link | mega-menu */
-  navbarItems: NavbarItem[]
-  /** Footer — non-repeatable component (single object) */
-  footer: FooterData | null
-  defaultSeo: SEOComponent | null
   favicon: StrapiMediaFile | null
+  defaultSeo: SEOComponent | null
+  /** shared.media component wrapping the logo image */
+  logo: StrapiMediaComponent | null
+  /** Navbar CTA button — shared.link */
+  navbarCta: LinkComponent | null
+  /** Navbar nav items — DynamicZone of shared.link | shared.dropdown */
+  navbarItems: NavbarItem[]
+  /** Footer — non-repeatable layout.footer component */
+  footer: FooterData | null
   createdAt: string
   updatedAt: string
 }

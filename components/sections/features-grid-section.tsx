@@ -1,3 +1,5 @@
+"use client"
+
 import * as React from "react"
 import { LucideIcon } from "lucide-react"
 import { Container } from "@/components/layout/container"
@@ -9,11 +11,12 @@ import {
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
+import { StrapiIcon } from "@/components/strapi/strapi-icon"
 
 export interface FeatureCardItem {
-  icon: LucideIcon | React.ComponentType<{ className?: string }>
+  icon: any
   title: string
-  description: string
+  description: string | null
 }
 
 export interface FeaturesGridSectionProps {
@@ -129,19 +132,38 @@ export function FeaturesGridSection({
                             iconBgClass
                           )}
                         >
-                          <Icon
-                            className={cn("h-6 w-6 shrink-0", iconColorClass)}
-                            strokeWidth={2.25}
-                          />
+                          {typeof Icon === "function" || React.isValidElement(Icon) ? (
+                            <Icon
+                              className={cn("h-6 w-6 shrink-0", iconColorClass)}
+                              strokeWidth={2.25}
+                            />
+                          ) : (
+                            <StrapiIcon
+                              icon={Icon}
+                              size={24}
+                              className={cn("h-6 w-6 shrink-0", iconColorClass)}
+                            />
+                          )}
                         </div>
                       ) : (
-                        <Icon
-                          className={cn(
-                            "mb-6 h-10 w-10 shrink-0",
-                            iconColorClass
-                          )}
-                          strokeWidth={2}
-                        />
+                        typeof Icon === "function" || React.isValidElement(Icon) ? (
+                          <Icon
+                            className={cn(
+                              "mb-6 h-10 w-10 shrink-0",
+                              iconColorClass
+                            )}
+                            strokeWidth={2}
+                          />
+                        ) : (
+                          <StrapiIcon
+                            icon={Icon}
+                            size={40}
+                            className={cn(
+                              "mb-6 h-10 w-10 shrink-0",
+                              iconColorClass
+                            )}
+                          />
+                        )
                       )}
 
                       {/* Card Header Title */}

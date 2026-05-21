@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils"
 import { Navbar } from "@/components/layout/navigation/navbar"
 import { Footer } from "@/components/layout/navigation/footer"
+import { getGlobal } from "@/lib/strapi/services/global"
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
 
@@ -13,11 +14,13 @@ const fontMono = Geist_Mono({
   variable: "--font-mono",
 })
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const globalData = await getGlobal()
+
   return (
     <html
       lang="en"
@@ -31,9 +34,9 @@ export default function RootLayout({
     >
       <body className="flex min-h-screen flex-col bg-background">
         <ThemeProvider>
-          <Navbar />
+          <Navbar globalData={globalData} />
           <main className="flex-1 pt-20">{children}</main>
-          <Footer />
+          <Footer globalData={globalData} />
         </ThemeProvider>
       </body>
     </html>

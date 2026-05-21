@@ -1,63 +1,43 @@
 /**
- * Shared Strapi component types.
- * Mirrors every schema in src/components/shared/ of the Strapi project.
+ * Shared component types.
+ * Mirrors every schema in src/components/shared/ and src/components/cards/
+ * of the myclaims-online-cms Strapi project.
+ *
+ * Component name → TS interface mapping:
+ *   shared.link             → LinkComponent
+ *   shared.dropdown         → DropdownComponent
+ *   shared.menu-item        → MenuItemComponent
+ *   shared.contact-item     → ContactItemComponent
+ *   shared.social-media-link→ SocialMediaLinkComponent
+ *   shared.link-column      → LinkColumnComponent
+ *   shared.list-item        → ListItemComponent
+ *   shared.timeline-step    → TimelineStepComponent
+ *   shared.rich-text        → RichTextComponent
+ *   shared.media            → (re-exported from media.ts)
+ *   shared.file             → (re-exported from media.ts)
+ *   shared.file-link        → FileLinkComponent
+ *   shared.form-option      → FormOptionComponent
+ *   shared.form-fields      → FormFieldComponent
+ *   shared.form-step        → FormStepComponent
+ *   shared.seo              → SEOComponent
+ *   cards.feature-card      → FeatureCardComponent
  */
 
-import type { StrapiMediaComponent } from "./media"
+import type { StrapiMediaComponent, StrapiFileComponent, StrapiMediaFile } from "./media"
 
-// ─── Strapi Rich-Text Block Types ────────────────────────────────────────────
-
-/** A single text run inside a block node */
-export interface StrapiBlockChild {
-  type?: string
-  text: string
-  bold?: boolean
-  italic?: boolean
-  underline?: boolean
-  strikethrough?: boolean
-  code?: boolean
-}
-
-/** A single block node (paragraph, heading, list, etc.) */
-export interface StrapiBlockNode {
-  type:
-    | "paragraph"
-    | "heading"
-    | "list"
-    | "list-item"
-    | "quote"
-    | "code"
-    | "image"
-    | string
-  children?: (StrapiBlockChild | StrapiBlockNode)[]
-  level?: number
-  format?: "ordered" | "unordered"
-}
-
-/** Strapi Blocks rich-text field — array of block nodes */
-export type StrapiBlockContent = StrapiBlockNode[]
-
-// ─── Iconhub ──────────────────────────────────────────────────────────────────
+// ─── Iconhub custom field ─────────────────────────────────────────────────────
 
 /**
  * The iconhub custom field stores both the icon name (for @iconify/react)
- * and the raw SVG data. Always prefer `iconName` on the frontend.
+ * and the raw SVG data.
+ * Always use `iconName` on the frontend — pass it directly to <Icon icon={iconName} />.
  */
 export interface IconhubField {
-  iconName: string // e.g. "mdi:home" — use with <Icon icon={iconName} />
-  iconData: string // raw SVG string (fallback only)
+  iconName: string  // e.g. "mdi:home" — use with @iconify/react
+  iconData: string  // raw SVG string (fallback, rarely needed)
 }
 
-// ─── Shared Components ────────────────────────────────────────────────────────
-
-/** shared.link — internal page or external URL */
-export interface LinkComponent {
-  id: number
-  label: string
-  isExternal: boolean
-  externalLink: string | null
-  page: PageRelation | null
-}
+// ─── Page relation stub ───────────────────────────────────────────────────────
 
 /** Minimal page shape as it appears in relations (e.g. inside shared.link) */
 export interface PageRelation {
@@ -67,107 +47,156 @@ export interface PageRelation {
   title: string
 }
 
-/** shared.seo */
+// ─── shared.link ─────────────────────────────────────────────────────────────
+
+/** shared.link — internal page link or external URL */
+export interface LinkComponent {
+  id: number
+  label: string
+  isExternal: boolean
+  externalLink: string | null
+  page: PageRelation | null
+}
+
+// ─── shared.dropdown ─────────────────────────────────────────────────────────
+
+/** shared.dropdown — a labelled group of menu items (used in navbar dynamic zone) */
+export interface DropdownComponent {
+  id: number
+  label: string
+  items: MenuItemComponent[]
+}
+
+// ─── shared.menu-item ────────────────────────────────────────────────────────
+
+/** shared.menu-item — icon + label + optional page link */
+export interface MenuItemComponent {
+  id: number
+  icon: IconhubField
+  label: string
+  page: PageRelation | null
+}
+
+// ─── shared.contact-item ─────────────────────────────────────────────────────
+
+/** shared.contact-item — used in footer and contact-with-map section */
+export interface ContactItemComponent {
+  id: number
+  icon: IconhubField
+  title: string
+  subtitle: string | null
+  linkUrl: string | null
+}
+
+// ─── shared.social-media-link ────────────────────────────────────────────────
+
+/** shared.social-media-link — icon + URL (used in footer) */
+export interface SocialMediaLinkComponent {
+  id: number
+  icon: IconhubField
+  url: string
+}
+
+// ─── shared.link-column ──────────────────────────────────────────────────────
+
+/** shared.link-column — a titled column of links (used in footer) */
+export interface LinkColumnComponent {
+  id: number
+  title: string | null
+  links: LinkComponent[]
+}
+
+// ─── shared.list-item ────────────────────────────────────────────────────────
+
+/** shared.list-item — optional icon + text bullet point */
+export interface ListItemComponent {
+  id: number
+  icon: IconhubField | null
+  text: string
+}
+
+// ─── shared.timeline-step ────────────────────────────────────────────────────
+
+/** shared.timeline-step — used in process-timeline section */
+export interface TimelineStepComponent {
+  id: number
+  title: string
+  description: string | null
+}
+
+// ─── shared.rich-text ────────────────────────────────────────────────────────
+
+/** shared.rich-text — Markdown body (richtext field) */
+export interface RichTextComponent {
+  id: number
+  body: string | null
+}
+
+// ─── shared.seo ──────────────────────────────────────────────────────────────
+
+/** shared.seo — meta title, description, and share image */
 export interface SEOComponent {
   id: number
   metaTitle: string
   metaDescription: string
-  shareImage: import("./media").StrapiMediaFile | null
+  shareImage: StrapiMediaFile | null
 }
 
-/** shared.tag */
-export interface TagComponent {
-  id: number
-  name: string
-  isHighlighted: boolean
-}
+// ─── shared.file-link ────────────────────────────────────────────────────────
 
-/** shared.stat */
-export interface StatComponent {
+/** shared.file-link — a labelled downloadable file (used in contact-with-map CTA) */
+export interface FileLinkComponent {
   id: number
-  value: string
   label: string
+  file: StrapiFileComponent | null
 }
 
-/** shared.check-item */
-export interface CheckItem {
+// ─── shared.form-option ──────────────────────────────────────────────────────
+
+export type FormOptionType = "default" | "quiz_option"
+
+/** shared.form-option — a selectable option inside a select/quiz field */
+export interface FormOptionComponent {
   id: number
   text: string
+  type: FormOptionType
+  additionalInfo: string | null   // richtext, only for quiz_option
+  isDisqualifying: boolean        // only for quiz_option
 }
 
-/** shared.meta-item (used in project-meta-section) */
-export interface MetaItem {
+// ─── shared.form-fields ──────────────────────────────────────────────────────
+
+export type FormFieldType = "text" | "email" | "tel" | "textarea" | "select"
+
+/** shared.form-fields — a single form field definition */
+export interface FormFieldComponent {
   id: number
-  label: string
-  title: string
-  subtitle: string
+  label: string | null
+  type: FormFieldType
+  required: boolean
+  selectOptions: FormOptionComponent[]  // populated only when type === "select"
 }
 
-/** shared.rich-text */
-export interface RichTextComponent {
-  id: number
-  body: string
-}
+// ─── shared.form-step ────────────────────────────────────────────────────────
 
-/** shared.contact-item (used in footer) */
-export interface ContactItem {
+/** shared.form-step — a named step containing multiple fields */
+export interface FormStepComponent {
   id: number
-  icon: IconhubField
-  label: string
-  href: string
-}
-
-/** shared.footer-column */
-export interface FooterColumn {
-  id: number
-  title: string
-  links: LinkComponent[]
-}
-
-// ─── Mega Menu ────────────────────────────────────────────────────────────────
-
-/** shared.mega-menu-item */
-export interface MegaMenuItem {
-  id: number
-  icon: IconhubField
-  label: string
+  title: string | null
   description: string | null
-  page: PageRelation | null
+  fields: FormFieldComponent[]
 }
 
-/** shared.mega-menu-category */
-export interface MegaMenuCategory {
-  id: number
-  title: string
-  items: MegaMenuItem[]
-}
+// ─── cards.feature-card ──────────────────────────────────────────────────────
 
-/** shared.mega-menu-featured */
-export interface MegaMenuFeatured {
+/** cards.feature-card — icon + title + optional description */
+export interface FeatureCardComponent {
   id: number
+  icon: IconhubField | null
   title: string
   description: string | null
-  link: LinkComponent | null
-  video: import("./media").StrapiVideoComponent | null
 }
 
-/** blocks.mega-menu */
-export interface MegaMenuBlock {
-  id: number
-  label: string
-  categories: MegaMenuCategory[]
-  featured: MegaMenuFeatured | null
-}
+// ─── Re-exports from media.ts ─────────────────────────────────────────────────
 
-// ─── Navbar ───────────────────────────────────────────────────────────────────
-
-/** A top-level nav item — either a simple link or a mega-menu trigger */
-export interface NavItem {
-  id: number
-  label: string
-  link: LinkComponent | null
-  megaMenu: MegaMenuBlock | null
-}
-
-// ─── Media component alias ────────────────────────────────────────────────────
-export type { StrapiMediaComponent }
+export type { StrapiMediaComponent, StrapiFileComponent }

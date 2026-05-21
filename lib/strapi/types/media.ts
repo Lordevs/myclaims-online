@@ -1,7 +1,9 @@
 /**
  * Strapi media/upload types.
- * Matches the shape returned by Strapi's Media Library.
+ * Matches the shape returned by Strapi v5's Media Library (plugin::upload.file).
  */
+
+// ─── Image format variants ────────────────────────────────────────────────────
 
 export interface StrapiImageFormat {
   name: string
@@ -21,7 +23,9 @@ export interface StrapiImageFormats {
   large?: StrapiImageFormat
 }
 
-/** Full media object as returned by Strapi */
+// ─── Full media file ──────────────────────────────────────────────────────────
+
+/** Full media object as returned by Strapi's upload plugin */
 export interface StrapiMediaFile {
   id: number
   documentId: string
@@ -42,20 +46,22 @@ export interface StrapiMediaFile {
   updatedAt: string
 }
 
-/** The `shared.media` component wraps a single file */
+// ─── Component wrappers ───────────────────────────────────────────────────────
+
+/**
+ * `shared.media` — wraps a single image file.
+ * Used on logo, hero images, form illustration, etc.
+ */
 export interface StrapiMediaComponent {
   id: number
   file: StrapiMediaFile
 }
 
-/** The `shared.slider` component wraps multiple files */
-export interface StrapiSliderComponent {
+/**
+ * `shared.file` — wraps a single non-image file (PDFs, docs, etc.)
+ * Used inside `shared.file-link`.
+ */
+export interface StrapiFileComponent {
   id: number
-  files: StrapiMediaFile[]
-}
-
-/** The `shared.video` component wraps a single video file */
-export interface StrapiVideoComponent {
-  id: number
-  video: StrapiMediaFile
+  file: StrapiMediaFile
 }

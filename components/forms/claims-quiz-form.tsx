@@ -117,6 +117,11 @@ export function ClaimsQuizForm({
     email: "",
   })
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [state, setState] = useState<{ status: string; message: string | null }>({
+    status: "idle",
+    message: null,
+  })
 
   const activeQuestion = questions[currentStepIndex]
   const totalSteps = questions.length
@@ -154,14 +159,49 @@ export function ClaimsQuizForm({
     }
   }
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsSubmitted(true)
-    if (onComplete) {
-      onComplete({
-        ...answers,
-        ...contactInfo,
+    setIsSubmitting(true)
+    setState({ status: "idle", message: null })
+
+    try {
+      const { submitForm } = await import("@/actions/form")
+      const formData = new FormData()
+      formData.append("formId", "claims-quiz")
+      formData.append("name", contactInfo.name)
+      formData.append("phone", contactInfo.phone)
+      formData.append("email", contactInfo.email)
+
+      // Package quiz selections into the payload
+      questions.forEach((q) => {
+        const value = answers[q.id] || ""
+        formData.append(q.questionText, value)
       })
+
+      const res = await submitForm({ status: "idle", message: null }, formData)
+
+      if (res.status === "success") {
+        setIsSubmitted(true)
+        if (onComplete) {
+          onComplete({
+            ...answers,
+            ...contactInfo,
+          })
+        }
+      } else {
+        setState({
+          status: "error",
+          message: res.message || "Failed to submit claims quiz. Please try again.",
+        })
+      }
+    } catch (err: any) {
+      console.error("[ClaimsQuizForm] Submission error:", err)
+      setState({
+        status: "error",
+        message: err.message || "An unexpected error occurred during submission.",
+      })
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -171,6 +211,7 @@ export function ClaimsQuizForm({
     setIsFormStep(false)
     setContactInfo({ name: "", phone: "", email: "" })
     setIsSubmitted(false)
+    setState({ status: "idle", message: null })
   }
 
   return (

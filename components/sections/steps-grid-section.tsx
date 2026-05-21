@@ -1,3 +1,5 @@
+"use client"
+
 import * as React from "react"
 import { LucideIcon } from "lucide-react"
 import { Container } from "@/components/layout/container"
@@ -7,9 +9,10 @@ import {
   StaggerItem,
 } from "@/components/ui/animations"
 import { cn } from "@/lib/utils"
+import { StrapiIcon } from "@/components/strapi/strapi-icon"
 
 export interface StepItem {
-  icon: LucideIcon | React.ComponentType<{ className?: string }>
+  icon: any
   title: string
   description: string
 }
@@ -97,10 +100,18 @@ export function StepsGridSection({
                         {idx + 1}
                       </span>
                       {/* Main Icon */}
-                      <Icon
-                        className="relative z-10 h-14 w-14 shrink-0 text-[#E6405E] transition-transform duration-200 group-hover:scale-105"
-                        strokeWidth={1.75}
-                      />
+                      {typeof Icon === "function" || React.isValidElement(Icon) ? (
+                        <Icon
+                          className="relative z-10 h-14 w-14 shrink-0 text-[#E6405E] transition-transform duration-200 group-hover:scale-105"
+                          strokeWidth={1.75}
+                        />
+                      ) : (
+                        <StrapiIcon
+                          icon={Icon}
+                          size={56}
+                          className="relative z-10 h-14 w-14 shrink-0 text-[#E6405E] transition-transform duration-200 group-hover:scale-105"
+                        />
+                      )}
                     </div>
 
                     {/* Step Title Header */}
