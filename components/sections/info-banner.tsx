@@ -1,7 +1,7 @@
-import * as React from "react"
 import { Container } from "@/components/layout/container"
 import { FadeIn } from "@/components/ui/animations"
 import { cn } from "@/lib/utils"
+import { Markdown } from "@/components/shared/markdown"
 
 export interface InfoBannerProps {
   /** The banner main title text */
@@ -61,15 +61,15 @@ export function InfoBanner({
           <FadeIn delay={0.2} className="w-full">
             <div className="flex flex-col gap-5 md:gap-6">
               {paraList.map((paraText, idx) => (
-                <p
+                <Markdown
                   key={idx}
+                  content={paraText}
+                  variant="light"
                   className={cn(
                     "mx-auto max-w-[850px] text-sm leading-relaxed font-normal md:text-base lg:text-[17px]",
                     paraColor
                   )}
-                >
-                  {paraText}
-                </p>
+                />
               ))}
             </div>
           </FadeIn>

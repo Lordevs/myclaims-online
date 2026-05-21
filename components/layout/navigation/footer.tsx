@@ -4,7 +4,6 @@ import { Logo } from "@/components/shared/logo"
 import { Container } from "@/components/layout/container"
 import { StrapiIcon } from "@/components/strapi/strapi-icon"
 import { resolveStrapiLink } from "@/lib/strapi/utils"
-import { BlocksRenderer } from "@/components/shared/blocks-renderer"
 import { ROUTES } from "@/constants/routes"
 import type { GlobalData } from "@/lib/strapi/types/global"
 
@@ -129,10 +128,10 @@ export function Footer({ globalData }: FooterProps) {
         {/* Bottom Metadata & Disclaimer */}
         <div className="flex flex-col gap-8 text-xs leading-relaxed text-white/70 lg:flex-row lg:justify-between">
           <div className="flex max-w-3xl flex-col gap-3.5">
-            {/* Company details — Strapi blocks or Markdown fallback */}
-            {footer?.companyDetails ? (
-              <BlocksRenderer
-                content={footer.companyDetails}
+            {/* Company details — Strapi shared.rich-text or Markdown fallback */}
+            {footer?.companyDetails?.body ? (
+              <Markdown
+                content={footer.companyDetails.body}
                 className="text-xs leading-relaxed text-white/80 [&_p]:m-0 [&_strong]:font-semibold [&_strong]:text-white"
               />
             ) : (
@@ -148,10 +147,10 @@ export function Footer({ globalData }: FooterProps) {
               </>
             )}
 
-            {/* Disclaimer — Strapi blocks or Markdown fallback */}
-            {footer?.disclaimer ? (
-              <BlocksRenderer
-                content={footer.disclaimer}
+            {/* Disclaimer — Strapi shared.rich-text or Markdown fallback */}
+            {footer?.disclaimer?.body ? (
+              <Markdown
+                content={footer.disclaimer.body}
                 className="mt-2 text-xs leading-relaxed text-white/50 [&_p]:m-0 [&_strong]:font-semibold [&_strong]:text-white/85"
               />
             ) : (

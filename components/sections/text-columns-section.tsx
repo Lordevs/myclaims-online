@@ -1,7 +1,7 @@
-import * as React from "react"
 import { Container } from "@/components/layout/container"
 import { FadeIn } from "@/components/ui/animations"
 import { cn } from "@/lib/utils"
+import { Markdown } from "@/components/shared/markdown"
 
 export interface TextColumnsSectionProps {
   /** Main section heading text */
@@ -43,17 +43,28 @@ export function TextColumnsSection({
               {title}
             </h2>
 
-            {/* Split Paragraph Grid */}
-            <div className="grid w-full grid-cols-1 gap-8 md:grid-cols-2 md:gap-12 lg:gap-16">
+            {/* Split Paragraph Grid — dynamically adjusts layout if only one column is populated */}
+            <div
+              className={cn(
+                "grid w-full grid-cols-1 gap-8 lg:gap-16",
+                col2Text?.trim() ? "md:grid-cols-2 md:gap-12" : "max-w-3xl"
+              )}
+            >
               {/* Left Column Text */}
-              <p className="text-sm leading-relaxed font-normal text-[#594143] md:text-base lg:text-2xl">
-                {col1Text}
-              </p>
+              <Markdown
+                content={col1Text}
+                variant="light"
+                className="text-sm leading-relaxed font-normal text-[#594143] md:text-base lg:text-2xl"
+              />
 
-              {/* Right Column Text */}
-              <p className="text-sm leading-relaxed font-normal text-[#594143] md:text-base lg:text-2xl">
-                {col2Text}
-              </p>
+              {/* Right Column Text — only rendered if present */}
+              {col2Text?.trim() && (
+                <Markdown
+                  content={col2Text}
+                  variant="light"
+                  className="text-sm leading-relaxed font-normal text-[#594143] md:text-base lg:text-2xl"
+                />
+              )}
             </div>
           </div>
         </FadeIn>

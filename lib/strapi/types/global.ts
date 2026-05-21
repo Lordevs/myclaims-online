@@ -19,9 +19,9 @@ import type {
   SocialMediaLinkComponent,
   LinkColumnComponent,
   SEOComponent,
+  RichTextComponent,
 } from "./shared"
 import type { StrapiMediaComponent, StrapiMediaFile } from "./media"
-import type { StrapiBlockContent } from "./collections"
 
 // ─── Navbar Dynamic Zone ──────────────────────────────────────────────────────
 
@@ -48,8 +48,8 @@ export interface FooterData {
   id: number
   description: string | null
   socialLinks: SocialMediaLinkComponent[]
-  companyDetails: StrapiBlockContent | null
-  disclaimer: StrapiBlockContent | null
+  companyDetails: RichTextComponent | null
+  disclaimer: RichTextComponent | null
   copyright: string | null
   pageLinks: LinkColumnComponent[]
 }
