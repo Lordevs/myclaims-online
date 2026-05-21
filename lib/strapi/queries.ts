@@ -74,6 +74,8 @@ export const globalPopulate = {
   footer: {
     populate: {
       socialLinks: true,
+      companyDetails: true,
+      disclaimer: true,
       pageLinks: {
         populate: {
           links: {
