@@ -85,10 +85,12 @@ export async function fetchStrapi<T>(
     ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
   }
 
+  const hasCacheProperty = nextOptions && "cache" in nextOptions;
+
   const res = await fetch(url, {
     headers,
-    // Default: revalidate every 60 seconds (ISR). Override per call.
-    next: { revalidate: 60 },
+    // Default: revalidate every 60 seconds (ISR) unless a specific cache strategy is provided.
+    ...(!hasCacheProperty ? { next: { revalidate: 60 } } : {}),
     ...(nextOptions ?? {}),
   })
 
