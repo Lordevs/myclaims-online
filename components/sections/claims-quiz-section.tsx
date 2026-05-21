@@ -2,7 +2,7 @@ import { ShieldCheck, Check, Phone } from "lucide-react"
 import { Container } from "@/components/layout/container"
 import { FadeIn } from "@/components/ui/animations"
 import { cn } from "@/lib/utils"
-import type { FormStepComponent } from "@/lib/strapi/types/shared"
+import type { FormStepComponent, ListItemComponent } from "@/lib/strapi/types/shared"
 import {
   ClaimsQuizForm,
   QuizQuestion,
@@ -25,6 +25,10 @@ export interface ClaimsQuizSectionProps {
   specialistDescription?: string
   /** Specialist title */
   specialistTitle?: string
+  /** Dynamic success message from CMS form */
+  successMessage?: string
+  /** Dynamic footer items from CMS form */
+  footerItems?: ListItemComponent[]
   /** Custom extra styling classes */
   className?: string
 }
@@ -43,6 +47,8 @@ export function ClaimsQuizSection({
   specialistPhone,
   specialistDescription,
   specialistTitle,
+  successMessage,
+  footerItems,
   className,
 }: ClaimsQuizSectionProps) {
   return (
@@ -63,6 +69,8 @@ export function ClaimsQuizSection({
             questions={questions}
             contactStep={contactStep}
             onComplete={onComplete}
+            successMessage={successMessage}
+            footerItems={footerItems}
           />
 
           {/* RIGHT SIDEBAR COLUMN */}

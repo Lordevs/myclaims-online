@@ -4,6 +4,7 @@ import { Container } from "@/components/layout/container"
 import { FadeIn } from "@/components/ui/animations"
 import { EnquiryForm } from "@/components/forms/enquiry-form"
 import { cn } from "@/lib/utils"
+import type { FormEntry } from "@/lib/strapi/types/collections"
 
 export interface FormHeroProps {
   /** The main landing page title */
@@ -22,6 +23,8 @@ export interface FormHeroProps {
   formSubtitle?: string
   /** Custom additional class classes */
   className?: string
+  /** The fully populated Form entry from CMS */
+  form?: FormEntry | null
 }
 
 /**
@@ -51,6 +54,7 @@ export function FormHero({
   formTitle,
   formSubtitle,
   className,
+  form,
 }: FormHeroProps) {
   // Smart auto-splitting of the heading around the question mark for premium dual-color rendering
   const titleParts = title.split("?")
@@ -65,6 +69,10 @@ export function FormHero({
         {title}
       </h1>
     )
+
+  const firstStep = form?.steps?.[0]
+  const resolvedFormTitle = firstStep?.title || formTitle || undefined
+  const resolvedFormSubtitle = firstStep?.description || formSubtitle || undefined
 
   return (
     <section
@@ -92,7 +100,7 @@ export function FormHero({
                   <div key={idx} className="flex items-center gap-3">
                     <div className="flex h-5.5 w-5.5 shrink-0 items-center justify-center rounded-full bg-[#1B6E3F] shadow-none">
                       <Check
-                        className="h-3.5 w-3.5 text-white"
+                         className="h-3.5 w-3.5 text-white"
                         strokeWidth={3}
                       />
                     </div>
@@ -121,8 +129,9 @@ export function FormHero({
           <div className="sticky top-24 col-span-1 w-full lg:col-span-5">
             <FadeIn delay={0.25}>
               <EnquiryForm
-                title={formTitle}
-                subtitle={formSubtitle}
+                title={resolvedFormTitle}
+                subtitle={resolvedFormSubtitle}
+                form={form}
                 className="w-full"
               />
             </FadeIn>

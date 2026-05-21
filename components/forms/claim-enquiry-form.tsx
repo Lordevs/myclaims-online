@@ -14,18 +14,16 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { submitForm } from "@/actions/form"
+import type { FormEntry } from "@/lib/strapi/types/collections"
+import { StrapiIcon } from "@/components/strapi/strapi-icon"
 
 export interface ClaimEnquiryFormProps {
   /** Optional callback handler for successful form submissions */
-  onSubmit?: (data: {
-    name: string
-    phone: string
-    email: string
-    vehicleType: string
-    description: string
-  }) => void
+  onSubmit?: (data: Record<string, string>) => void
   /** Optional custom styling classes */
   className?: string
+  /** The fully populated Form entry from CMS */
+  form?: FormEntry | null
 }
 
 /**
@@ -34,26 +32,21 @@ export interface ClaimEnquiryFormProps {
  * - Card Background: #FFFFFFB2 with backdropFilter blur(12px)
  * - Heading: Start Your Claim Now in #064E3B
  * - Inputs: #FFFFFF80 background, 1px solid #E0BEC1 border
- * - Vehicle Type: Absolute floating overlapping label inside a custom dropdown
- * - Action Button: #E6405E accent color
+ * - Accent: #E6405E action color
  * - Security Footer: border-top 1px solid #064E3B0D, lock and shield badges
+ * - Dynamic: Renders form fields purely from the backend configuration
  */
 export function ClaimEnquiryForm({
   onSubmit,
   className,
+  form,
 }: ClaimEnquiryFormProps) {
   const [state, formAction, isPending] = useActionState(submitForm, {
     status: "idle",
     message: null,
   })
 
-  const [formData, setFormData] = React.useState({
-    name: "",
-    phone: "",
-    email: "",
-    vehicleType: "",
-    description: "",
-  })
+  const [formData, setFormData] = React.useState<Record<string, string>>({})
 
   // Trigger optional callback on successful submit
   useEffect(() => {
@@ -61,15 +54,12 @@ export function ClaimEnquiryForm({
       if (onSubmit) {
         onSubmit(formData)
       }
-      setFormData({
-        name: "",
-        phone: "",
-        email: "",
-        vehicleType: "",
-        description: "",
-      })
+      setFormData({})
     }
   }, [state.status, onSubmit])
+
+  // Flat list of all fields across all steps
+  const cmsFields = form?.steps?.flatMap((step) => step.fields || []) || []
 
   if (state.status === "success") {
     return (
@@ -87,7 +77,7 @@ export function ClaimEnquiryForm({
             Enquiry Received!
           </h3>
           <p className="mb-8 max-w-lg text-sm leading-relaxed font-semibold text-[#4C6549] sm:text-base">
-            {state.message || "Thank you! Your claims enquiry has been received. Our team will contact you shortly."}
+            {form?.successMessage || state.message || "Thank you! Your claims enquiry has been received. Our team will contact you shortly."}
           </p>
         </div>
       </div>
@@ -102,8 +92,7 @@ export function ClaimEnquiryForm({
         className
       )}
     >
-      <input type="hidden" name="formId" value="enquiry-form" />
-      <input type="hidden" name="vehicleType" value={formData.vehicleType} />
+      <input type="hidden" name="formId" value={form?.formId || "enquiry-form"} />
 
       {/* Form Heading */}
       <h3 className="mb-6 text-xl font-extrabold tracking-tight text-[#064E3B] sm:text-2xl">
@@ -120,144 +109,97 @@ export function ClaimEnquiryForm({
 
       {/* Input Stack */}
       <div className="mb-6 flex flex-col gap-4 text-left">
-        {/* Full Name */}
-        <div className="relative">
-          <Input
-            required
-            type="text"
-            name="name"
-            placeholder="Full Name"
-            value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            className={cn(
-              "h-auto w-full rounded-xl px-4 py-3.5 text-sm font-medium text-[#064E3B] transition-colors outline-none placeholder:text-[#A3A3A3]",
-              "border border-[#E0BEC1] bg-[#FFFFFF80] focus:border-[#AF2144] focus-visible:border-[#AF2144] focus-visible:ring-0"
-            )}
-          />
-        </div>
-
-        {/* Phone & Email Row */}
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          {/* Phone Number */}
-          <div className="relative">
-            <Input
-              required
-              type="tel"
-              name="phone"
-              placeholder="Phone Number"
-              value={formData.phone}
-              onChange={(e) =>
-                setFormData({ ...formData, phone: e.target.value })
-              }
-              className={cn(
-                "h-auto w-full rounded-xl px-4 py-3.5 text-sm font-medium text-[#064E3B] transition-colors outline-none placeholder:text-[#A3A3A3]",
-                "border border-[#E0BEC1] bg-[#FFFFFF80] focus:border-[#AF2144] focus-visible:border-[#AF2144] focus-visible:ring-0"
+        {cmsFields.map((field) => {
+          const fieldKey = field.label || `field_${field.id}`
+          return (
+            <div key={field.id} className="relative">
+              {field.type === "textarea" ? (
+                <Textarea
+                  required={field.required !== false}
+                  name={fieldKey}
+                  placeholder={field.label || ""}
+                  value={formData[fieldKey] || ""}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      [fieldKey]: e.target.value,
+                    }))
+                  }
+                  rows={3}
+                  className={cn(
+                    "min-h-[100px] w-full rounded-xl px-4 py-3.5 text-sm leading-relaxed font-medium text-[#064E3B] transition-colors outline-none placeholder:text-[#A3A3A3]",
+                    "border border-[#E0BEC1] bg-[#FFFFFF80] focus:border-[#AF2144] focus-visible:border-[#AF2144] focus-visible:ring-0"
+                  )}
+                />
+              ) : field.type === "select" ? (
+                <div className="relative">
+                  {/* Overlap Label for Premium Aesthetics */}
+                  <label className="absolute -top-[9px] left-3.5 z-10 rounded-sm bg-white px-1.5 text-[10px] font-extrabold tracking-wider text-[#AF2144] uppercase">
+                    {field.label || "Select Option"}
+                  </label>
+                  <div className="relative w-full">
+                    <input
+                      type="hidden"
+                      name={fieldKey}
+                      value={formData[fieldKey] || ""}
+                    />
+                    <Select
+                      required={field.required !== false}
+                      value={formData[fieldKey] || undefined}
+                      onValueChange={(val) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          [fieldKey]: val,
+                        }))
+                      }
+                    >
+                      <SelectTrigger
+                        className={cn(
+                          "!h-auto w-full cursor-pointer appearance-none rounded-xl px-4 py-3.5 text-sm text-[#064E3B] outline-hidden transition-all",
+                          "!focus-visible:ring-0 border border-[#E0BEC1] bg-[#FFFFFF80] font-semibold focus:border-[#AF2144] focus:bg-white focus-visible:border-[#AF2144] data-[placeholder]:font-medium data-[placeholder]:text-[#A3A3A3] data-[state=open]:border-[#AF2144] data-[state=open]:bg-white [&_svg]:h-4 [&_svg]:w-4 [&_svg]:text-[#064E3B]"
+                        )}
+                      >
+                        <SelectValue placeholder={`Select ${field.label || "Option"}`} />
+                      </SelectTrigger>
+                      <SelectContent
+                        position="popper"
+                        className="rounded-xl border border-[#E0BEC1] bg-white/95 font-semibold text-[#064E3B] shadow-xl backdrop-blur-md"
+                      >
+                        {field.selectOptions?.map((opt) => (
+                          <SelectItem
+                            key={opt.id}
+                            value={opt.text}
+                            className="cursor-pointer py-2 font-semibold focus:bg-[#F4F8E5] focus:text-[#064E3B] data-[state=checked]:bg-[#F4F8E5] data-[state=checked]:text-[#064E3B]"
+                          >
+                            {opt.text}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              ) : (
+                <Input
+                  required={field.required !== false}
+                  type={field.type}
+                  name={fieldKey}
+                  placeholder={field.label || ""}
+                  value={formData[fieldKey] || ""}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      [fieldKey]: e.target.value,
+                    }))
+                  }
+                  className={cn(
+                    "h-auto w-full rounded-xl px-4 py-3.5 text-sm font-medium text-[#064E3B] transition-colors outline-none placeholder:text-[#A3A3A3]",
+                    "border border-[#E0BEC1] bg-[#FFFFFF80] focus:border-[#AF2144] focus-visible:border-[#AF2144] focus-visible:ring-0"
+                  )}
+                />
               )}
-            />
-          </div>
-
-          {/* Email Address */}
-          <div className="relative">
-            <Input
-              required
-              type="email"
-              name="email"
-              placeholder="Email Address"
-              value={formData.email}
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
-              className={cn(
-                "h-auto w-full rounded-xl px-4 py-3.5 text-sm font-medium text-[#064E3B] transition-colors outline-none placeholder:text-[#A3A3A3]",
-                "border border-[#E0BEC1] bg-[#FFFFFF80] focus:border-[#AF2144] focus-visible:border-[#AF2144] focus-visible:ring-0"
-              )}
-            />
-          </div>
-        </div>
-
-        {/* Vehicle Type Dropdown with Overlap Label */}
-        <div className="relative">
-          <label className="absolute -top-[9px] left-3.5 z-10 rounded-sm bg-white px-1.5 text-[10px] font-extrabold tracking-wider text-[#AF2144] uppercase">
-            Vehicle Type
-          </label>
-          <div className="relative w-full">
-            <Select
-              required
-              value={formData.vehicleType || undefined}
-              onValueChange={(val) =>
-                setFormData({ ...formData, vehicleType: val })
-              }
-            >
-              <SelectTrigger
-                className={cn(
-                  "!h-auto w-full cursor-pointer appearance-none rounded-xl px-4 py-3.5 text-sm text-[#064E3B] outline-hidden transition-all",
-                  "!focus-visible:ring-0 border border-[#E0BEC1] bg-[#FFFFFF80] font-semibold focus:border-[#AF2144] focus:bg-white focus-visible:border-[#AF2144] data-[placeholder]:font-medium data-[placeholder]:text-[#A3A3A3] data-[state=open]:border-[#AF2144] data-[state=open]:bg-white [&_svg]:h-4 [&_svg]:w-4 [&_svg]:text-[#064E3B]"
-                )}
-              >
-                <SelectValue placeholder="Select Vehicle Type" />
-              </SelectTrigger>
-              <SelectContent
-                position="popper"
-                className="rounded-xl border border-[#E0BEC1] bg-white/95 font-semibold text-[#064E3B] shadow-xl backdrop-blur-md"
-              >
-                <SelectItem
-                  value="Car"
-                  className="cursor-pointer py-2 font-semibold focus:bg-[#F4F8E5] focus:text-[#064E3B] data-[state=checked]:bg-[#F4F8E5] data-[state=checked]:text-[#064E3B]"
-                >
-                  Car
-                </SelectItem>
-                <SelectItem
-                  value="Taxi"
-                  className="cursor-pointer py-2 font-semibold focus:bg-[#F4F8E5] focus:text-[#064E3B] data-[state=checked]:bg-[#F4F8E5] data-[state=checked]:text-[#064E3B]"
-                >
-                  Taxi / Private Hire
-                </SelectItem>
-                <SelectItem
-                  value="Motorbike"
-                  className="cursor-pointer py-2 font-semibold focus:bg-[#F4F8E5] focus:text-[#064E3B] data-[state=checked]:bg-[#F4F8E5] data-[state=checked]:text-[#064E3B]"
-                >
-                  Motorcycle
-                </SelectItem>
-                <SelectItem
-                  value="Cycle"
-                  className="cursor-pointer py-2 font-semibold focus:bg-[#F4F8E5] focus:text-[#064E3B] data-[state=checked]:bg-[#F4F8E5] data-[state=checked]:text-[#064E3B]"
-                >
-                  Bicycle / E-Scooter
-                </SelectItem>
-                <SelectItem
-                  value="Electric Vehicle"
-                  className="cursor-pointer py-2 font-semibold focus:bg-[#F4F8E5] focus:text-[#064E3B] data-[state=checked]:bg-[#F4F8E5] data-[state=checked]:text-[#064E3B]"
-                >
-                  Electric Vehicle
-                </SelectItem>
-                <SelectItem
-                  value="Other"
-                  className="cursor-pointer py-2 font-semibold focus:bg-[#F4F8E5] focus:text-[#064E3B] data-[state=checked]:bg-[#F4F8E5] data-[state=checked]:text-[#064E3B]"
-                >
-                  Other
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-
-        {/* Accident Description */}
-        <div className="relative">
-          <Textarea
-            required
-            name="description"
-            placeholder="Accident Description"
-            value={formData.description}
-            onChange={(e) =>
-              setFormData({ ...formData, description: e.target.value })
-            }
-            rows={4}
-            className={cn(
-              "min-h-[100px] w-full rounded-xl px-4 py-3.5 text-sm leading-relaxed font-medium text-[#064E3B] transition-colors outline-none placeholder:text-[#A3A3A3]",
-              "border border-[#E0BEC1] bg-[#FFFFFF80] focus:border-[#AF2144] focus-visible:border-[#AF2144] focus-visible:ring-0"
-            )}
-          />
-        </div>
+            </div>
+          )
+        })}
       </div>
 
       {/* Submit Action Button */}
@@ -269,32 +211,53 @@ export function ClaimEnquiryForm({
           "border-none bg-[#E6405E] hover:bg-[#d03350]! active:scale-[0.98] disabled:opacity-50"
         )}
       >
-        <span>{isPending ? "Submitting..." : "Submit Enquiry"}</span>
+        <span>{isPending ? "Submitting..." : (form?.submitButtonText || "Submit Enquiry")}</span>
         {!isPending && (
           <Play className="h-3.5 w-3.5 translate-x-0.5 fill-white text-white" />
         )}
       </Button>
 
       {/* Form Footer */}
-      <div className="mt-6 grid grid-cols-2 items-center gap-4 border-t border-[#064E3B0D] pt-5 text-center">
-        {/* No Obligation */}
-        <div className="flex items-center justify-center gap-2 text-[#064E3B99] transition-opacity hover:opacity-80">
-          <ShieldCheck className="h-4 w-4 shrink-0 text-[#AF2144]" />
-          <span className="text-[10px] font-extrabold tracking-wider uppercase sm:text-[11px]">
-            No Obligation
-          </span>
-        </div>
+      <div className={cn(
+        "mt-6 items-center gap-4 border-t border-[#064E3B0D] pt-5 text-center",
+        form?.footerItems && form.footerItems.length > 0
+          ? "flex flex-wrap justify-center gap-x-6 gap-y-2"
+          : "grid grid-cols-2"
+      )}>
+        {form?.footerItems && form.footerItems.length > 0 ? (
+          form.footerItems.map((item) => (
+            <div key={item.id} className="flex items-center justify-center gap-2 text-[#064E3B99] transition-opacity hover:opacity-80">
+              {item.icon ? (
+                <StrapiIcon icon={item.icon} size={14} className="shrink-0 text-[#AF2144]" />
+              ) : (
+                <ShieldCheck className="h-4 w-4 shrink-0 text-[#AF2144]" />
+              )}
+              <span className="text-[10px] font-extrabold tracking-wider uppercase sm:text-[11px]">
+                {item.text}
+              </span>
+            </div>
+          ))
+        ) : (
+          <>
+            {/* No Obligation */}
+            <div className="flex items-center justify-center gap-2 text-[#064E3B99] transition-opacity hover:opacity-80">
+              <ShieldCheck className="h-4 w-4 shrink-0 text-[#AF2144]" />
+              <span className="text-[10px] font-extrabold tracking-wider uppercase sm:text-[11px]">
+                No Obligation
+              </span>
+            </div>
 
-        {/* Secure Data */}
-        <div className="flex items-center justify-center gap-2 text-[#064E3B99] transition-opacity hover:opacity-80">
-          <Lock className="h-3.5 w-3.5 shrink-0 text-[#AF2144]" />
-          <span className="text-[10px] font-extrabold tracking-wider uppercase sm:text-[11px]">
-            Secure Data
-          </span>
-        </div>
+            {/* Secure Data */}
+            <div className="flex items-center justify-center gap-2 text-[#064E3B99] transition-opacity hover:opacity-80">
+              <Lock className="h-3.5 w-3.5 shrink-0 text-[#AF2144]" />
+              <span className="text-[10px] font-extrabold tracking-wider uppercase sm:text-[11px]">
+                Secure Data
+              </span>
+            </div>
+          </>
+        )}
       </div>
     </form>
-
   )
 }
 

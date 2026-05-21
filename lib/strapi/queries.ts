@@ -120,7 +120,7 @@ export const pagePopulate = {
           listItems: listItemPopulate,
           Image: { populate: mediaPopulate },
           ctaButtons: { populate: linkPopulate },
-          form: { fields: ["id", "documentId", "formId", "title"] },
+          form: { populate: formPopulate },
         },
       },
       "sections.rich-text-section": {
@@ -138,7 +138,7 @@ export const pagePopulate = {
         populate: {
           listItems: listItemPopulate,
           image: { populate: mediaPopulate },
-          form: { fields: ["id", "documentId", "formId", "title"] },
+          form: { populate: formPopulate },
         },
       },
       "sections.feature-grid": {

@@ -47,7 +47,7 @@ export interface SplitHeroSection {
   /** ctaButtons — present when layout === "hero_with_media", max 2 */
   ctaButtons: LinkComponent[]
   /** form relation — present when layout === "hero_with_form" */
-  form: Pick<FormEntry, "id" | "documentId" | "formId" | "title"> | null
+  form: FormEntry | null
 }
 
 // ─── sections.rich-text-section ──────────────────────────────────────────────
@@ -89,7 +89,7 @@ export interface FormSection {
   /** listItems — only shown when layout === "illustration_form" */
   listItems: ListItemComponent[]
   image: StrapiMediaComponent | null
-  form: Pick<FormEntry, "id" | "documentId" | "formId" | "title"> | null
+  form: FormEntry | null
 }
 
 // ─── sections.feature-grid ───────────────────────────────────────────────────

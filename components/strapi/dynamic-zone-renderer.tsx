@@ -18,6 +18,7 @@ import { TextColumnsSection } from "@/components/sections/text-columns-section"
 import { InfoBanner } from "@/components/sections/info-banner"
 import { ImageWithListSection } from "@/components/sections/image-with-list-section"
 import { ClaimFormSection } from "@/components/sections/claim-form-section"
+import { DetailedEnquirySection } from "@/components/sections/detailed-enquiry-section"
 import { ClaimsSupport } from "@/components/sections/claims-support"
 import { StepsGridSection } from "@/components/sections/steps-grid-section"
 import { FeaturesGridSection } from "@/components/sections/features-grid-section"
@@ -65,6 +66,7 @@ const SECTION_MAP: {
           imageSrc={imageSrc}
           imageAlt={imageAlt}
           formTitle={section.form?.title || undefined}
+          form={section.form}
         />
       )
     }
@@ -127,16 +129,32 @@ const SECTION_MAP: {
   },
 
   "sections.form-section": (section: FormSection) => {
-    const imageSrc = getStrapiMedia(section.image?.file?.url) || "/contact-form.avif"
-    const imageAlt = section.image?.file?.alternativeText || "Expert Claims Handler"
+    const imageSrc = getStrapiMedia(section.image?.file?.url)
 
+    if (section.layout === "illustration_form") {
+      const listItems = section.listItems?.map((item) => item.text) || []
+      return (
+        <DetailedEnquirySection
+          key={section.id}
+          title={section.title}
+          subtitle={section.subtitle || undefined}
+          listItems={listItems.length > 0 ? listItems : undefined}
+          arrowSrc={imageSrc || undefined}
+          form={section.form}
+        />
+      )
+    }
+
+    // Default layout: section.layout === "default_form" or null
+    const imageAlt = section.image?.file?.alternativeText || "Expert Claims Handler"
     return (
       <ClaimFormSection
         key={section.id}
         titleGreen={section.title}
         subtitle={section.subtitle || ""}
-        imageSrc={imageSrc}
+        imageSrc={imageSrc || "/contact-form.avif"}
         imageAlt={imageAlt}
+        form={section.form}
       />
     )
   },
@@ -307,7 +325,7 @@ const SECTION_MAP: {
 
   "sections.quiz-section": (section: QuizSection) => {
     const allSteps = section.form?.steps || []
-    
+
     // The last step is the contact details form if it contains fields of type other than 'select'
     const hasContactStep =
       allSteps.length > 0 &&

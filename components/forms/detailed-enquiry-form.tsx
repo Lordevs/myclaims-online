@@ -8,18 +8,24 @@ import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { Separator } from "../ui/separator"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { submitForm } from "@/actions/form"
+import type { FormEntry } from "@/lib/strapi/types/collections"
+import { StrapiIcon } from "@/components/strapi/strapi-icon"
 
 export interface DetailedEnquiryFormProps {
   /** Custom submit handler */
-  onSubmit?: (data: {
-    name: string
-    email: string
-    phone: string
-    message: string
-  }) => void
+  onSubmit?: (data: Record<string, string>) => void
   /** Additional styling class */
   className?: string
+  /** The fully populated Form entry from CMS */
+  form?: FormEntry | null
 }
 
 /**
@@ -31,22 +37,19 @@ export interface DetailedEnquiryFormProps {
  * - Input borders: 2.25px solid #0F172A
  * - Submit button: #E94E6B with offset shadow
  * - Bottom security footer: bg-[#F1F5F9] with text/icons in #594143
+ * - Dynamic: Renders form fields purely from backend CMS configuration
  */
 export function DetailedEnquiryForm({
   onSubmit,
   className,
+  form,
 }: DetailedEnquiryFormProps) {
   const [state, formAction, isPending] = useActionState(submitForm, {
     status: "idle",
     message: null,
   })
 
-  const [formData, setFormData] = React.useState({
-    name: "",
-    email: "",
-    phone: "",
-    message: "",
-  })
+  const [formData, setFormData] = React.useState<Record<string, string>>({})
 
   // Trigger optional callback on success
   useEffect(() => {
@@ -54,9 +57,12 @@ export function DetailedEnquiryForm({
       if (onSubmit) {
         onSubmit(formData)
       }
-      setFormData({ name: "", email: "", phone: "", message: "" })
+      setFormData({})
     }
   }, [state.status, onSubmit])
+
+  // Flat list of all fields across all steps
+  const cmsFields = form?.steps?.flatMap((step) => step.fields || []) || []
 
   if (state.status === "success") {
     return (
@@ -76,7 +82,7 @@ export function DetailedEnquiryForm({
             Enquiry Sent!
           </h3>
           <p className="mb-4 max-w-md text-sm leading-relaxed font-bold text-[#594143] sm:text-base">
-            {state.message || "Thank you! Your detailed claims enquiry has been received. We will contact you shortly."}
+            {form?.successMessage || state.message || "Thank you! Your detailed claims enquiry has been received. We will contact you shortly."}
           </p>
         </div>
       </div>
@@ -93,7 +99,7 @@ export function DetailedEnquiryForm({
         className
       )}
     >
-      <input type="hidden" name="formId" value="detail-enquiry-form" />
+      <input type="hidden" name="formId" value={form?.formId || "detail-enquiry-form"} />
 
       {/* Form Inputs Content Padding */}
       <div className="flex flex-col gap-5 p-6 sm:p-8">
@@ -105,107 +111,103 @@ export function DetailedEnquiryForm({
           </div>
         )}
 
-        {/* Name and Email side-by-side on larger screens */}
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          {/* Full Name */}
-          <div className="flex flex-col">
-            <Label
-              htmlFor="detail-name"
-              className="mb-2 text-sm leading-none font-bold text-[#0F172A]"
-            >
-              Name
-            </Label>
-            <Input
-              required
-              id="detail-name"
-              type="text"
-              name="name"
-              placeholder="John Doe"
-              value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
-              className={cn(
-                "h-auto w-full rounded-lg px-4 py-3 text-sm text-[#0F172A] transition-colors outline-none placeholder:text-[#888888]",
-                "border-[2.25px] border-[#0F172A] bg-white focus-visible:border-[#E94E6B] focus-visible:ring-0"
-              )}
-            />
-          </div>
-
-          {/* Email Address */}
-          <div className="flex flex-col">
-            <Label
-              htmlFor="detail-email"
-              className="mb-2 text-sm leading-none font-bold text-[#0F172A]"
-            >
-              Email
-            </Label>
-            <Input
-              required
-              id="detail-email"
-              type="email"
-              name="email"
-              placeholder="john@example.com"
-              value={formData.email}
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
-              className={cn(
-                "h-auto w-full rounded-lg px-4 py-3 text-sm text-[#0F172A] transition-colors outline-none placeholder:text-[#888888]",
-                "border-[2.25px] border-[#0F172A] bg-white focus-visible:border-[#E94E6B] focus-visible:ring-0"
-              )}
-            />
-          </div>
-        </div>
-
-        {/* Phone Number */}
-        <div className="flex flex-col">
-          <Label
-            htmlFor="detail-phone"
-            className="mb-2 text-sm leading-none font-bold text-[#0F172A]"
-          >
-            Phone Number
-          </Label>
-          <Input
-            required
-            id="detail-phone"
-            type="tel"
-            name="phone"
-            placeholder="07123 456 789"
-            value={formData.phone}
-            onChange={(e) =>
-              setFormData({ ...formData, phone: e.target.value })
-            }
-            className={cn(
-              "h-auto w-full rounded-lg px-4 py-3 text-sm text-[#0F172A] transition-colors outline-none placeholder:text-[#888888]",
-              "border-[2.25px] border-[#0F172A] bg-white focus-visible:border-[#E94E6B] focus-visible:ring-0"
-            )}
-          />
-        </div>
-
-        {/* Brief Message / Claim Details */}
-        <div className="flex flex-col">
-          <Label
-            htmlFor="detail-message"
-            className="mb-2 text-sm leading-none font-bold text-[#0F172A]"
-          >
-            Brief Message / Claim Details
-          </Label>
-          <Textarea
-            required
-            id="detail-message"
-            name="message"
-            placeholder="Tell us about your incident..."
-            value={formData.message}
-            onChange={(e) =>
-              setFormData({ ...formData, message: e.target.value })
-            }
-            rows={4}
-            className={cn(
-              "min-h-[100px] w-full rounded-lg px-4 py-3 text-sm text-[#0F172A] transition-colors outline-none placeholder:text-[#888888]",
-              "border-[2.25px] border-[#0F172A] bg-white focus-visible:border-[#E94E6B] focus-visible:ring-0"
-            )}
-          />
+        {/* Input Stack */}
+        <div className="flex flex-col gap-4 text-left">
+          {cmsFields.map((field) => {
+            const fieldKey = field.label || `field_${field.id}`
+            const fieldId = `detail-${field.id}`
+            return (
+              <div key={field.id} className="flex flex-col">
+                <Label
+                  htmlFor={fieldId}
+                  className="mb-2 text-sm leading-none font-bold text-[#0F172A]"
+                >
+                  {field.label || ""}
+                </Label>
+                {field.type === "textarea" ? (
+                  <Textarea
+                    required={field.required !== false}
+                    id={fieldId}
+                    name={fieldKey}
+                    placeholder={field.label || ""}
+                    value={formData[fieldKey] || ""}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        [fieldKey]: e.target.value,
+                      }))
+                    }
+                    rows={4}
+                    className={cn(
+                      "min-h-[100px] w-full rounded-lg px-4 py-3 text-sm text-[#0F172A] transition-colors outline-none placeholder:text-[#888888]",
+                      "border-[2.25px] border-[#0F172A] bg-white focus-visible:border-[#E94E6B] focus-visible:ring-0"
+                    )}
+                  />
+                ) : field.type === "select" ? (
+                  <div className="relative w-full">
+                    <input
+                      type="hidden"
+                      name={fieldKey}
+                      value={formData[fieldKey] || ""}
+                    />
+                    <Select
+                      required={field.required !== false}
+                      value={formData[fieldKey] || undefined}
+                      onValueChange={(val) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          [fieldKey]: val,
+                        }))
+                      }
+                    >
+                      <SelectTrigger
+                        id={fieldId}
+                        className={cn(
+                          "!h-auto w-full cursor-pointer appearance-none rounded-lg px-4 py-3 text-sm text-[#0F172A] outline-hidden transition-all bg-white",
+                          "!focus-visible:ring-0 border-[2.25px] border-[#0F172A] font-bold focus:border-[#E94E6B] focus:bg-white focus-visible:border-[#E94E6B] data-[placeholder]:font-medium data-[placeholder]:text-[#888888] data-[state=open]:border-[#E94E6B]"
+                        )}
+                      >
+                        <SelectValue placeholder={`Select ${field.label || "Option"}`} />
+                      </SelectTrigger>
+                      <SelectContent
+                        position="popper"
+                        className="rounded-lg border-[2.25px] border-[#0F172A] bg-white/95 font-bold text-[#0F172A] shadow-xl backdrop-blur-md"
+                      >
+                        {field.selectOptions?.map((opt) => (
+                          <SelectItem
+                            key={opt.id}
+                            value={opt.text}
+                            className="cursor-pointer py-2 font-bold focus:bg-[#F4F8E5] focus:text-[#064E3B] data-[state=checked]:bg-[#F4F8E5] data-[state=checked]:text-[#064E3B]"
+                          >
+                            {opt.text}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                ) : (
+                  <Input
+                    required={field.required !== false}
+                    id={fieldId}
+                    type={field.type}
+                    name={fieldKey}
+                    placeholder={field.label || ""}
+                    value={formData[fieldKey] || ""}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        [fieldKey]: e.target.value,
+                      }))
+                    }
+                    className={cn(
+                      "h-auto w-full rounded-lg px-4 py-3 text-sm text-[#0F172A] transition-colors outline-none placeholder:text-[#888888]",
+                      "border-[2.25px] border-[#0F172A] bg-white focus-visible:border-[#E94E6B] focus-visible:ring-0"
+                    )}
+                  />
+                )}
+              </div>
+            )
+          })}
         </div>
 
         {/* Neobrutalist Pink Submit Button */}
@@ -218,7 +220,7 @@ export function DetailedEnquiryForm({
             "mt-2 shadow-[4.5px_4.5px_0px_0px_#1A1C19] disabled:opacity-50"
           )}
         >
-          <span>{isPending ? "Submitting..." : "Submit Enquiry"}</span>
+          <span>{isPending ? "Submitting..." : (form?.submitButtonText || "Submit Enquiry")}</span>
         </Button>
       </div>
 
@@ -230,24 +232,41 @@ export function DetailedEnquiryForm({
         )}
       >
         <Separator className="mb-4 bg-[#E2E2E2]" />
-        <div className="flex items-center gap-1.5">
-          <LockKeyhole className="h-4 w-4 shrink-0 text-[#594143]" />
-          <span className="text-base leading-none font-bold tracking-tight">
-            No obligation
-          </span>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <Clock className="h-4 w-4 shrink-0 text-[#594143]" />
-          <span className="text-base leading-none font-bold tracking-tight">
-            Free consultation
-          </span>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <ShieldCheck className="h-4 w-4 shrink-0 text-[#594143]" />
-          <span className="text-base leading-none font-bold tracking-tight">
-            Data secure & never shared
-          </span>
-        </div>
+        {form?.footerItems && form.footerItems.length > 0 ? (
+          form.footerItems.map((item) => (
+            <div key={item.id} className="flex items-center gap-1.5">
+              {item.icon ? (
+                <StrapiIcon icon={item.icon} size={16} className="shrink-0 text-[#594143]" />
+              ) : (
+                <ShieldCheck className="h-4 w-4 shrink-0 text-[#594143]" />
+              )}
+              <span className="text-base leading-none font-bold tracking-tight">
+                {item.text}
+              </span>
+            </div>
+          ))
+        ) : (
+          <>
+            <div className="flex items-center gap-1.5">
+              <LockKeyhole className="h-4 w-4 shrink-0 text-[#594143]" />
+              <span className="text-base leading-none font-bold tracking-tight">
+                No obligation
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Clock className="h-4 w-4 shrink-0 text-[#594143]" />
+              <span className="text-base leading-none font-bold tracking-tight">
+                Free consultation
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <ShieldCheck className="h-4 w-4 shrink-0 text-[#594143]" />
+              <span className="text-base leading-none font-bold tracking-tight">
+                Data secure & never shared
+              </span>
+            </div>
+          </>
+        )}
       </div>
     </form>
   )

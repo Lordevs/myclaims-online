@@ -7,7 +7,8 @@ import { Progress } from "@/components/ui/progress"
 import { cn } from "@/lib/utils"
 import { Markdown } from "@/components/shared/markdown"
 
-import type { FormStepComponent } from "@/lib/strapi/types/shared"
+import type { FormStepComponent, ListItemComponent } from "@/lib/strapi/types/shared"
+import { StrapiIcon } from "@/components/strapi/strapi-icon"
 
 export interface QuizOption {
   id: string | number
@@ -31,6 +32,10 @@ export interface ClaimsQuizFormProps {
   contactStep?: FormStepComponent
   /** On completion event callback, returning answers and contact details */
   onComplete?: (answers: Record<string | number, string>) => void
+  /** Dynamic success message from CMS form */
+  successMessage?: string
+  /** Dynamic footer items from CMS form */
+  footerItems?: ListItemComponent[]
   /** Custom extra styling classes */
   className?: string
 }
@@ -111,6 +116,8 @@ export function ClaimsQuizForm({
   questions = defaultQuestions,
   contactStep,
   onComplete,
+  successMessage,
+  footerItems,
   className,
 }: ClaimsQuizFormProps) {
   // State for tracking active step
@@ -175,16 +182,10 @@ export function ClaimsQuizForm({
       const formData = new FormData()
       formData.append("formId", "claims-quiz")
 
-      if (contactStep && contactStep.fields && contactStep.fields.length > 0) {
-        contactStep.fields.forEach((field) => {
-          const fieldKey = field.label || `field_${field.id}`
-          formData.append(fieldKey, contactInfo[fieldKey] || "")
-        })
-      } else {
-        formData.append("name", contactInfo.name || "")
-        formData.append("phone", contactInfo.phone || "")
-        formData.append("email", contactInfo.email || "")
-      }
+      contactStep?.fields?.forEach((field) => {
+        const fieldKey = field.label || `field_${field.id}`
+        formData.append(fieldKey, contactInfo[fieldKey] || "")
+      })
 
       // Package quiz selections into the payload
       questions.forEach((q) => {
@@ -274,8 +275,7 @@ export function ClaimsQuizForm({
               Claim Details Received!
             </h3>
             <p className="mb-8 max-w-lg text-sm leading-relaxed font-medium text-[#594143] sm:text-base">
-              Thank you! Your assessment has been completed. A claims specialist
-              will review your file and call you directly within 15 minutes.
+              {successMessage || "Thank you! Your assessment has been completed. A claims specialist will review your file and call you directly within 15 minutes."}
             </p>
             <button
               onClick={handleReset}
@@ -302,131 +302,74 @@ export function ClaimsQuizForm({
             )}
 
             <form onSubmit={handleFormSubmit} className="flex flex-col gap-5">
-              {contactStep && contactStep.fields && contactStep.fields.length > 0 ? (
-                contactStep.fields.map((field) => {
-                  const fieldKey = field.label || `field_${field.id}`
-                  return (
-                    <div key={field.id} className="flex flex-col gap-2">
-                      {field.label && (
-                        <label
-                          className="text-xs font-black text-[#1A1C19] sm:text-sm"
-                          htmlFor={`field_${field.id}`}
-                        >
-                          {field.label}
-                        </label>
-                      )}
-                      {field.type === "textarea" ? (
-                        <textarea
-                          id={`field_${field.id}`}
-                          name={field.label || ""}
-                          required={field.required !== false}
-                          placeholder={`Enter your ${field.label?.toLowerCase() || "details"}`}
-                          value={contactInfo[fieldKey] || ""}
-                          onChange={(e) =>
-                            setContactInfo((prev) => ({
-                              ...prev,
-                              [fieldKey]: e.target.value,
-                            }))
-                          }
-                          className="w-full rounded-xl border-2 border-[#4C6549] bg-[#F3F4EF] px-5 py-4 font-bold text-[#1A1C19] placeholder-[#594143]/50 transition-all focus:ring-2 focus:ring-[#AF2144]/20 focus:outline-none min-h-[120px]"
-                        />
+              {contactStep?.fields?.map((field) => {
+                const fieldKey = field.label || `field_${field.id}`
+                return (
+                  <div key={field.id} className="flex flex-col gap-2">
+                    {field.label && (
+                      <label
+                        className="text-xs font-black text-[#1A1C19] sm:text-sm"
+                        htmlFor={`field_${field.id}`}
+                      >
+                        {field.label}
+                      </label>
+                    )}
+                    {field.type === "textarea" ? (
+                      <textarea
+                        id={`field_${field.id}`}
+                        name={field.label || ""}
+                        required={field.required !== false}
+                        placeholder={`Enter your ${field.label?.toLowerCase() || "details"}`}
+                        value={contactInfo[fieldKey] || ""}
+                        onChange={(e) =>
+                          setContactInfo((prev) => ({
+                            ...prev,
+                            [fieldKey]: e.target.value,
+                          }))
+                        }
+                        className="w-full rounded-xl border-2 border-[#4C6549] bg-[#F3F4EF] px-5 py-4 font-bold text-[#1A1C19] placeholder-[#594143]/50 transition-all focus:ring-2 focus:ring-[#AF2144]/20 focus:outline-none min-h-[120px]"
+                      />
+                    ) : (
+                      <input
+                        id={`field_${field.id}`}
+                        type={field.type}
+                        name={field.label || ""}
+                        required={field.required !== false}
+                        placeholder={
+                          field.type === "email"
+                            ? "john@example.com"
+                            : field.type === "tel"
+                            ? "07123 456789"
+                            : `Enter your ${field.label?.toLowerCase() || ""}`
+                        }
+                        value={contactInfo[fieldKey] || ""}
+                        onChange={(e) =>
+                          setContactInfo((prev) => ({
+                            ...prev,
+                            [fieldKey]: e.target.value,
+                          }))
+                        }
+                        className="w-full rounded-xl border-2 border-[#4C6549] bg-[#F3F4EF] px-5 py-4 font-bold text-[#1A1C19] placeholder-[#594143]/50 transition-all focus:ring-2 focus:ring-[#AF2144]/20 focus:outline-none"
+                      />
+                    )}
+                  </div>
+                )
+              })}
+
+              {/* Dynamic Footer Items inside contact form */}
+              {footerItems && footerItems.length > 0 && (
+                <div className="mt-4 flex flex-wrap justify-start gap-x-4 gap-y-2 text-[#594143] text-xs font-semibold">
+                  {footerItems.map((item) => (
+                    <div key={item.id} className="flex items-center gap-1.5">
+                      {item.icon ? (
+                        <StrapiIcon icon={item.icon} size={14} className="shrink-0 text-[#594143]" />
                       ) : (
-                        <input
-                          id={`field_${field.id}`}
-                          type={field.type}
-                          name={field.label || ""}
-                          required={field.required !== false}
-                          placeholder={
-                            field.type === "email"
-                              ? "john@example.com"
-                              : field.type === "tel"
-                              ? "07123 456789"
-                              : `Enter your ${field.label?.toLowerCase() || ""}`
-                          }
-                          value={contactInfo[fieldKey] || ""}
-                          onChange={(e) =>
-                            setContactInfo((prev) => ({
-                              ...prev,
-                              [fieldKey]: e.target.value,
-                            }))
-                          }
-                          className="w-full rounded-xl border-2 border-[#4C6549] bg-[#F3F4EF] px-5 py-4 font-bold text-[#1A1C19] placeholder-[#594143]/50 transition-all focus:ring-2 focus:ring-[#AF2144]/20 focus:outline-none"
-                        />
+                        <ShieldCheck className="h-4 w-4 shrink-0 text-[#594143]" />
                       )}
+                      <span>{item.text}</span>
                     </div>
-                  )
-                })
-              ) : (
-                <>
-                  <div className="flex flex-col gap-2">
-                    <label
-                      className="text-xs font-black text-[#1A1C19] sm:text-sm"
-                      htmlFor="fullName"
-                    >
-                      Full Name
-                    </label>
-                    <input
-                      id="fullName"
-                      type="text"
-                      required
-                      placeholder="John Doe"
-                      value={contactInfo.name || ""}
-                      onChange={(e) =>
-                        setContactInfo((prev) => ({
-                          ...prev,
-                          name: e.target.value,
-                        }))
-                      }
-                      className="w-full rounded-xl border-2 border-[#4C6549] bg-[#F3F4EF] px-5 py-4 font-bold text-[#1A1C19] placeholder-[#594143]/50 transition-all focus:ring-2 focus:ring-[#AF2144]/20 focus:outline-none"
-                    />
-                  </div>
-
-                  <div className="flex flex-col gap-2">
-                    <label
-                      className="text-xs font-black text-[#1A1C19] sm:text-sm"
-                      htmlFor="phoneNumber"
-                    >
-                      Phone Number
-                    </label>
-                    <input
-                      id="phoneNumber"
-                      type="tel"
-                      required
-                      placeholder="07123 456789"
-                      value={contactInfo.phone || ""}
-                      onChange={(e) =>
-                        setContactInfo((prev) => ({
-                          ...prev,
-                          phone: e.target.value,
-                        }))
-                      }
-                      className="w-full rounded-xl border-2 border-[#4C6549] bg-[#F3F4EF] px-5 py-4 font-bold text-[#1A1C19] placeholder-[#594143]/50 transition-all focus:ring-2 focus:ring-[#AF2144]/20 focus:outline-none"
-                    />
-                  </div>
-
-                  <div className="flex flex-col gap-2">
-                    <label
-                      className="text-xs font-black text-[#1A1C19] sm:text-sm"
-                      htmlFor="emailAddress"
-                    >
-                      Email Address
-                    </label>
-                    <input
-                      id="emailAddress"
-                      type="email"
-                      required
-                      placeholder="john@example.com"
-                      value={contactInfo.email || ""}
-                      onChange={(e) =>
-                        setContactInfo((prev) => ({
-                          ...prev,
-                          email: e.target.value,
-                        }))
-                      }
-                      className="w-full rounded-xl border-2 border-[#4C6549] bg-[#F3F4EF] px-5 py-4 font-bold text-[#1A1C19] placeholder-[#594143]/50 transition-all focus:ring-2 focus:ring-[#AF2144]/20 focus:outline-none"
-                    />
-                  </div>
-                </>
+                  ))}
+                </div>
               )}
 
               {state.status === "error" && state.message && (
