@@ -53,8 +53,6 @@ const SECTION_MAP: {
 } = {
   "sections.split-hero-section": (section: SplitHeroSection) => {
     const listItems = section.listItems?.map((i) => i.text) || []
-    const imageSrc = getStrapiMedia(section.Image?.file?.url) || ""
-    const imageAlt = section.Image?.file?.alternativeText || ""
 
     if (section.layout === "hero_with_form") {
       return (
@@ -63,8 +61,7 @@ const SECTION_MAP: {
           title={section.title}
           description={section.subtitle || ""}
           listItems={listItems}
-          imageSrc={imageSrc}
-          imageAlt={imageAlt}
+          image={section.Image}
           formTitle={section.form?.title || undefined}
           form={section.form}
         />
@@ -77,8 +74,7 @@ const SECTION_MAP: {
         title={section.title}
         description={section.subtitle || ""}
         listItems={listItems}
-        imageSrc={imageSrc}
-        imageAlt={imageAlt}
+        image={section.Image}
         primaryBtnText={section.ctaButtons?.[0]?.label || undefined}
         primaryBtnHref={resolveStrapiLink(section.ctaButtons?.[0])}
         secondaryBtnText={section.ctaButtons?.[1]?.label || undefined}
@@ -113,24 +109,19 @@ const SECTION_MAP: {
   },
 
   "sections.media-and-text": (section: MediaAndTextSection) => {
-    const imageSrc = getStrapiMedia(section.image?.file?.url) || ""
-    const imageAlt = section.image?.file?.alternativeText || ""
     const listItems = section.items?.map((i) => i.text) || []
 
     return (
       <ImageWithListSection
         key={section.id}
         title={section.title}
-        imageSrc={imageSrc}
-        imageAlt={imageAlt}
+        image={section.image}
         listItems={listItems}
       />
     )
   },
 
   "sections.form-section": (section: FormSection) => {
-    const imageSrc = getStrapiMedia(section.image?.file?.url)
-
     if (section.layout === "illustration_form") {
       const listItems = section.listItems?.map((item) => item.text) || []
       return (
@@ -139,21 +130,19 @@ const SECTION_MAP: {
           title={section.title}
           subtitle={section.subtitle || undefined}
           listItems={listItems.length > 0 ? listItems : undefined}
-          arrowSrc={imageSrc || undefined}
+          arrowImage={section.image}
           form={section.form}
         />
       )
     }
 
     // Default layout: section.layout === "default_form" or null
-    const imageAlt = section.image?.file?.alternativeText || "Expert Claims Handler"
     return (
       <ClaimFormSection
         key={section.id}
         titleGreen={section.title}
         subtitle={section.subtitle || ""}
-        imageSrc={imageSrc || "/contact-form.avif"}
-        imageAlt={imageAlt}
+        image={section.image}
         form={section.form}
       />
     )

@@ -1,10 +1,11 @@
 import Link from "next/link"
-import Image from "next/image"
 import { Check } from "lucide-react"
 import { Container } from "@/components/layout/container"
 import { FadeIn } from "@/components/ui/animations"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import { StrapiImage } from "@/components/strapi/strapi-image"
+import type { StrapiMediaComponent } from "@/lib/strapi/types/media"
 
 export interface HeroProps {
   /** The primary bold green heading */
@@ -14,9 +15,7 @@ export interface HeroProps {
   /** Array of check list statements */
   listItems?: string[]
   /** Path to the main illustration/photo asset */
-  imageSrc?: string
-  /** Alt label for accessibility */
-  imageAlt?: string
+  image?: StrapiMediaComponent | null
   /** Label for the pink action button */
   primaryBtnText?: string
   /** Destination for the pink action button */
@@ -44,8 +43,7 @@ export function Hero({
     "Personal injury support",
     "Nationwide Service",
   ],
-  imageSrc = "/hero-placeholder.avif",
-  imageAlt = "Taxi Uber Accident Collision Illustration",
+  image,
   primaryBtnText = "Start My Claim",
   primaryBtnHref = "#enquiry-form",
   secondaryBtnText = "Call Now",
@@ -142,13 +140,13 @@ export function Hero({
 
                 {/* Front Image Canvas */}
                 <div className="absolute inset-0 z-10 overflow-hidden rounded-xl bg-white">
-                  <Image
-                    src={imageSrc}
-                    alt={imageAlt}
+                  <StrapiImage
+                    image={image}
                     fill
                     priority
                     sizes="(max-width: 1024px) 100vw, 50vw"
                     className="object-cover"
+                    fallbackSrc="/hero-placeholder.avif"
                   />
                 </div>
               </div>

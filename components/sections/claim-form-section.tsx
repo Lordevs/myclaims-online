@@ -1,9 +1,10 @@
-import Image from "next/image"
 import { Container } from "@/components/layout/container"
 import { FadeIn } from "@/components/ui/animations"
 import { cn } from "@/lib/utils"
 import { ClaimEnquiryForm } from "@/components/forms/claim-enquiry-form"
 import type { FormEntry } from "@/lib/strapi/types/collections"
+import { StrapiImage } from "@/components/strapi/strapi-image"
+import type { StrapiMediaComponent } from "@/lib/strapi/types/media"
 
 export interface ClaimFormSectionProps {
   /** Title part in green */
@@ -13,9 +14,7 @@ export interface ClaimFormSectionProps {
   /** Subtitle text */
   subtitle?: string
   /** The main visual photo */
-  imageSrc?: string
-  /** Alt label for accessibility */
-  imageAlt?: string
+  image?: StrapiMediaComponent | null
   /** Custom form submit callback */
   onSubmit?: (data: Record<string, string>) => void
   /** Optional class styling overrides */
@@ -39,8 +38,7 @@ export function ClaimFormSection({
   titleGreen,
   titleRed,
   subtitle,
-  imageSrc,
-  imageAlt,
+  image,
   onSubmit,
   className,
   form,
@@ -78,7 +76,7 @@ export function ClaimFormSection({
               )}
 
               {/* Styled Photo Frame */}
-              {imageSrc && (
+              {image && (
                 <div className="relative w-full max-w-[480px]">
                   {/* Photo canvas */}
                   <div
@@ -88,13 +86,13 @@ export function ClaimFormSection({
                       boxShadow: "0px 25px 50px -12px #00000040",
                     }}
                   >
-                    <Image
-                      src={imageSrc}
-                      alt={imageAlt || ""}
+                    <StrapiImage
+                      image={image}
                       fill
                       priority
                       sizes="(max-width: 1024px) 100vw, 480px"
                       className="object-cover"
+                      fallbackSrc="/contact-form.avif"
                     />
                   </div>
 

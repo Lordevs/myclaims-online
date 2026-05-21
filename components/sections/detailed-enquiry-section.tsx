@@ -1,10 +1,11 @@
-import Image from "next/image"
 import { Check } from "lucide-react"
 import { Container } from "@/components/layout/container"
 import { FadeIn } from "@/components/ui/animations"
 import { DetailedEnquiryForm } from "../forms/detailed-enquiry-form"
 import { cn } from "@/lib/utils"
 import type { FormEntry } from "@/lib/strapi/types/collections"
+import { StrapiImage } from "@/components/strapi/strapi-image"
+import type { StrapiMediaComponent } from "@/lib/strapi/types/media"
 
 export interface DetailedEnquirySectionProps {
   /** Title on the left column */
@@ -14,7 +15,7 @@ export interface DetailedEnquirySectionProps {
   /** Checklist statements */
   listItems?: string[]
   /** Image source path for the twisted arrow graphic */
-  arrowSrc?: string
+  arrowImage?: StrapiMediaComponent | null
   /** Custom submit handler passed down to the form */
   onSubmit?: (data: Record<string, string>) => void
   /** Additional styling class */
@@ -35,7 +36,7 @@ export function DetailedEnquirySection({
   title,
   subtitle,
   listItems,
-  arrowSrc,
+  arrowImage,
   onSubmit,
   className,
   form,
@@ -87,10 +88,10 @@ export function DetailedEnquirySection({
                 )}
 
                 {/* Twisted Pink Arrow Graphic - Positioned at bottom right of left column */}
-                {arrowSrc && (
+                {arrowImage && (
                   <div className="pointer-events-none relative z-20 mt-4 hidden aspect-1.75/1 w-[200px] self-end select-none sm:w-[240px] md:block md:w-[280px]">
-                    <Image
-                      src={arrowSrc}
+                    <StrapiImage
+                      image={arrowImage}
                       alt="Twisted Arrow Decorative Illustration"
                       fill
                       className="object-contain"

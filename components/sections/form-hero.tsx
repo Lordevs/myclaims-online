@@ -1,10 +1,11 @@
-import Image from "next/image"
 import { Check } from "lucide-react"
 import { Container } from "@/components/layout/container"
 import { FadeIn } from "@/components/ui/animations"
 import { EnquiryForm } from "@/components/forms/enquiry-form"
 import { cn } from "@/lib/utils"
 import type { FormEntry } from "@/lib/strapi/types/collections"
+import { StrapiImage } from "@/components/strapi/strapi-image"
+import type { StrapiMediaComponent } from "@/lib/strapi/types/media"
 
 export interface FormHeroProps {
   /** The main landing page title */
@@ -14,9 +15,7 @@ export interface FormHeroProps {
   /** 8 Bulleted checkmark statements, will render in a 2-column grid on desktop */
   listItems?: string[]
   /** Source path of the replacement diagram */
-  imageSrc?: string
-  /** Alt label for accessibility */
-  imageAlt?: string
+  image?: StrapiMediaComponent | null
   /** Heading inside the enquiry card */
   formTitle?: string
   /** Subtitle inside the enquiry card */
@@ -49,8 +48,7 @@ export function FormHero({
     "Vehicle Recovery & Towing Services",
     "Free Legal Consultation & Advice",
   ],
-  imageSrc = "/form-hero-placeholder.avif",
-  imageAlt = "Instant Vehicle Replacement Diagram",
+  image,
   formTitle,
   formSubtitle,
   className,
@@ -113,13 +111,13 @@ export function FormHero({
 
               {/* Large graphic diagram underneath lists (no neobrutalist borders) */}
               <div className="relative aspect-[1.15/1] w-full overflow-hidden rounded-2xl sm:aspect-1.25/1">
-                <Image
-                  src={imageSrc}
-                  alt={imageAlt}
+                <StrapiImage
+                  image={image}
                   fill
                   priority
                   sizes="(max-width: 768px) 100vw, 480px"
                   className="object-contain"
+                  fallbackSrc="/form-hero-placeholder.avif"
                 />
               </div>
             </FadeIn>

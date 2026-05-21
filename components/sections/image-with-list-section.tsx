@@ -2,15 +2,14 @@ import { Container } from "@/components/layout/container"
 import { FadeIn } from "@/components/ui/animations"
 import { cn } from "@/lib/utils"
 import { CircleCheck } from "lucide-react"
-import Image from "next/image"
+import { StrapiImage } from "@/components/strapi/strapi-image"
+import type { StrapiMediaComponent } from "@/lib/strapi/types/media"
 
 export interface ImageWithListSectionProps {
   /** The primary section heading title */
   title: string
-  /** The absolute or relative path to the image asset */
-  imageSrc: string
-  /** The alternative text for the image */
-  imageAlt?: string
+  /** The Strapi media image object */
+  image?: StrapiMediaComponent | null
   /** List of text bullet points to render with checkmark icons */
   listItems: string[]
   /** Flip layout: render image on the right instead of left (defaults to false) */
@@ -27,8 +26,7 @@ export interface ImageWithListSectionProps {
  */
 export function ImageWithListSection({
   title,
-  imageSrc,
-  imageAlt = "Feature illustration",
+  image,
   listItems,
   imageOnRight = false,
 }: ImageWithListSectionProps) {
@@ -50,9 +48,8 @@ export function ImageWithListSection({
               {/* Actual Image Block */}
               {/* box-shadow: 4.5px 4.5px 0px 0px #064E3B; */}
               <div className="relative h-full w-full overflow-hidden rounded-[18px] border-[2.25px] border-[#064E3B] bg-white shadow-[4.5px_4.5px_0px_0px_#064E3B]">
-                <Image
-                  src={imageSrc}
-                  alt={imageAlt}
+                <StrapiImage
+                  image={image}
                   className="block h-full w-full object-cover"
                   loading="lazy"
                   width={540}
