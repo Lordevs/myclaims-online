@@ -4,7 +4,7 @@ import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils"
 import { Navbar } from "@/components/layout/navigation/navbar"
-import { Footer } from "@/components/layout/navigation/footer"
+import { Footer } from "@/components/layout/footer"
 import { getGlobal } from "@/lib/strapi/services/global"
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })

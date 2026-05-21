@@ -1,14 +1,13 @@
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { resolveStrapiLink } from "@/lib/strapi/utils"
-import { ROUTES } from "@/constants/routes"
 import { LinkComponent } from "@/lib/strapi/types/shared"
 import { Button } from "@/components/ui/button"
 
 interface NavCTAButtonProps {
   className?: string
   onClick?: () => void
-  /** Strapi CTA link — overrides the hardcoded route when provided */
+  /** Strapi CTA link */
   ctaButton?: LinkComponent | null
 }
 
@@ -17,9 +16,10 @@ export function NavCTAButton({
   onClick,
   ctaButton,
 }: NavCTAButtonProps) {
-  const label = ctaButton?.label ?? "Start My Claim"
-  const resolvedLink = resolveStrapiLink(ctaButton)
-  const href = resolvedLink === "#" ? ROUTES.START_MY_CLAIM : resolvedLink
+  if (!ctaButton) return null
+
+  const label = ctaButton.label
+  const href = resolveStrapiLink(ctaButton)
 
   return (
     <Button
@@ -33,7 +33,7 @@ export function NavCTAButton({
       <Link
         href={href}
         onClick={onClick}
-        {...(ctaButton?.isExternal
+        {...(ctaButton.isExternal
           ? { target: "_blank", rel: "noopener noreferrer" }
           : {})}
       >
