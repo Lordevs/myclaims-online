@@ -5,11 +5,16 @@ import { ArrowLeft, ArrowRight, ShieldCheck, RefreshCw } from "lucide-react"
 import { FadeIn } from "@/components/ui/animations"
 import { Progress } from "@/components/ui/progress"
 import { cn } from "@/lib/utils"
+import { Markdown } from "@/components/shared/markdown"
+
+import type { FormStepComponent } from "@/lib/strapi/types/shared"
 
 export interface QuizOption {
   id: string | number
   text: string
   value: string
+  additionalInfo?: string | null
+  isDisqualifying?: boolean
 }
 
 export interface QuizQuestion {
@@ -22,6 +27,8 @@ export interface QuizQuestion {
 export interface ClaimsQuizFormProps {
   /** Dynamic array of questions */
   questions?: QuizQuestion[]
+  /** Dynamic contact/lead capture step from CMS */
+  contactStep?: FormStepComponent
   /** On completion event callback, returning answers and contact details */
   onComplete?: (answers: Record<string | number, string>) => void
   /** Custom extra styling classes */
@@ -102,6 +109,7 @@ const defaultQuestions: QuizQuestion[] = [
  */
 export function ClaimsQuizForm({
   questions = defaultQuestions,
+  contactStep,
   onComplete,
   className,
 }: ClaimsQuizFormProps) {
@@ -111,11 +119,7 @@ export function ClaimsQuizForm({
   const [answers, setAnswers] = useState<Record<string | number, string>>({})
   // Complete lead form state
   const [isFormStep, setIsFormStep] = useState(false)
-  const [contactInfo, setContactInfo] = useState({
-    name: "",
-    phone: "",
-    email: "",
-  })
+  const [contactInfo, setContactInfo] = useState<Record<string, string>>({})
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [state, setState] = useState<{ status: string; message: string | null }>({
@@ -129,6 +133,8 @@ export function ClaimsQuizForm({
   const progressPercent =
     totalSteps > 0 ? (currentStepIndex / totalSteps) * 100 : 0
   const selectedValue = activeQuestion ? answers[activeQuestion.id] : undefined
+  const selectedOption = activeQuestion?.options.find((opt) => opt.value === selectedValue)
+  const isDisqualified = selectedOption?.isDisqualifying || false
 
   // Navigation handlers
   const handleSelectOption = (value: string) => {
@@ -140,7 +146,7 @@ export function ClaimsQuizForm({
   }
 
   const handleNext = () => {
-    if (!selectedValue) return
+    if (!selectedValue || isDisqualified) return
 
     if (currentStepIndex < totalSteps - 1) {
       setCurrentStepIndex((prev) => prev + 1)
@@ -168,9 +174,17 @@ export function ClaimsQuizForm({
       const { submitForm } = await import("@/actions/form")
       const formData = new FormData()
       formData.append("formId", "claims-quiz")
-      formData.append("name", contactInfo.name)
-      formData.append("phone", contactInfo.phone)
-      formData.append("email", contactInfo.email)
+
+      if (contactStep && contactStep.fields && contactStep.fields.length > 0) {
+        contactStep.fields.forEach((field) => {
+          const fieldKey = field.label || `field_${field.id}`
+          formData.append(fieldKey, contactInfo[fieldKey] || "")
+        })
+      } else {
+        formData.append("name", contactInfo.name || "")
+        formData.append("phone", contactInfo.phone || "")
+        formData.append("email", contactInfo.email || "")
+      }
 
       // Package quiz selections into the payload
       questions.forEach((q) => {
@@ -209,7 +223,7 @@ export function ClaimsQuizForm({
     setAnswers({})
     setCurrentStepIndex(0)
     setIsFormStep(false)
-    setContactInfo({ name: "", phone: "", email: "" })
+    setContactInfo({})
     setIsSubmitted(false)
     setState({ status: "idle", message: null })
   }
@@ -274,82 +288,152 @@ export function ClaimsQuizForm({
           /* Premium Contact Details Form Step */
           <FadeIn delay={0.05} y={15}>
             <h3 className="mb-3 text-2xl leading-tight font-black tracking-tight text-[#1A1C19] sm:text-3xl">
-              Almost Eligible! Lock in your claim evaluation
+              {contactStep?.title || "Almost Eligible! Lock in your claim evaluation"}
             </h3>
-            <p className="mb-8 text-sm leading-relaxed font-semibold text-[#594143]">
-              We have successfully captured your claim responses. Please share
-              your contact info so we can assign an advisor.
-            </p>
+            {contactStep?.description ? (
+              <div className="mb-8 text-sm leading-relaxed font-semibold text-[#594143]">
+                <Markdown content={contactStep.description} variant="light" className="prose-sm max-w-none prose-[#594143]" />
+              </div>
+            ) : (
+              <p className="mb-8 text-sm leading-relaxed font-semibold text-[#594143]">
+                We have successfully captured your claim responses. Please share
+                your contact info so we can assign an advisor.
+              </p>
+            )}
 
             <form onSubmit={handleFormSubmit} className="flex flex-col gap-5">
-              <div className="flex flex-col gap-2">
-                <label
-                  className="text-xs font-black text-[#1A1C19] sm:text-sm"
-                  htmlFor="fullName"
-                >
-                  Full Name
-                </label>
-                <input
-                  id="fullName"
-                  type="text"
-                  required
-                  placeholder="John Doe"
-                  value={contactInfo.name}
-                  onChange={(e) =>
-                    setContactInfo((prev) => ({
-                      ...prev,
-                      name: e.target.value,
-                    }))
-                  }
-                  className="w-full rounded-xl border-2 border-[#4C6549] bg-[#F3F4EF] px-5 py-4 font-bold text-[#1A1C19] placeholder-[#594143]/50 transition-all focus:ring-2 focus:ring-[#AF2144]/20 focus:outline-none"
-                />
-              </div>
+              {contactStep && contactStep.fields && contactStep.fields.length > 0 ? (
+                contactStep.fields.map((field) => {
+                  const fieldKey = field.label || `field_${field.id}`
+                  return (
+                    <div key={field.id} className="flex flex-col gap-2">
+                      {field.label && (
+                        <label
+                          className="text-xs font-black text-[#1A1C19] sm:text-sm"
+                          htmlFor={`field_${field.id}`}
+                        >
+                          {field.label}
+                        </label>
+                      )}
+                      {field.type === "textarea" ? (
+                        <textarea
+                          id={`field_${field.id}`}
+                          name={field.label || ""}
+                          required={field.required !== false}
+                          placeholder={`Enter your ${field.label?.toLowerCase() || "details"}`}
+                          value={contactInfo[fieldKey] || ""}
+                          onChange={(e) =>
+                            setContactInfo((prev) => ({
+                              ...prev,
+                              [fieldKey]: e.target.value,
+                            }))
+                          }
+                          className="w-full rounded-xl border-2 border-[#4C6549] bg-[#F3F4EF] px-5 py-4 font-bold text-[#1A1C19] placeholder-[#594143]/50 transition-all focus:ring-2 focus:ring-[#AF2144]/20 focus:outline-none min-h-[120px]"
+                        />
+                      ) : (
+                        <input
+                          id={`field_${field.id}`}
+                          type={field.type}
+                          name={field.label || ""}
+                          required={field.required !== false}
+                          placeholder={
+                            field.type === "email"
+                              ? "john@example.com"
+                              : field.type === "tel"
+                              ? "07123 456789"
+                              : `Enter your ${field.label?.toLowerCase() || ""}`
+                          }
+                          value={contactInfo[fieldKey] || ""}
+                          onChange={(e) =>
+                            setContactInfo((prev) => ({
+                              ...prev,
+                              [fieldKey]: e.target.value,
+                            }))
+                          }
+                          className="w-full rounded-xl border-2 border-[#4C6549] bg-[#F3F4EF] px-5 py-4 font-bold text-[#1A1C19] placeholder-[#594143]/50 transition-all focus:ring-2 focus:ring-[#AF2144]/20 focus:outline-none"
+                        />
+                      )}
+                    </div>
+                  )
+                })
+              ) : (
+                <>
+                  <div className="flex flex-col gap-2">
+                    <label
+                      className="text-xs font-black text-[#1A1C19] sm:text-sm"
+                      htmlFor="fullName"
+                    >
+                      Full Name
+                    </label>
+                    <input
+                      id="fullName"
+                      type="text"
+                      required
+                      placeholder="John Doe"
+                      value={contactInfo.name || ""}
+                      onChange={(e) =>
+                        setContactInfo((prev) => ({
+                          ...prev,
+                          name: e.target.value,
+                        }))
+                      }
+                      className="w-full rounded-xl border-2 border-[#4C6549] bg-[#F3F4EF] px-5 py-4 font-bold text-[#1A1C19] placeholder-[#594143]/50 transition-all focus:ring-2 focus:ring-[#AF2144]/20 focus:outline-none"
+                    />
+                  </div>
 
-              <div className="flex flex-col gap-2">
-                <label
-                  className="text-xs font-black text-[#1A1C19] sm:text-sm"
-                  htmlFor="phoneNumber"
-                >
-                  Phone Number
-                </label>
-                <input
-                  id="phoneNumber"
-                  type="tel"
-                  required
-                  placeholder="07123 456789"
-                  value={contactInfo.phone}
-                  onChange={(e) =>
-                    setContactInfo((prev) => ({
-                      ...prev,
-                      phone: e.target.value,
-                    }))
-                  }
-                  className="w-full rounded-xl border-2 border-[#4C6549] bg-[#F3F4EF] px-5 py-4 font-bold text-[#1A1C19] placeholder-[#594143]/50 transition-all focus:ring-2 focus:ring-[#AF2144]/20 focus:outline-none"
-                />
-              </div>
+                  <div className="flex flex-col gap-2">
+                    <label
+                      className="text-xs font-black text-[#1A1C19] sm:text-sm"
+                      htmlFor="phoneNumber"
+                    >
+                      Phone Number
+                    </label>
+                    <input
+                      id="phoneNumber"
+                      type="tel"
+                      required
+                      placeholder="07123 456789"
+                      value={contactInfo.phone || ""}
+                      onChange={(e) =>
+                        setContactInfo((prev) => ({
+                          ...prev,
+                          phone: e.target.value,
+                        }))
+                      }
+                      className="w-full rounded-xl border-2 border-[#4C6549] bg-[#F3F4EF] px-5 py-4 font-bold text-[#1A1C19] placeholder-[#594143]/50 transition-all focus:ring-2 focus:ring-[#AF2144]/20 focus:outline-none"
+                    />
+                  </div>
 
-              <div className="flex flex-col gap-2">
-                <label
-                  className="text-xs font-black text-[#1A1C19] sm:text-sm"
-                  htmlFor="emailAddress"
-                >
-                  Email Address
-                </label>
-                <input
-                  id="emailAddress"
-                  type="email"
-                  required
-                  placeholder="john@example.com"
-                  value={contactInfo.email}
-                  onChange={(e) =>
-                    setContactInfo((prev) => ({
-                      ...prev,
-                      email: e.target.value,
-                    }))
-                  }
-                  className="w-full rounded-xl border-2 border-[#4C6549] bg-[#F3F4EF] px-5 py-4 font-bold text-[#1A1C19] placeholder-[#594143]/50 transition-all focus:ring-2 focus:ring-[#AF2144]/20 focus:outline-none"
-                />
-              </div>
+                  <div className="flex flex-col gap-2">
+                    <label
+                      className="text-xs font-black text-[#1A1C19] sm:text-sm"
+                      htmlFor="emailAddress"
+                    >
+                      Email Address
+                    </label>
+                    <input
+                      id="emailAddress"
+                      type="email"
+                      required
+                      placeholder="john@example.com"
+                      value={contactInfo.email || ""}
+                      onChange={(e) =>
+                        setContactInfo((prev) => ({
+                          ...prev,
+                          email: e.target.value,
+                        }))
+                      }
+                      className="w-full rounded-xl border-2 border-[#4C6549] bg-[#F3F4EF] px-5 py-4 font-bold text-[#1A1C19] placeholder-[#594143]/50 transition-all focus:ring-2 focus:ring-[#AF2144]/20 focus:outline-none"
+                    />
+                  </div>
+                </>
+              )}
+
+              {state.status === "error" && state.message && (
+                <div className="text-sm font-semibold text-[#AF2144] animate-in fade-in duration-200">
+                  {state.message}
+                </div>
+              )}
 
               {/* Navigation buttons */}
               <div className="mt-8 flex items-center justify-between border-t border-[#4C6549]/10 pt-6">
@@ -363,9 +447,16 @@ export function ClaimsQuizForm({
 
                 <button
                   type="submit"
-                  className="flex items-center gap-2 rounded-2xl border-2 border-[#4C6549] bg-[#AF2144] px-6 py-4 font-black text-white shadow-[4px_4px_0px_0px_#344D32] transition-all duration-200 hover:translate-x-[2px] hover:translate-y-[2px] hover:bg-[#961a37] hover:shadow-[2px_2px_0px_0px_#344D32] focus:outline-none"
+                  disabled={isSubmitting}
+                  className={cn(
+                    "flex items-center gap-2 rounded-2xl border-2 border-[#4C6549] bg-[#AF2144] px-6 py-4 font-black text-white transition-all duration-200 focus:outline-none",
+                    isSubmitting
+                      ? "cursor-not-allowed border-[#4C6549]/40 bg-[#AF2144]/40 text-white/50 shadow-none"
+                      : "shadow-[4px_4px_0px_0px_#344D32] hover:translate-x-[2px] hover:translate-y-[2px] hover:bg-[#961a37] hover:shadow-[2px_2px_0px_0px_#344D32]"
+                  )}
                 >
-                  Submit My Claim <ArrowRight className="size-4" />
+                  {isSubmitting ? "Submitting..." : "Submit My Claim"}{" "}
+                  {!isSubmitting && <ArrowRight className="size-4" />}
                 </button>
               </div>
             </form>
@@ -407,6 +498,13 @@ export function ClaimsQuizForm({
               })}
             </div>
 
+            {/* Disqualifying Warning Panel */}
+            {isDisqualified && selectedOption?.additionalInfo && (
+              <div className="mt-6 text-sm font-semibold leading-relaxed text-[#AF2144] animate-in fade-in slide-in-from-top-1 duration-300 w-full">
+                <Markdown content={selectedOption.additionalInfo} className="prose-sm max-w-none prose-[#AF2144]" variant="light" />
+              </div>
+            )}
+
             {/* Navigation row */}
             <div className="mt-10 flex items-center justify-between border-t border-[#4C6549]/10 pt-6">
               {currentStepIndex > 0 ? (
@@ -422,10 +520,10 @@ export function ClaimsQuizForm({
 
               <button
                 onClick={handleNext}
-                disabled={!selectedValue}
+                disabled={!selectedValue || isDisqualified}
                 className={cn(
                   "flex items-center gap-2 rounded-2xl border-2 border-[#4C6549] px-6 py-4 font-black text-white transition-all duration-200 focus:outline-none",
-                  selectedValue
+                  selectedValue && !isDisqualified
                     ? "cursor-pointer bg-[#AF2144] shadow-[4px_4px_0px_0px_#344D32] hover:translate-x-[2px] hover:translate-y-[2px] hover:bg-[#961a37] hover:shadow-[2px_2px_0px_0px_#344D32]"
                     : "cursor-not-allowed border-[#4C6549]/40 bg-[#AF2144]/40 text-white/50 shadow-none"
                 )}

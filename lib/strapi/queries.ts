@@ -41,6 +41,25 @@ const formStepPopulate = {
   },
 }
 
+// ─── Form (with full nested steps) ──────────────────────────────────────────
+
+/**
+ * Populates for /api/forms?filters[formId][$eq]=...
+ * Fetches all steps → fields → selectOptions for rendering a full form.
+ */
+export const formPopulate = {
+  steps: {
+    populate: {
+      fields: {
+        populate: {
+          selectOptions: true,
+        },
+      },
+    },
+  },
+  footerItems: listItemPopulate,
+}
+
 // ─── Global single-type ──────────────────────────────────────────────────────
 
 /**
@@ -148,7 +167,7 @@ export const pagePopulate = {
       },
       "sections.quiz-section": {
         populate: {
-          form: { fields: ["id", "documentId", "formId", "title"] },
+          form: { populate: formPopulate },
           trustBullets: listItemPopulate,
           supportPhone: { populate: linkPopulate },
         },
@@ -170,25 +189,6 @@ export const pagePopulate = {
       },
     },
   },
-}
-
-// ─── Form (with full nested steps) ──────────────────────────────────────────
-
-/**
- * Populates for /api/forms?filters[formId][$eq]=...
- * Fetches all steps → fields → selectOptions for rendering a full form.
- */
-export const formPopulate = {
-  steps: {
-    populate: {
-      fields: {
-        populate: {
-          selectOptions: true,
-        },
-      },
-    },
-  },
-  footerItems: listItemPopulate,
 }
 
 // ─── FAQ list ─────────────────────────────────────────────────────────────────

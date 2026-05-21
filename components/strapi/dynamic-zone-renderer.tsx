@@ -195,9 +195,9 @@ const SECTION_MAP: {
         button={
           ctaBtn
             ? {
-                label: ctaBtn.label,
-                href: resolveStrapiLink(ctaBtn),
-              }
+              label: ctaBtn.label,
+              href: resolveStrapiLink(ctaBtn),
+            }
             : undefined
         }
       />
@@ -306,12 +306,42 @@ const SECTION_MAP: {
   },
 
   "sections.quiz-section": (section: QuizSection) => {
+    const allSteps = section.form?.steps || []
+    
+    // The last step is the contact details form if it contains fields of type other than 'select'
+    const hasContactStep =
+      allSteps.length > 0 &&
+      allSteps[allSteps.length - 1].fields?.some((f) => f.type !== "select")
+
+    const quizSteps = hasContactStep ? allSteps.slice(0, -1) : allSteps
+    const contactStep = hasContactStep ? allSteps[allSteps.length - 1] : null
+
+    const questions = quizSteps.map((step) => {
+      const field = step.fields?.[0]
+      return {
+        id: step.id,
+        questionText: field?.label || step.title || "",
+        category: step.description || step.title || "Assessment",
+        options: field?.selectOptions?.map((opt) => ({
+          id: opt.id,
+          text: opt.text,
+          value: opt.text,
+          additionalInfo: opt.additionalInfo,
+          isDisqualifying: opt.isDisqualifying,
+        })) || [],
+      }
+    })
+
     return (
       <ClaimsQuizSection
         key={section.id}
+        questions={questions.length > 0 ? questions : undefined}
+        contactStep={contactStep || undefined}
         trustItems={section.trustBullets?.map((i) => i.text)}
+        trustTitle={section.trustTitle || undefined}
         specialistPhone={section.supportPhone?.label || undefined}
         specialistDescription={section.supportText || undefined}
+        specialistTitle={section.supportTitle || undefined}
       />
     )
   },

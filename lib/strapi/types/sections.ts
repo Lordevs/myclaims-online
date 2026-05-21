@@ -148,7 +148,7 @@ export interface TrustBannerSection {
 export interface QuizSection {
   __component: "sections.quiz-section"
   id: number
-  form: Pick<FormEntry, "id" | "documentId" | "formId" | "title"> | null
+  form: FormEntry | null
   trustTitle: string | null
   trustBullets: ListItemComponent[]
   supportTitle: string | null
