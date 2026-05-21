@@ -15,13 +15,15 @@ import { MobileNavContent } from "./mobile-nav-content"
 import { NavCTAButton } from "@/components/layout/navigation/nav-cta-button"
 import type { LinkComponent } from "@/lib/strapi/types/shared"
 import type { NavbarItem } from "@/lib/strapi/types/global"
+import type { StrapiMediaComponent } from "@/lib/strapi/types/media"
 
 interface MobileNavProps {
   ctaButton?: LinkComponent | null
   navItems?: NavbarItem[]
+  logo?: StrapiMediaComponent | null
 }
 
-export function MobileNav({ ctaButton, navItems }: MobileNavProps) {
+export function MobileNav({ ctaButton, navItems, logo }: MobileNavProps) {
   const [isOpen, setIsOpen] = React.useState(false)
 
   return (
@@ -38,7 +40,7 @@ export function MobileNav({ ctaButton, navItems }: MobileNavProps) {
       >
         <SheetHeader className="px-6 pt-6 text-left">
           <SheetTitle className="text-left">
-            <Logo />
+            <Logo logo={logo} />
           </SheetTitle>
         </SheetHeader>
 

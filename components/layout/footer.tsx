@@ -22,7 +22,7 @@ export function Footer({ globalData }: FooterProps) {
         <div className="flex flex-col gap-12 pb-12 lg:flex-row lg:justify-between lg:gap-8">
           {/* Left Column */}
           <div className="flex max-w-lg flex-col">
-            <Logo className="h-6 w-auto" />
+            <Logo logo={globalData?.logo} className="h-6 w-auto" />
             {footer.description && (
               <p className="mt-6 text-[14px] leading-relaxed text-white/80">
                 {footer.description}

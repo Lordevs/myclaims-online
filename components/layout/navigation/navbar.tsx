@@ -35,7 +35,7 @@ export function Navbar({ globalData }: NavbarProps) {
       )}
     >
       <Container className="flex items-center justify-between md:px-0">
-        <Logo />
+        <Logo logo={globalData?.logo} />
 
         {/* Desktop Navigation */}
         <div className="flex items-center gap-10">
@@ -48,7 +48,7 @@ export function Navbar({ globalData }: NavbarProps) {
             <NavCTAButton ctaButton={ctaButton} className="hidden md:flex" />
 
             {/* Mobile Navigation */}
-            <MobileNav ctaButton={ctaButton} navItems={navItems} />
+            <MobileNav ctaButton={ctaButton} navItems={navItems} logo={globalData?.logo} />
           </div>
         </div>
       </Container>
