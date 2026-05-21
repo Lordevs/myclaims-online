@@ -21,7 +21,7 @@ import { ClaimFormSection } from "@/components/sections/claim-form-section"
 import { ClaimsSupport } from "@/components/sections/claims-support"
 import { StepsGridSection } from "@/components/sections/steps-grid-section"
 import { FeaturesGridSection } from "@/components/sections/features-grid-section"
-import { WhyChooseUs } from "@/components/sections/why-choose-us"
+import { AsymmetricRowSection } from "@/components/sections/asymmetric-row-section"
 import { FAQSection } from "@/components/sections/faq"
 import { CtaBoxed } from "@/components/sections/cta-boxed"
 import { CtaStrip } from "@/components/sections/cta-strip"
@@ -166,9 +166,9 @@ const SECTION_MAP: {
       )
     }
 
-    if (section.sectionTheme === "pink") {
+    if (section.layout === "asymmetric_row") {
       return (
-        <WhyChooseUs
+        <AsymmetricRowSection
           key={section.id}
           title={section.title}
           items={section.items}
@@ -176,6 +176,7 @@ const SECTION_MAP: {
       )
     }
 
+    // Default or section.layout === "grid_3_col"
     const offers = section.items.map((i) => ({
       icon: i.icon,
       title: i.title,
@@ -183,19 +184,22 @@ const SECTION_MAP: {
     }))
 
     const ctaBtn = section.ctaButton
-    const buttonProp = ctaBtn
-      ? {
-        label: ctaBtn.label,
-        href: resolveStrapiLink(ctaBtn),
-      }
-      : undefined
+    const theme = section.sectionTheme === "pink" ? "pink" : "green"
 
     return (
       <FeaturesGridSection
         key={section.id}
         title={section.title}
         items={offers}
-        button={buttonProp}
+        theme={theme}
+        button={
+          ctaBtn
+            ? {
+                label: ctaBtn.label,
+                href: resolveStrapiLink(ctaBtn),
+              }
+            : undefined
+        }
       />
     )
   },

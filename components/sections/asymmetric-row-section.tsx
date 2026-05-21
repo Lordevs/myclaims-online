@@ -1,7 +1,6 @@
 "use client"
 
 import * as React from "react"
-import { Handshake, PiggyBank } from "lucide-react"
 import { Container } from "@/components/layout/container"
 import {
   FadeIn,
@@ -66,24 +65,14 @@ export function BentoCard({
                   : "border-2 border-[#064E3B] bg-[#064E3B] shadow-[2px_2px_0px_0px_#064E3B]"
               )}
             >
-              {typeof Icon === "function" || React.isValidElement(Icon) ? (
-                React.createElement(Icon, {
-                  className: cn(
-                    "h-7 w-7 md:h-8 md:w-8",
-                    iconVariant === "pink" ? "text-white" : "text-[#A3E635]"
-                  ),
-                  strokeWidth: iconVariant === "pink" ? 2 : 2.25
-                })
-              ) : (
-                <StrapiIcon
-                  icon={Icon}
-                  size={32}
-                  className={cn(
-                    "h-7 w-7 md:h-8 md:w-8",
-                    iconVariant === "pink" ? "text-white" : "text-[#A3E635]"
-                  )}
-                />
-              )}
+              <StrapiIcon
+                icon={Icon}
+                size={32}
+                className={cn(
+                  "h-7 w-7 md:h-8 md:w-8",
+                  iconVariant === "pink" ? "text-white" : "text-[#A3E635]"
+                )}
+              />
             </div>
           )}
 
@@ -112,50 +101,18 @@ export function BentoCard({
   )
 }
 
-export interface WhyChooseUsProps {
+export interface AsymmetricRowSectionProps {
   title?: string
   items?: FeatureCardComponent[]
   className?: string
 }
 
 /**
- * High-fidelity "Why Choose My Claims Online" Bento Grid section.
- * Renders reusable BentoCards in a robust, animated 12-column grid.
+ * High-fidelity Bento Grid section.
+ * Renders BentoCards in an animated 12-column asymmetric grid layout.
  */
-export function WhyChooseUs({ title, items, className }: WhyChooseUsProps) {
-  const displayTitle = title || "Why Choose My Claims Online"
-
-  const defaultItems = [
-    {
-      icon: Handshake,
-      iconVariant: "pink" as const,
-      title: "No win no fee",
-      description: "Total peace of mind with our transparent legal support structure.",
-      colSpanClass: "lg:col-span-6",
-    },
-    {
-      icon: PiggyBank,
-      iconVariant: "green" as const,
-      title: "No upfront costs",
-      description: "We fund the entire process so you aren't out of pocket during the claim.",
-      colSpanClass: "lg:col-span-6",
-    },
-    {
-      title: "Fast response times",
-      description: "Our team starts working on your case the moment you hit submit.",
-      colSpanClass: "md:col-span-4",
-    },
-    {
-      title: "Nationwide coverage",
-      description: "From London to the Highlands, our recovery network spans the entire UK.",
-      colSpanClass: "md:col-span-4",
-    },
-    {
-      title: "25+ years experience",
-      description: "Decades of handling complex claims and helping thousands of drivers.",
-      colSpanClass: "md:col-span-4",
-    },
-  ]
+export function AsymmetricRowSection({ title, items, className }: AsymmetricRowSectionProps) {
+  if (!items || items.length === 0) return null
 
   const getColSpan = (idx: number, total: number) => {
     if (total === 5) {
@@ -170,15 +127,13 @@ export function WhyChooseUs({ title, items, className }: WhyChooseUsProps) {
     return "lg:col-span-4 md:col-span-6"
   }
 
-  const listItems = items
-    ? items.map((item, idx) => ({
-        icon: item.icon,
-        iconVariant: (idx % 2 === 0 ? "pink" : "green") as "pink" | "green",
-        title: item.title,
-        description: item.description || "",
-        colSpanClass: getColSpan(idx, items.length),
-      }))
-    : defaultItems
+  const listItems = items.map((item, idx) => ({
+    icon: item.icon,
+    iconVariant: (idx % 2 === 0 ? "pink" : "green") as "pink" | "green",
+    title: item.title,
+    description: item.description || "",
+    colSpanClass: getColSpan(idx, items.length),
+  }))
 
   return (
     <section
@@ -189,11 +144,13 @@ export function WhyChooseUs({ title, items, className }: WhyChooseUsProps) {
     >
       <Container>
         {/* Animated Main Section Header */}
-        <FadeIn delay={0.1} className="mb-12 text-center md:mb-20">
-          <h2 className="text-3xl leading-tight font-extrabold tracking-tight text-[#064E3B] md:text-5xl">
-            {displayTitle}
-          </h2>
-        </FadeIn>
+        {title && (
+          <FadeIn delay={0.1} className="mb-12 text-center md:mb-20">
+            <h2 className="text-3xl leading-tight font-extrabold tracking-tight text-[#064E3B] md:text-5xl">
+              {title}
+            </h2>
+          </FadeIn>
+        )}
 
         {/* Animated 12-Column Bento Grid */}
         <StaggerContainer>
@@ -217,4 +174,4 @@ export function WhyChooseUs({ title, items, className }: WhyChooseUsProps) {
   )
 }
 
-export default WhyChooseUs
+export default AsymmetricRowSection
