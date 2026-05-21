@@ -55,7 +55,8 @@ export async function submitForm(
   let phone = ""
 
   for (const [key, value] of formData.entries()) {
-    if (key === "formId") continue
+    // Ignore internal Next.js action keys and the formId
+    if (key === "formId" || key.startsWith("$ACTION_")) continue
     
     // Extract core fields based on label matching
     const normalizedKey = key.toLowerCase().replace(/[^a-z0-9]/g, "")
