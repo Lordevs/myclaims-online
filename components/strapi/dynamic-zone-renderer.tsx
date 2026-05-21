@@ -23,10 +23,10 @@ import { StepsGridSection } from "@/components/sections/steps-grid-section"
 import { FeaturesGridSection } from "@/components/sections/features-grid-section"
 import { WhyChooseUs } from "@/components/sections/why-choose-us"
 import { FAQSection } from "@/components/sections/faq"
-import { GreenCTASection } from "@/components/sections/green-cta-section"
-import { ClaimsCardCTA } from "@/components/sections/claims-card-cta"
-import { SimpleLinkCTA } from "@/components/sections/simple-link-cta"
-import { OneCallCTA } from "@/components/sections/one-call-cta"
+import { CtaBoxed } from "@/components/sections/cta-boxed"
+import { CtaStrip } from "@/components/sections/cta-strip"
+import { CtaFullWidth } from "@/components/sections/cta-full-width"
+import { CtaGrid } from "@/components/sections/cta-grid"
 import { TrustBanner } from "@/components/sections/trust-banner"
 import { ClaimsQuizSection } from "@/components/sections/claims-quiz-section"
 import { ClaimsJourney } from "@/components/sections/claims-journey"
@@ -185,9 +185,9 @@ const SECTION_MAP: {
     const ctaBtn = section.ctaButton
     const buttonProp = ctaBtn
       ? {
-          label: ctaBtn.label,
-          href: resolveStrapiLink(ctaBtn),
-        }
+        label: ctaBtn.label,
+        href: resolveStrapiLink(ctaBtn),
+      }
       : undefined
 
     return (
@@ -215,14 +215,29 @@ const SECTION_MAP: {
     if (!cta) return null
 
     if (cta.layout === "full_width_banner") {
-      const btn = cta.buttons?.[0]
+      const phoneBtn = cta.buttons?.find(
+        (btn) =>
+          btn.externalLink?.startsWith("tel:") ||
+          btn.label?.toLowerCase().includes("call") ||
+          btn.label?.match(/\d/)
+      ) || cta.buttons?.[0]
+
+      const enquiryBtn = cta.buttons?.find(
+        (btn) =>
+          !btn.externalLink?.startsWith("tel:") &&
+          !btn.label?.toLowerCase().includes("call") &&
+          !btn.label?.match(/\d/)
+      ) || cta.buttons?.[1]
+
       return (
-        <GreenCTASection
+        <CtaFullWidth
           key={section.id}
           title={cta.title}
           subtitle={cta.subtitle || ""}
-          buttonLabel={btn?.label}
-          buttonHref={resolveStrapiLink(btn)}
+          phoneLabel={phoneBtn?.label}
+          phoneValue={phoneBtn?.externalLink?.replace("tel:", "") || ""}
+          enquiryLabel={enquiryBtn?.label}
+          enquiryHref={resolveStrapiLink(enquiryBtn)}
         />
       )
     }
@@ -231,7 +246,7 @@ const SECTION_MAP: {
       const btn1 = cta.buttons?.[0]
       const btn2 = cta.buttons?.[1]
       return (
-        <ClaimsCardCTA
+        <CtaBoxed
           key={section.id}
           title={cta.title}
           description={cta.subtitle || ""}
@@ -246,7 +261,7 @@ const SECTION_MAP: {
     if (cta.layout === "cta_strip") {
       const btn = cta.buttons?.[0]
       return (
-        <SimpleLinkCTA
+        <CtaStrip
           key={section.id}
           headingText={cta.title}
           linkText={btn?.label || ""}
@@ -256,25 +271,18 @@ const SECTION_MAP: {
     }
 
     if (cta.layout === "contact_grid") {
-      const phoneItem = cta.contactItems?.find(
-        (item) =>
-          item.icon?.iconName?.includes("phone") ||
-          item.linkUrl?.startsWith("tel:")
-      ) || cta.contactItems?.[0]
-
-      const submitItem = cta.contactItems?.find(
-        (item) => !item.linkUrl?.startsWith("tel:")
-      ) || cta.contactItems?.[1]
-
       return (
-        <OneCallCTA
+        <CtaGrid
           key={section.id}
           title={cta.title}
-          subtitle={cta.subtitle || ""}
-          phoneLabel={phoneItem?.title || undefined}
-          phoneValue={phoneItem?.linkUrl?.replace("tel:", "") || phoneItem?.subtitle || undefined}
-          enquiryLabel={submitItem?.title || undefined}
-          enquiryHref={submitItem?.linkUrl || undefined}
+          subtitle={cta.subtitle || undefined}
+          contactItems={cta.contactItems?.map((item) => ({
+            id: item.id,
+            icon: item.icon,
+            title: item.title,
+            subtitle: item.subtitle,
+            linkUrl: item.linkUrl,
+          }))}
         />
       )
     }
