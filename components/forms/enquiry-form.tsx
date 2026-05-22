@@ -85,9 +85,9 @@ export function EnquiryForm({
             <div className="mb-6 flex size-16 items-center justify-center rounded-full border-2 border-[#10B981] bg-[#10B981]/10 text-[#10B981]">
               <ShieldCheck className="size-8" />
             </div>
-            <h3 className="mb-2 text-xl font-bold tracking-tight text-[#111111] sm:text-2xl">
+            <h2 className="mb-2 text-xl font-bold tracking-tight text-[#111111] sm:text-2xl">
               Thank You!
-            </h3>
+            </h2>
             <p className="max-w-xs text-xs leading-relaxed font-semibold text-[#888888] sm:text-sm">
               {form?.successMessage ||
                 state.message ||
@@ -117,9 +117,9 @@ export function EnquiryForm({
           />
 
           {/* Form Title & Subtitle */}
-          <h3 className="mb-2 text-lg font-bold tracking-tight text-[#111111] sm:text-xl md:text-[22px]">
+          <h2 className="mb-2 text-lg font-bold tracking-tight text-[#111111] sm:text-xl md:text-[22px]">
             {title}
-          </h3>
+          </h2>
           <p className="mb-6 px-1 text-xs leading-relaxed font-normal text-[#888888] sm:text-sm">
             {subtitle}
           </p>

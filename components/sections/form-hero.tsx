@@ -115,8 +115,9 @@ export function FormHero({
                 <StrapiImage
                   image={image}
                   fill
-                  priority
-                  sizes="(max-width: 768px) 100vw, 480px"
+                  preload
+                  fetchPriority="high"
+                  sizes="(max-width: 768px) 100vw, 760px"
                   className="object-contain"
                   fallbackSrc="/form-hero-placeholder.avif"
                 />

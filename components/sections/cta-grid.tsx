@@ -65,6 +65,7 @@ export function CtaGrid({ title, subtitle, contactItems }: CtaGridProps) {
                           href={linkHref}
                           target={isHttp ? "_blank" : undefined}
                           rel={isHttp ? "noopener noreferrer" : undefined}
+                          aria-label={item.title}
                           className="mb-4 flex h-14 w-14 items-center justify-center rounded-full border-[2.25px] border-[#0F172A] bg-[#ECFCCB] text-[#0F172A] transition-transform duration-200 group-hover:scale-105 active:scale-95"
                         >
                           <StrapiIcon
