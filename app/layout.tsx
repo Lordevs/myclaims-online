@@ -7,31 +7,41 @@ import { cn } from "@/lib/utils"
 import { Navbar } from "@/components/layout/navigation/navbar"
 import { Footer } from "@/components/layout/footer"
 import { getGlobal } from "@/lib/strapi/services/global"
+import { getStrapiMedia } from "@/lib/strapi/utils"
 
-export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://myclaimsonline.co.uk"
-  ),
-  title: {
-    default: "My Claims Online",
-    template: "%s | My Claims Online",
-  },
-  description:
-    "My Claims Online — fast, no-win no-fee accident claims, vehicle replacement, and personal injury support across the UK.",
-  openGraph: {
-    siteName: "My Claims Online",
-    type: "website",
-    locale: "en_GB",
-    // Static fallback OG image — place /public/og-default.jpg (1200×630px JPG) in your repo
-    images: [{ url: "/og-default.png", width: 1200, height: 630, alt: "My Claims Online" }],
-  },
-  twitter: {
-    card: "summary_large_image",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
+export async function generateMetadata(): Promise<Metadata> {
+  const globalData = await getGlobal()
+  const faviconUrl = getStrapiMedia(globalData?.favicon?.url)
+
+  return {
+    metadataBase: new URL(
+      process.env.NEXT_PUBLIC_SITE_URL ?? "https://myclaimsonline.co.uk"
+    ),
+    title: {
+      default: globalData?.siteName || "My Claims Online",
+      template: `%s | ${globalData?.siteName || "My Claims Online"}`,
+    },
+    description:
+      globalData?.siteDescription ||
+      "My Claims Online — fast, no-win no-fee accident claims, vehicle replacement, and personal injury support across the UK.",
+    icons: {
+      icon: faviconUrl || "/favicon.ico",
+      shortcut: faviconUrl || "/favicon.ico",
+    },
+    openGraph: {
+      siteName: globalData?.siteName || "My Claims Online",
+      type: "website",
+      locale: "en_GB",
+      images: [{ url: "/og-default.png", width: 1200, height: 630, alt: "My Claims Online" }],
+    },
+    twitter: {
+      card: "summary_large_image",
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
+  }
 }
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
