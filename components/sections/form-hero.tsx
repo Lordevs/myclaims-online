@@ -117,7 +117,7 @@ export function FormHero({
                   fill
                   preload
                   fetchPriority="high"
-                  sizes="(max-width: 768px) 100vw, 760px"
+                  sizes="(max-width: 640px) calc(100vw - 32px), (max-width: 1024px) calc(100vw - 48px), (max-width: 1280px) 58vw, 680px"
                   className="object-contain"
                   fallbackSrc="/form-hero-placeholder.avif"
                 />
