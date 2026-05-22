@@ -2,6 +2,7 @@ import "server-only"
 import { cache } from "react"
 import { fetchStrapi } from "../fetch"
 import { globalPopulate } from "../queries"
+import { STRAPI_ENDPOINTS } from "../endpoints"
 import type { StrapiSingleResponse } from "../types/api"
 import type { GlobalData } from "../types/global"
 
@@ -14,7 +15,7 @@ import type { GlobalData } from "../types/global"
 export const getGlobal = cache(async (): Promise<GlobalData | null> => {
   try {
     const response = await fetchStrapi<StrapiSingleResponse<GlobalData>>(
-      "/api/global",
+      STRAPI_ENDPOINTS.GLOBAL,
       {
         params: { populate: globalPopulate },
         nextOptions: { next: { tags: ["global"], revalidate: 3600 } },

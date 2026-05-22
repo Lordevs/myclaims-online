@@ -105,6 +105,8 @@ export const globalPopulate = {
  * Covers all 11 DynamicZone section types via the `on` syntax (Strapi v5).
  */
 export const pagePopulate = {
+  // Per-page SEO fields (shared.seo component)
+  seo: { populate: { shareImage: true } },
   blocks: {
     on: {
       "sections.split-hero-section": {
@@ -183,15 +185,3 @@ export const pagePopulate = {
   },
 }
 
-// ─── FAQ list ─────────────────────────────────────────────────────────────────
-
-/** Populates for /api/faqs — no relations to populate */
-export const faqPopulate = {}
-
-// ─── CTA ─────────────────────────────────────────────────────────────────────
-
-/** Populates for /api/ctas/:documentId */
-export const ctaPopulate = {
-  buttons: { populate: linkPopulate },
-  contactItems: contactItemPopulate,
-}

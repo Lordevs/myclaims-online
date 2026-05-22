@@ -95,8 +95,8 @@ export function FormHero({
 
               {/* 2-Column responsive checklist */}
               <div className="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
-                {listItems.map((item, idx) => (
-                  <div key={idx} className="flex items-center gap-3">
+                {listItems.map((item) => (
+                  <div key={item} className="flex items-center gap-3">
                     <div className="flex h-5.5 w-5.5 shrink-0 items-center justify-center rounded-full bg-[#1B6E3F] shadow-none">
                       <Check
                         className="h-3.5 w-3.5 text-white"

@@ -63,10 +63,10 @@ export function FAQSection(props: Partial<FAQSection>) {
             collapsible
             className="space-y-4 rounded-none border-none md:space-y-5"
           >
-            {faqData.map((item, index) => (
-              <StaggerItem key={index}>
+            {faqData.map((item) => (
+              <StaggerItem key={item.question}>
                 <AccordionItem
-                  value={`item-${index}`}
+                  value={item.question}
                   className={cn(
                     "group overflow-hidden rounded-xl border-[2.25px] border-[#064E3B] bg-[#F9FAF5] shadow-none transition-all duration-200"
                   )}

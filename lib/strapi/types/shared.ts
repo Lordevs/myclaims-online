@@ -144,6 +144,8 @@ export interface SEOComponent {
   metaTitle: string
   metaDescription: string
   shareImage: StrapiMediaFile | null
+  /** If true, the page should be excluded from search engine indexing */
+  noIndex: boolean
 }
 
 // ─── shared.file-link ────────────────────────────────────────────────────────

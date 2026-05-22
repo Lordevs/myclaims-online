@@ -1,11 +1,10 @@
 import Link from "next/link"
 import { cn } from "@/lib/utils"
-import { ROUTES } from "@/constants/routes"
 import { StrapiImage } from "@/components/strapi/strapi-image"
 import type { StrapiMediaComponent } from "@/lib/strapi/types/media"
 
 export const Logo = ({
-  href = ROUTES.HOME,
+  href = "/",
   className,
   containerClassName,
   logo,

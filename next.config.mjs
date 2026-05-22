@@ -1,5 +1,51 @@
 /** @type {import('next').NextConfig} */
+
+const securityHeaders = [
+  { key: "X-DNS-Prefetch-Control", value: "on" },
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "X-Frame-Options", value: "SAMEORIGIN" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  {
+    key: "Permissions-Policy",
+    value: "camera=(), microphone=(), geolocation=(self), payment=()",
+  },
+  {
+    key: "Strict-Transport-Security",
+    value: "max-age=63072000; includeSubDomains; preload",
+  },
+  {
+    key: "Content-Security-Policy",
+    value: [
+      "default-src 'self'",
+      // Next.js inline scripts + turbopack
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+      // Tailwind inline styles + Radix UI
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+      // Google Fonts, Iconify CDN
+      "font-src 'self' https://fonts.gstatic.com https://api.iconify.design",
+      // Strapi Cloud images + local dev
+      "img-src 'self' data: blob: https://*.strapiapp.com https://*.media.strapiapp.com http://localhost:1337",
+      // Strapi API + Google Maps embed
+      "connect-src 'self' https://*.strapiapp.com http://localhost:1337 https://api.iconify.design",
+      // Google Maps iframe
+      "frame-src https://www.google.com https://maps.google.com",
+      "object-src 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
+      "upgrade-insecure-requests",
+    ].join("; "),
+  },
+]
+
 const nextConfig = {
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: securityHeaders,
+      },
+    ]
+  },
   images: {
     remotePatterns: [
       // ── Local Strapi dev server ──────────────────────────────────────────

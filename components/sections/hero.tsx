@@ -46,8 +46,8 @@ export function Hero({
   image,
   primaryBtnText = "Start My Claim",
   primaryBtnHref = "#enquiry-form",
-  secondaryBtnText = "Call Now",
-  secondaryBtnHref = "tel:07930444467",
+  secondaryBtnText,
+  secondaryBtnHref,
   className,
 }: HeroProps) {
   return (
@@ -78,8 +78,8 @@ export function Hero({
 
               {/* Vertical Check-mark Item List */}
               <div className="mb-10 flex flex-col gap-3.5">
-                {listItems.map((item, idx) => (
-                  <div key={idx} className="flex items-center gap-3.5">
+                {listItems.map((item) => (
+                  <div key={item} className="flex items-center gap-3.5">
                     <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#1B6E3F] shadow-none">
                       <Check
                         className="h-3.5 w-3.5 text-white"
@@ -109,19 +109,21 @@ export function Hero({
                   </Link>
                 </Button>
 
-                {/* White Button with Green Border */}
-                <Button
-                  asChild
-                  className={cn(
-                    "flex h-auto cursor-pointer items-center justify-center rounded-xl px-8 py-3.5 font-bold transition-transform duration-150 active:scale-[0.97] sm:px-10",
-                    "border-2 border-[#064E3B] bg-white text-[#064E3B] shadow-none hover:bg-slate-50!",
-                    "text-sm select-none sm:text-base"
-                  )}
-                >
-                  <a href={secondaryBtnHref}>
-                    <span>{secondaryBtnText}</span>
-                  </a>
-                </Button>
+                {/* White Button with Green Border — only rendered when CMS provides a value */}
+                {secondaryBtnText && secondaryBtnHref && (
+                  <Button
+                    asChild
+                    className={cn(
+                      "flex h-auto cursor-pointer items-center justify-center rounded-xl px-8 py-3.5 font-bold transition-transform duration-150 active:scale-[0.97] sm:px-10",
+                      "border-2 border-[#064E3B] bg-white text-[#064E3B] shadow-none hover:bg-slate-50!",
+                      "text-sm select-none sm:text-base"
+                    )}
+                  >
+                    <a href={secondaryBtnHref}>
+                      <span>{secondaryBtnText}</span>
+                    </a>
+                  </Button>
+                )}
               </div>
             </FadeIn>
           </div>

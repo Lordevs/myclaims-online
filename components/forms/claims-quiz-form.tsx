@@ -1,12 +1,12 @@
 "use client"
 
-import React, { useState } from "react"
+import { useState, useActionState, useEffect } from "react"
+import { submitForm } from "@/actions/form"
 import { ArrowLeft, ArrowRight, ShieldCheck, RefreshCw } from "lucide-react"
 import { FadeIn } from "@/components/ui/animations"
 import { Progress } from "@/components/ui/progress"
 import { cn } from "@/lib/utils"
 import { Markdown } from "@/components/shared/markdown"
-
 import type {
   FormStepComponent,
   ListItemComponent,
@@ -29,6 +29,10 @@ export interface QuizQuestion {
 }
 
 export interface ClaimsQuizFormProps {
+  /** Strapi formId — ties the submission to the correct form entry */
+  formId?: string
+  /** Strapi document ID — sent as a hidden field to skip the server-side lookup */
+  formDocumentId?: string
   /** Dynamic array of questions */
   questions?: QuizQuestion[]
   /** Dynamic contact/lead capture step from CMS */
@@ -111,11 +115,9 @@ const defaultQuestions: QuizQuestion[] = [
   },
 ]
 
-/**
- * Reusable Claims Quiz Form Component.
- * Contains multi-step questionnaire flows, Neobrutalist design states, and lead capture form logic.
- */
 export function ClaimsQuizForm({
+  formId = "claims-quiz",
+  formDocumentId,
   questions = defaultQuestions,
   contactStep,
   onComplete,
@@ -123,26 +125,29 @@ export function ClaimsQuizForm({
   footerItems,
   className,
 }: ClaimsQuizFormProps) {
-  // State for tracking active step
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
-  // State for active selections
   const [answers, setAnswers] = useState<Record<string | number, string>>({})
-  // Complete lead form state
   const [isFormStep, setIsFormStep] = useState(false)
   const [contactInfo, setContactInfo] = useState<Record<string, string>>({})
   const [isSubmitted, setIsSubmitted] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [state, setState] = useState<{
-    status: string
-    message: string | null
-  }>({
+
+  const [actionState, formAction, isPending] = useActionState(submitForm, {
     status: "idle",
     message: null,
   })
 
+  useEffect(() => {
+    if (actionState.status === "success") {
+      Promise.resolve().then(() => {
+        setIsSubmitted(true)
+        onComplete?.({ ...answers, ...contactInfo })
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [actionState.status])
+
   const activeQuestion = questions[currentStepIndex]
   const totalSteps = questions.length
-  // Progress calculations
   const progressPercent =
     totalSteps > 0 ? (currentStepIndex / totalSteps) * 100 : 0
   const selectedValue = activeQuestion ? answers[activeQuestion.id] : undefined
@@ -151,18 +156,13 @@ export function ClaimsQuizForm({
   )
   const isDisqualified = selectedOption?.isDisqualifying || false
 
-  // Navigation handlers
   const handleSelectOption = (value: string) => {
     if (!activeQuestion) return
-    setAnswers((prev) => ({
-      ...prev,
-      [activeQuestion.id]: value,
-    }))
+    setAnswers((prev) => ({ ...prev, [activeQuestion.id]: value }))
   }
 
   const handleNext = () => {
     if (!selectedValue || isDisqualified) return
-
     if (currentStepIndex < totalSteps - 1) {
       setCurrentStepIndex((prev) => prev + 1)
     } else {
@@ -180,65 +180,12 @@ export function ClaimsQuizForm({
     }
   }
 
-  const handleFormSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-    setState({ status: "idle", message: null })
-
-    try {
-      const { submitForm } = await import("@/actions/form")
-      const formData = new FormData()
-      formData.append("formId", "claims-quiz")
-
-      contactStep?.fields?.forEach((field) => {
-        const fieldKey = field.label || `field_${field.id}`
-        formData.append(fieldKey, contactInfo[fieldKey] || "")
-      })
-
-      // Package quiz selections into the payload
-      questions.forEach((q) => {
-        const value = answers[q.id] || ""
-        formData.append(q.questionText, value)
-      })
-
-      const res = await submitForm({ status: "idle", message: null }, formData)
-
-      if (res.status === "success") {
-        setIsSubmitted(true)
-        if (onComplete) {
-          onComplete({
-            ...answers,
-            ...contactInfo,
-          })
-        }
-      } else {
-        setState({
-          status: "error",
-          message:
-            res.message || "Failed to submit claims quiz. Please try again.",
-        })
-      }
-    } catch (err: unknown) {
-      console.error("[ClaimsQuizForm] Submission error:", err)
-      setState({
-        status: "error",
-        message:
-          err instanceof Error
-            ? err.message
-            : "An unexpected error occurred during submission.",
-      })
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
-
   const handleReset = () => {
     setAnswers({})
     setCurrentStepIndex(0)
     setIsFormStep(false)
     setContactInfo({})
     setIsSubmitted(false)
-    setState({ status: "idle", message: null })
   }
 
   return (
@@ -257,7 +204,6 @@ export function ClaimsQuizForm({
               : `Step ${currentStepIndex + 1} of ${totalSteps}`}
           </div>
 
-          {/* Shadcn Neobrutalist Progress Bar */}
           <Progress
             value={isFormStep ? 100 : progressPercent}
             className="h-4 w-full rounded-full border-2 border-[#4C6549] bg-[#E7E9E4] p-[2px] [&>[data-slot=progress-indicator]]:bg-[#AF2144]"
@@ -298,7 +244,7 @@ export function ClaimsQuizForm({
             </button>
           </FadeIn>
         ) : isFormStep ? (
-          /* Premium Contact Details Form Step */
+          /* Contact Details Form Step */
           <FadeIn delay={0.05} y={15}>
             <h3 className="mb-3 text-2xl leading-tight font-black tracking-tight text-[#1A1C19] sm:text-3xl">
               {contactStep?.title ||
@@ -319,11 +265,30 @@ export function ClaimsQuizForm({
               </p>
             )}
 
-            <form onSubmit={handleFormSubmit} className="flex flex-col gap-5">
+            <form action={formAction} className="flex flex-col gap-5">
+              {/* Submission metadata */}
+              <input type="hidden" name="formId" value={formId} />
+              <input
+                type="hidden"
+                name="formDocumentId"
+                value={formDocumentId || ""}
+              />
+              {/* Quiz answers embedded as hidden inputs */}
+              {questions.map((q) => (
+                <input
+                  key={q.id}
+                  type="hidden"
+                  name={String(q.questionText)}
+                  value={answers[q.id] || ""}
+                />
+              ))}
+
               {contactStep?.fields?.map((field) => {
                 const fieldKey = field.label || `field_${field.id}`
                 return (
                   <div key={field.id} className="flex flex-col gap-2">
+                    {/* Companion type marker — lets the server action route this field by its Strapi type */}
+                    <input type="hidden" name={`__type__${fieldKey}`} value={field.type || "text"} />
                     {field.label && (
                       <label
                         className="text-xs font-black text-[#1A1C19] sm:text-sm"
@@ -374,7 +339,6 @@ export function ClaimsQuizForm({
                 )
               })}
 
-              {/* Dynamic Footer Items inside contact form */}
               {footerItems && footerItems.length > 0 && (
                 <div className="mt-4 flex flex-wrap justify-start gap-x-4 gap-y-2 text-xs font-semibold text-[#594143]">
                   {footerItems.map((item) => (
@@ -394,13 +358,12 @@ export function ClaimsQuizForm({
                 </div>
               )}
 
-              {state.status === "error" && state.message && (
+              {actionState.status === "error" && actionState.message && (
                 <div className="animate-in text-sm font-semibold text-[#AF2144] duration-200 fade-in">
-                  {state.message}
+                  {actionState.message}
                 </div>
               )}
 
-              {/* Navigation buttons */}
               <div className="mt-8 flex items-center justify-between border-t border-[#4C6549]/10 pt-6">
                 <button
                   type="button"
@@ -412,28 +375,27 @@ export function ClaimsQuizForm({
 
                 <button
                   type="submit"
-                  disabled={isSubmitting}
+                  disabled={isPending}
                   className={cn(
                     "flex items-center gap-2 rounded-2xl border-2 border-[#4C6549] bg-[#AF2144] px-6 py-4 font-black text-white transition-all duration-200 focus:outline-none",
-                    isSubmitting
+                    isPending
                       ? "cursor-not-allowed border-[#4C6549]/40 bg-[#AF2144]/40 text-white/50 shadow-none"
                       : "shadow-[4px_4px_0px_0px_#344D32] hover:translate-x-[2px] hover:translate-y-[2px] hover:bg-[#961a37] hover:shadow-[2px_2px_0px_0px_#344D32]"
                   )}
                 >
-                  {isSubmitting ? "Submitting..." : "Submit My Claim"}{" "}
-                  {!isSubmitting && <ArrowRight className="size-4" />}
+                  {isPending ? "Submitting..." : "Submit My Claim"}{" "}
+                  {!isPending && <ArrowRight className="size-4" />}
                 </button>
               </div>
             </form>
           </FadeIn>
         ) : (
-          /* Dynamic Question Step */
+          /* Question Step */
           <FadeIn key={currentStepIndex} delay={0.05} y={15}>
             <h3 className="mb-8 text-2xl leading-snug font-extrabold tracking-tight text-[#1A1C19] sm:text-3xl sm:leading-tight md:text-4xl">
               {activeQuestion?.questionText}
             </h3>
 
-            {/* Options List */}
             <div className="flex flex-col gap-4">
               {activeQuestion?.options.map((option) => {
                 const isSelected = selectedValue === option.value
@@ -448,13 +410,11 @@ export function ClaimsQuizForm({
                         : "border-[#4C6549] bg-[#F3F4EF] hover:border-[#4C6549] hover:bg-[#EAECE5]"
                     )}
                   >
-                    {/* Premium Custom Radio Circle */}
                     <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full border-2 border-[#4C6549] bg-white transition-all duration-200">
                       {isSelected && (
                         <div className="h-3.5 w-3.5 animate-in rounded-full bg-[#AF2144] duration-200 zoom-in-50" />
                       )}
                     </div>
-
                     <span className="text-sm leading-tight font-extrabold text-[#1A1C19] sm:text-base">
                       {option.text}
                     </span>
@@ -463,7 +423,6 @@ export function ClaimsQuizForm({
               })}
             </div>
 
-            {/* Disqualifying Warning Panel */}
             {isDisqualified && selectedOption?.additionalInfo && (
               <div className="mt-6 w-full animate-in text-sm leading-relaxed font-semibold text-[#AF2144] duration-300 fade-in slide-in-from-top-1">
                 <Markdown
@@ -474,7 +433,6 @@ export function ClaimsQuizForm({
               </div>
             )}
 
-            {/* Navigation row */}
             <div className="mt-10 flex items-center justify-between border-t border-[#4C6549]/10 pt-6">
               {currentStepIndex > 0 ? (
                 <button
@@ -484,7 +442,7 @@ export function ClaimsQuizForm({
                   <ArrowLeft className="size-4" /> Back
                 </button>
               ) : (
-                <div /> // Empty block to align button right
+                <div />
               )}
 
               <button

@@ -12,6 +12,10 @@ import {
 } from "@/components/forms/claims-quiz-form"
 
 export interface ClaimsQuizSectionProps {
+  /** Strapi formId — passed through to the form submission */
+  formId?: string
+  /** Strapi document ID — passed through to skip the server-side lookup */
+  formDocumentId?: string
   /** Dynamic array of questions */
   questions?: QuizQuestion[]
   /** Dynamic contact/lead capture step from CMS */
@@ -42,6 +46,8 @@ export interface ClaimsQuizSectionProps {
  * while delegation of interactive form questionnaire logic is sent to the form subsystem.
  */
 export function ClaimsQuizSection({
+  formId,
+  formDocumentId,
   questions,
   contactStep,
   onComplete,
@@ -69,6 +75,8 @@ export function ClaimsQuizSection({
         <div className="grid grid-cols-1 items-start gap-x-10 gap-y-10 lg:grid-cols-12">
           {/* LEFT QUIZ COLUMN: Delegated to Form Subsystem */}
           <ClaimsQuizForm
+            formId={formId}
+            formDocumentId={formDocumentId}
             questions={questions}
             contactStep={contactStep}
             onComplete={onComplete}
@@ -94,8 +102,8 @@ export function ClaimsQuizSection({
 
                   {/* List Items */}
                   <ul className="flex flex-col gap-4">
-                    {trustItems.map((item, idx) => (
-                      <li key={idx} className="flex items-start gap-3">
+                    {trustItems.map((item) => (
+                      <li key={item} className="flex items-start gap-3">
                         <div className="mt-0.5 flex-shrink-0 text-[#4A6412]">
                           <Check className="size-5 stroke-[3px]" />
                         </div>

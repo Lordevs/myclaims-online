@@ -2,6 +2,7 @@ import "server-only"
 import { cache } from "react"
 import { fetchStrapi } from "../fetch"
 import { pagePopulate } from "../queries"
+import { STRAPI_ENDPOINTS } from "../endpoints"
 import type { StrapiListResponse } from "../types/api"
 import type { PageEntry } from "../types/collections"
 
@@ -14,7 +15,7 @@ export const getPageBySlug = cache(
   async (slug: string): Promise<PageEntry | null> => {
     try {
       const response = await fetchStrapi<StrapiListResponse<PageEntry>>(
-        "/api/pages",
+        STRAPI_ENDPOINTS.PAGES,
         {
           params: {
             filters: { slug: { $eq: slug } },
@@ -40,10 +41,11 @@ export const getPageBySlug = cache(
 export const getAllPages = cache(async (): Promise<PageEntry[]> => {
   try {
     const response = await fetchStrapi<StrapiListResponse<PageEntry>>(
-      "/api/pages",
+      STRAPI_ENDPOINTS.PAGES,
       {
         params: {
-          fields: ["slug", "title"], // Only fetch what's needed for routing
+          fields: ["slug", "title"],
+          pagination: { pageSize: 100, page: 1 },
         },
         nextOptions: { next: { tags: ["pages"], revalidate: 3600 } },
       }

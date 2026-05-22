@@ -110,6 +110,11 @@ export function EnquiryForm({
             name="formId"
             value={form?.formId || "contact-form"}
           />
+          <input
+            type="hidden"
+            name="formDocumentId"
+            value={form?.documentId || ""}
+          />
 
           {/* Form Title & Subtitle */}
           <h3 className="mb-2 text-lg font-bold tracking-tight text-[#111111] sm:text-xl md:text-[22px]">
@@ -133,6 +138,8 @@ export function EnquiryForm({
               const fieldKey = field.label || `field_${field.id}`
               return (
                 <div key={field.id} className="relative">
+                  {/* Companion type marker — lets the server action route this field by its Strapi type */}
+                  <input type="hidden" name={`__type__${fieldKey}`} value={field.type || "text"} />
                   {field.type === "textarea" ? (
                     <Textarea
                       required={field.required !== false}

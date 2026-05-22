@@ -2,6 +2,7 @@ import "server-only"
 import { cache } from "react"
 import { fetchStrapi } from "../fetch"
 import { formPopulate } from "../queries"
+import { STRAPI_ENDPOINTS } from "../endpoints"
 import type { StrapiListResponse } from "../types/api"
 import type { FormEntry } from "../types/collections"
 
@@ -13,7 +14,7 @@ export const getFormById = cache(
   async (formId: string): Promise<FormEntry | null> => {
     try {
       const response = await fetchStrapi<StrapiListResponse<FormEntry>>(
-        "/api/forms",
+        STRAPI_ENDPOINTS.FORMS,
         {
           params: {
             filters: { formId: { $eq: formId } },

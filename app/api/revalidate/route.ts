@@ -22,8 +22,12 @@ export async function POST(req: NextRequest) {
   const authHeader = req.headers.get("authorization")
   const secret = process.env.REVALIDATION_SECRET
 
-  // If a secret is configured, ensure the request has the correct Authorization header
-  if (secret && authHeader !== `Bearer ${secret}`) {
+  if (!secret) {
+    console.error("[revalidate] REVALIDATION_SECRET is not set — endpoint disabled.")
+    return NextResponse.json({ message: "Revalidation is not configured" }, { status: 500 })
+  }
+
+  if (authHeader !== `Bearer ${secret}`) {
     console.warn("[revalidate] Unauthorized revalidation attempt.")
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
   }
@@ -62,13 +66,26 @@ export async function POST(req: NextRequest) {
           revalidate(`form-${entry.formId}`)
           revalidatedTags.push(`form-${entry.formId}`)
         }
+        // Forms are embedded inside pages — revalidate pages too
+        revalidate("pages")
+        revalidatedTags.push("pages")
+        break
+
+      case "faq":
+        // FAQs are embedded inside faq-section blocks on pages
+        revalidate("pages")
+        revalidatedTags.push("pages")
+        break
+
+      case "cta":
+        // CTAs are embedded inside cta-section blocks on pages
+        revalidate("pages")
+        revalidatedTags.push("pages")
         break
 
       default:
-        // For other collection types, let's also purge "pages" or "global" just in case they're referenced.
-        // E.g. FAQs are loaded dynamically, but pages might consume them.
-        revalidate("pages")
-        revalidatedTags.push("pages (fallback)")
+        // Unknown model — log and skip rather than blasting the entire cache
+        console.warn(`[revalidate] No revalidation rule for model: ${modelName}`)
         break
     }
 

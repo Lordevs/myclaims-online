@@ -131,6 +131,8 @@ export interface PageEntry {
   documentId: string
   title: string
   slug: string
+  /** Per-page SEO fields — populated via pagePopulate */
+  seo: import("./shared").SEOComponent | null
   /** Populated dynamically — type narrowed in sections.ts */
   blocks: import("./sections").DynamicZoneSection[]
   createdAt: string

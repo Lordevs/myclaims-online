@@ -121,6 +121,8 @@ export function ClaimEnquiryForm({
           const fieldKey = field.label || `field_${field.id}`
           return (
             <div key={field.id} className="relative">
+              {/* Companion type marker — lets the server action route this field by its Strapi type */}
+              <input type="hidden" name={`__type__${fieldKey}`} value={field.type || "text"} />
               {field.type === "textarea" ? (
                 <Textarea
                   required={field.required !== false}

@@ -1,7 +1,9 @@
 import { getPageBySlug, getAllPages } from "@/lib/strapi/services/page"
+import { getGlobal } from "@/lib/strapi/services/global"
 import { DynamicZoneRenderer } from "@/components/strapi/dynamic-zone-renderer"
 import { notFound } from "next/navigation"
 import type { Metadata } from "next"
+import { getStrapiMedia } from "@/lib/strapi/utils"
 
 interface PageProps {
   params: Promise<{ slug: string }>
@@ -15,21 +17,39 @@ export async function generateMetadata({
 
   // Don't duplicate the home page route under /home
   if (slug === "home") {
-    return {
-      title: "My Claims Online",
-    }
+    return { title: "My Claims Online" }
   }
 
-  const page = await getPageBySlug(slug).catch(() => null)
-  if (!page) {
-    return {
-      title: "Page Not Found",
-    }
-  }
+  const [page, globalData] = await Promise.all([
+    getPageBySlug(slug).catch(() => null),
+    getGlobal().catch(() => null),
+  ])
+
+  if (!page) return { title: "Page Not Found" }
+
+  // Cascade: per-page seo → global defaultSeo → static fallback
+  const seo = page.seo
+  const globalSeo = globalData?.defaultSeo
+  const title = seo?.metaTitle ?? page.title
+  const description = seo?.metaDescription ?? globalSeo?.metaDescription ?? undefined
+
+  const ogImage = seo?.shareImage?.url
+    ? getStrapiMedia(seo.shareImage.url)
+    : globalSeo?.shareImage?.url
+      ? getStrapiMedia(globalSeo.shareImage.url)
+      : null
 
   return {
-    title: `${page.title} | My Claims Online`,
-    description: `Learn more about ${page.title} with My Claims Online. We handle your claims and vehicle replacement fast.`,
+    title,
+    description,
+    ...(seo?.noIndex && { robots: { index: false, follow: false } }),
+    openGraph: {
+      title,
+      description,
+      ...(ogImage && {
+        images: [{ url: ogImage, width: 1200, height: 630, alt: title }],
+      }),
+    },
   }
 }
 

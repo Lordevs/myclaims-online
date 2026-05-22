@@ -79,8 +79,8 @@ export function Footer({ globalData }: FooterProps) {
         </div>
 
         {/* Subtle separator */}
-        {(footer.pageLinks?.length > 0 ||
-          footer.socialLinks?.length > 0 ||
+        {(footer.pageLinks.length > 0 ||
+          footer.socialLinks.length > 0 ||
           footer.description) && (
           <div className="border-t border-white/10 pt-8" />
         )}

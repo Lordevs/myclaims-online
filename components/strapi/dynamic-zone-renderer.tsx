@@ -35,6 +35,21 @@ import { StrategicHubSection } from "@/components/sections/strategic-hub-section
 
 import { getStrapiMedia, resolveStrapiLink } from "@/lib/strapi/utils"
 
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+const ALLOWED_MAP_HOSTS = ["www.google.com", "maps.google.com", "google.com"]
+
+function sanitizeMapEmbedUrl(url: string | undefined): string | undefined {
+  if (!url) return undefined
+  try {
+    const parsed = new URL(url)
+    if (ALLOWED_MAP_HOSTS.includes(parsed.hostname)) return url
+  } catch {
+    // invalid URL
+  }
+  return undefined
+}
+
 // ─── Section Map ───────────────────────────────────────────────────────────────
 
 /**
@@ -223,20 +238,12 @@ const SECTION_MAP: {
 
     if (cta.layout === "full_width_banner") {
       const phoneBtn =
-        cta.buttons?.find(
-          (btn) =>
-            btn.externalLink?.startsWith("tel:") ||
-            btn.label?.toLowerCase().includes("call") ||
-            btn.label?.match(/\d/)
-        ) || cta.buttons?.[0]
+        cta.buttons?.find((btn) => btn.externalLink?.startsWith("tel:")) ||
+        cta.buttons?.[0]
 
       const enquiryBtn =
-        cta.buttons?.find(
-          (btn) =>
-            !btn.externalLink?.startsWith("tel:") &&
-            !btn.label?.toLowerCase().includes("call") &&
-            !btn.label?.match(/\d/)
-        ) || cta.buttons?.[1]
+        cta.buttons?.find((btn) => !btn.externalLink?.startsWith("tel:")) ||
+        cta.buttons?.[1]
 
       return (
         <CtaFullWidth
@@ -341,6 +348,8 @@ const SECTION_MAP: {
     return (
       <ClaimsQuizSection
         key={section.id}
+        formId={section.form?.formId || undefined}
+        formDocumentId={section.form?.documentId || undefined}
         questions={questions.length > 0 ? questions : undefined}
         contactStep={contactStep || undefined}
         trustItems={section.trustBullets?.map((i) => i.text)}
@@ -387,7 +396,7 @@ const SECTION_MAP: {
             ? getStrapiMedia(section.ctaButton.file.file.url) || "#"
             : "#"
         }
-        mapEmbedUrl={section.mapEmbedUrl || undefined}
+        mapEmbedUrl={sanitizeMapEmbedUrl(section.mapEmbedUrl || undefined)}
       />
     )
   },
@@ -405,6 +414,9 @@ export function DynamicZoneRenderer({ sections }: DynamicZoneRendererProps) {
   return (
     <>
       {sections.map((section) => {
+        // TypeScript cannot narrow a discriminated union through a map lookup —
+        // the SECTION_MAP mapped type guarantees compile-time completeness; the
+        // cast to `any` here is the accepted workaround for this known limitation.
         const renderSection = SECTION_MAP[section.__component] as (
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           sec: any
