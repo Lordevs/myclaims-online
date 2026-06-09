@@ -73,6 +73,10 @@ export interface GlobalData {
   navbarCta: LinkComponent | null
   /** Navbar nav items — DynamicZone of shared.link | shared.dropdown */
   navbarItems: NavbarItem[]
+  /** WhatsApp contact number */
+  whatsappNumber?: string | null
+  /** Optional WhatsApp default message pre-filled */
+  whatsappMessage?: string | null
   /** Footer — non-repeatable layout.footer component */
   footer: FooterData | null
   createdAt: string

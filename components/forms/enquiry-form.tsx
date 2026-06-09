@@ -100,7 +100,7 @@ export function EnquiryForm({
         <form
           action={formAction}
           className={cn(
-            "flex w-full flex-col rounded-2xl bg-white p-8 text-center md:p-10 lg:pb-10",
+            "flex w-full flex-col rounded-2xl bg-white p-8 text-center lg:pb-10",
             "border-[1.2px] border-[#E2E2E2]",
             "shadow-[0px_4.8px_36.02px_0px_rgba(0,0,0,0.09)]"
           )}

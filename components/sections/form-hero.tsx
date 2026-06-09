@@ -73,11 +73,6 @@ export function FormHero({
   const resolvedFormSubtitle =
     firstStep?.description || formSubtitle || undefined
 
-  const hasDimensions = image?.file?.width && image?.file?.height
-  const imageRatio = hasDimensions
-    ? `${image.file.width} / ${image.file.height}`
-    : "16 / 9"
-
   return (
     <section
       className={cn(
@@ -116,20 +111,16 @@ export function FormHero({
               </div>
 
               {/* Large graphic diagram underneath lists (no neobrutalist borders) */}
-              <div
-                className="relative w-full max-w-[550px] overflow-hidden rounded-2xl mt-8"
-                style={{ aspectRatio: imageRatio }}
-              >
-                <StrapiImage
-                  image={image}
-                  fill
-                  preload
-                  fetchPriority="high"
-                  sizes="(max-width: 640px) calc(100vw - 32px), (max-width: 1024px) calc(100vw - 48px), (max-width: 1280px) 58vw, 680px"
-                  className="object-contain"
-                  fallbackSrc="/form-hero-placeholder.avif"
-                />
-              </div>
+              <StrapiImage
+                image={image}
+                width={image?.file?.width || 550}
+                height={image?.file?.height || 309}
+                preload
+                fetchPriority="high"
+                sizes="(max-width: 640px) calc(100vw - 32px), (max-width: 1024px) calc(100vw - 48px), (max-width: 1280px) 58vw, 680px"
+                className="w-full h-auto rounded-2xl mt-8 max-w-[550px]"
+                fallbackSrc="/form-hero-placeholder.avif"
+              />
             </FadeIn>
           </div>
 

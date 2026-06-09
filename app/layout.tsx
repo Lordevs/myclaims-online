@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils"
 import { Navbar } from "@/components/layout/navigation/navbar"
 import { Footer } from "@/components/layout/footer"
+import { WhatsAppButton } from "@/components/layout/whatsapp-button"
 import { getGlobal } from "@/lib/strapi/services/global"
 import { getStrapiMedia } from "@/lib/strapi/utils"
 
@@ -74,6 +75,10 @@ export default async function RootLayout({
           <Navbar globalData={globalData} />
           <main className="flex-1 pt-20">{children}</main>
           <Footer globalData={globalData} />
+          <WhatsAppButton
+            number={globalData?.whatsappNumber}
+            message={globalData?.whatsappMessage}
+          />
         </ThemeProvider>
       </body>
     </html>
