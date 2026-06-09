@@ -100,7 +100,7 @@ export function EnquiryForm({
         <form
           action={formAction}
           className={cn(
-            "flex w-full flex-col rounded-2xl bg-white p-6 text-center md:p-8",
+            "flex w-full flex-col rounded-2xl bg-white p-8 text-center md:p-10 lg:pb-10",
             "border-[1.2px] border-[#E2E2E2]",
             "shadow-[0px_4.8px_36.02px_0px_rgba(0,0,0,0.09)]"
           )}
@@ -117,10 +117,10 @@ export function EnquiryForm({
           />
 
           {/* Form Title & Subtitle */}
-          <h2 className="mb-2 text-lg font-bold tracking-tight text-[#111111] sm:text-xl md:text-[22px]">
+          <h2 className="mb-3 text-lg font-bold tracking-tight text-[#111111] sm:text-xl md:text-[22px]">
             {title}
           </h2>
-          <p className="mb-6 px-1 text-xs leading-relaxed font-normal text-[#888888] sm:text-sm">
+          <p className="mb-8 px-1 text-xs leading-relaxed font-normal text-[#888888] sm:text-sm">
             {subtitle}
           </p>
 
@@ -133,7 +133,7 @@ export function EnquiryForm({
           )}
 
           {/* Input stack */}
-          <div className="mb-5 flex flex-col gap-3.5 text-left">
+          <div className="mb-6 flex flex-col gap-4.5 text-left">
             {cmsFields.map((field) => {
               const fieldKey = field.label || `field_${field.id}`
               return (
@@ -154,7 +154,7 @@ export function EnquiryForm({
                       }
                       rows={3}
                       className={cn(
-                        "min-h-[80px] w-full rounded-lg px-4 py-3 text-sm text-[#111111] transition-colors outline-none placeholder:text-[#888888]",
+                        "min-h-[90px] w-full rounded-lg px-5 py-4.5 text-sm text-[#111111] transition-colors outline-none placeholder:text-[#888888]",
                         "border-[1.2px] border-[#E2E2E2] bg-white focus:border-[#E6405E] focus-visible:border-[#E6405E] focus-visible:ring-0"
                       )}
                     />
@@ -177,7 +177,7 @@ export function EnquiryForm({
                       >
                         <SelectTrigger
                           className={cn(
-                            "!h-auto w-full cursor-pointer appearance-none rounded-lg bg-white px-4 py-3 text-sm text-[#111111] outline-hidden transition-all",
+                            "!h-auto w-full cursor-pointer appearance-none rounded-lg bg-white px-5 py-4 text-sm text-[#111111] outline-hidden transition-all",
                             "!focus-visible:ring-0 border-[1.2px] border-[#E2E2E2] font-semibold focus:border-[#E6405E] focus:bg-white focus-visible:border-[#E6405E] data-[placeholder]:font-medium data-[placeholder]:text-[#888888] data-[state=open]:border-[#E6405E]"
                           )}
                         >
@@ -215,13 +215,13 @@ export function EnquiryForm({
                         }))
                       }
                       className={cn(
-                        "h-auto w-full rounded-lg px-4 py-3 text-sm text-[#111111] transition-colors outline-none placeholder:text-[#888888]",
+                        "h-auto w-full rounded-lg px-5 py-4 text-sm text-[#111111] transition-colors outline-none placeholder:text-[#888888]",
                         "border-[1.2px] border-[#E2E2E2] bg-white focus:border-[#E6405E] focus-visible:border-[#E6405E] focus-visible:ring-0"
                       )}
                     />
                   )}
                 </div>
-              )
+              );
             })}
           </div>
 
@@ -230,7 +230,7 @@ export function EnquiryForm({
             type="submit"
             disabled={isPending}
             className={cn(
-              "flex h-auto w-full cursor-pointer items-center justify-center gap-2 rounded-lg py-3.5 font-bold text-white transition-all duration-200",
+              "flex h-auto w-full cursor-pointer items-center justify-center gap-2 rounded-lg py-4.5 font-bold text-white transition-all duration-200",
               "border-none bg-[#E6405E] text-[15px] shadow-none select-none hover:bg-[#d03350]! disabled:opacity-50"
             )}
           >
@@ -245,7 +245,7 @@ export function EnquiryForm({
           </Button>
 
           {/* Security Warning Footer */}
-          <div className="mt-4.5 flex flex-wrap justify-center gap-x-4 gap-y-2 text-[#888888]">
+          <div className="mt-6 flex flex-wrap justify-center gap-x-4 gap-y-2 text-[#888888]">
             {form?.footerItems && form.footerItems.length > 0 ? (
               form.footerItems.map((item) => (
                 <div key={item.id} className="flex items-center gap-1.5">
@@ -276,7 +276,7 @@ export function EnquiryForm({
       )}
 
       {/* Under-form Trust Badges */}
-      <div className="mt-4 text-center">
+      <div className="mt-6 text-center">
         <p className="text-[13px] font-bold text-[#111111]">
           Excellent Rating on{" "}
           <span className="text-[#E6405E]">Google Reviews</span>

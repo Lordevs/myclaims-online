@@ -34,7 +34,7 @@ export function Navbar({ globalData }: NavbarProps) {
           : "border-b border-white/5 bg-primary py-5"
       )}
     >
-      <Container className="flex items-center justify-between md:px-0">
+      <Container className="flex items-center justify-between">
         <Logo logo={globalData?.logo} />
 
         {/* Desktop Navigation */}

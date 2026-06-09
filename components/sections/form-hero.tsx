@@ -73,18 +73,23 @@ export function FormHero({
   const resolvedFormSubtitle =
     firstStep?.description || formSubtitle || undefined
 
+  const hasDimensions = image?.file?.width && image?.file?.height
+  const imageRatio = hasDimensions
+    ? `${image.file.width} / ${image.file.height}`
+    : "16 / 9"
+
   return (
     <section
       className={cn(
-        "relative w-full overflow-hidden pt-16 pb-14 text-left md:pt-24 md:pb-20",
+        "relative w-full overflow-hidden pt-10 pb-6 text-left",
         "bg-[linear-gradient(109.99deg,#F4F8E5_0%,#F4F8E5_35%,#F4F8E5_70%,#FFFFFF_100%)]",
         className
       )}
     >
       <Container className="relative z-10">
-        <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12 lg:gap-16">
+        <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-[3.5fr_2.5fr]">
           {/* LEFT COLUMN: Split heading, 2-col checklist, and transition diagram */}
-          <div className="col-span-1 flex flex-col justify-start lg:col-span-7">
+          <div className="flex flex-col justify-start">
             <FadeIn delay={0.1}>
               {renderedHeading}
 
@@ -111,7 +116,10 @@ export function FormHero({
               </div>
 
               {/* Large graphic diagram underneath lists (no neobrutalist borders) */}
-              <div className="relative aspect-[1.15/1] w-full overflow-hidden rounded-2xl sm:aspect-1.25/1">
+              <div
+                className="relative w-full max-w-[550px] overflow-hidden rounded-2xl mt-8"
+                style={{ aspectRatio: imageRatio }}
+              >
                 <StrapiImage
                   image={image}
                   fill
@@ -126,7 +134,7 @@ export function FormHero({
           </div>
 
           {/* RIGHT COLUMN: Interactive Form Column */}
-          <div className="sticky top-24 col-span-1 w-full lg:col-span-5">
+          <div className="sticky top-0 w-full">
             <FadeIn delay={0.25}>
               <EnquiryForm
                 title={resolvedFormTitle}
