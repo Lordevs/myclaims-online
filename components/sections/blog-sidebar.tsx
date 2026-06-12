@@ -61,27 +61,6 @@ export function BlogSidebar({ relatedBlogs }: BlogSidebarProps) {
           ))}
         </div>
       </div>
-
-      {/* CARD 3: Why Choose ClaimIt */}
-      <div className="rounded-[24px] bg-[#0D421B] p-8 text-white flex flex-col gap-6">
-        <h3 className="md:text-2xl text-xl font-extrabold text-left">
-          Why Choose ClaimIt
-        </h3>
-        <div className="flex flex-col gap-6 text-left">
-          <div>
-            <div className="text-3xl font-black text-[#A3E635]">98%</div>
-            <div className="text-xs text-white mt-0.5">Success Rate</div>
-          </div>
-          <div>
-            <div className="text-3xl font-black text-[#A3E635]">2.5k+</div>
-            <div className="text-xs text-white mt-0.5">Claims Settled</div>
-          </div>
-          <div>
-            <div className="text-3xl font-black text-[#A3E635]">£15M+</div>
-            <div className="text-xs text-white mt-0.5">Recovered for Clients</div>
-          </div>
-        </div>
-      </div>
     </div>
   )
 }

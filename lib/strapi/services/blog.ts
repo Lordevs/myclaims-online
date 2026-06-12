@@ -71,7 +71,8 @@ export const getBlogBySlug = cache(
 export const getBlogsPaginated = cache(
   async (
     page: number = 1,
-    pageSize: number = 9
+    pageSize: number = 9,
+    excludeId?: number
   ): Promise<{ data: BlogEntry[]; pagination: StrapiPagination | null }> => {
     try {
       const response = await fetchStrapi<StrapiListResponse<BlogEntry>>(
@@ -81,9 +82,17 @@ export const getBlogsPaginated = cache(
             populate: blogPopulate,
             sort: ["publishedAt:desc", "createdAt:desc"],
             pagination: { page, pageSize },
+            ...(excludeId && { filters: { id: { $ne: excludeId } } }),
           },
           nextOptions: {
-            next: { tags: [`blogs-page-${page}`, "blogs"], revalidate: 3600 },
+            next: { 
+              tags: [
+                `blogs-page-${page}`, 
+                ...(excludeId ? [`exclude-${excludeId}`] : []), 
+                "blogs"
+              ], 
+              revalidate: 3600 
+            },
           },
         }
       )

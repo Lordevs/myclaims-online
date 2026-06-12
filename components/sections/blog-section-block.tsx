@@ -12,14 +12,20 @@ interface BlogSectionBlockProps {
 }
 
 export async function BlogSectionBlock({ title, currentPage = 1 }: BlogSectionBlockProps) {
-  const { data: latest, pagination } = await getBlogsPaginated(currentPage, 9)
+  // Fetch the absolute latest blog as the featured post (1 item)
+  const featuredRes = await getBlogsPaginated(1, 1)
+  const featuredPost = featuredRes.data[0] || null
+
+  // Fetch the paginated grid blogs, excluding the featured post
+  const { data: latest, pagination } = await getBlogsPaginated(
+    currentPage,
+    1,
+    featuredPost?.id
+  )
 
   const totalPages = pagination?.pageCount || 1
   const hasPrev = currentPage > 1
   const hasNext = currentPage < totalPages
-
-  // The latest article is the first index in the returned list on page 1
-  const featuredPost = currentPage === 1 ? latest[0] : null
 
   // Format date helper
   const formatDate = (dateStr: string) => {
@@ -53,8 +59,8 @@ export async function BlogSectionBlock({ title, currentPage = 1 }: BlogSectionBl
     <section className="bg-[#F9FAF5] py-12 md:py-16">
       <Container className="max-w-7xl px-4 md:px-6">
 
-        {/* 1. FEATURED ARTICLE (Hero Card - Page 1 only) */}
-        {currentPage === 1 && featuredPost && (
+        {/* 1. FEATURED ARTICLE (Hero Card - Displayed on all pages) */}
+        {featuredPost && (
           <div className="mb-16 bg-white overflow-hidden shadow-[0px_4px_12px_0px_#00000008] hover:shadow-[0px_8px_20px_0px_#00000014] transition-shadow">
             <Link href={`/articles/${featuredPost.slug}`} className="grid grid-cols-1 lg:grid-cols-12 items-stretch min-h-[400px]">
               {/* Left Column: Image */}
@@ -153,7 +159,7 @@ export async function BlogSectionBlock({ title, currentPage = 1 }: BlogSectionBl
                 <Link
                   href={hasPrev ? `?page=${currentPage - 1}` : "#"}
                   className={cn(
-                    "flex h-9 w-9 items-center justify-center rounded-[8px] border border-[#E5E7EB] bg-white text-gray-700 transition-all shadow-sm",
+                    "flex h-9 w-9 items-center justify-center rounded-[8px] border border-[#E5E7EB] bg-white text-gray-700 transition-all",
                     hasPrev
                       ? "hover:bg-gray-50 hover:border-gray-300"
                       : "cursor-not-allowed opacity-30 pointer-events-none"
@@ -182,7 +188,7 @@ export async function BlogSectionBlock({ title, currentPage = 1 }: BlogSectionBl
                       key={`page-${page}`}
                       href={`?page=${page}`}
                       className={cn(
-                        "flex h-9 w-9 items-center justify-center rounded-[8px] text-sm font-semibold transition-all shadow-sm",
+                        "flex h-9 w-9 items-center justify-center rounded-[8px] text-sm font-semibold transition-all",
                         isCurrent
                           ? "bg-[#0D421B] text-white border border-[#0D421B]"
                           : "border border-[#E5E7EB] bg-white text-gray-700 hover:bg-gray-50 hover:border-gray-300"
@@ -197,7 +203,7 @@ export async function BlogSectionBlock({ title, currentPage = 1 }: BlogSectionBl
                 <Link
                   href={hasNext ? `?page=${currentPage + 1}` : "#"}
                   className={cn(
-                    "flex h-9 w-9 items-center justify-center rounded-[8px] border border-[#E5E7EB] bg-white text-gray-700 transition-all shadow-sm",
+                    "flex h-9 w-9 items-center justify-center rounded-[8px] border border-[#E5E7EB] bg-white text-gray-700 transition-all",
                     hasNext
                       ? "hover:bg-gray-50 hover:border-gray-300"
                       : "cursor-not-allowed opacity-30 pointer-events-none"
