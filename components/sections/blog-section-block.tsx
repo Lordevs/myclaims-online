@@ -12,16 +12,11 @@ interface BlogSectionBlockProps {
 }
 
 export async function BlogSectionBlock({ title, currentPage = 1 }: BlogSectionBlockProps) {
-  // Fetch the absolute latest blog as the featured post (1 item)
-  const featuredRes = await getBlogsPaginated(1, 1)
-  const featuredPost = featuredRes.data[0] || null
+  // Fetch 10 items: 1 for the featured hero, 9 for the latest articles grid
+  const { data: posts, pagination } = await getBlogsPaginated(currentPage, 10)
 
-  // Fetch the paginated grid blogs, excluding the featured post
-  const { data: latest, pagination } = await getBlogsPaginated(
-    currentPage,
-    1,
-    featuredPost?.id
-  )
+  const featuredPost = posts[0] || null
+  const latest = posts.slice(1)
 
   const totalPages = pagination?.pageCount || 1
   const hasPrev = currentPage > 1
