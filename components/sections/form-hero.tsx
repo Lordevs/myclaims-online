@@ -118,7 +118,7 @@ export function FormHero({
                 preload
                 fetchPriority="high"
                 sizes="(max-width: 640px) calc(100vw - 32px), (max-width: 1024px) calc(100vw - 48px), (max-width: 1280px) 58vw, 680px"
-                className="w-full h-auto rounded-2xl mt-8 max-w-[550px]"
+                className="mt-8 h-auto w-full max-w-[550px] rounded-2xl"
                 fallbackSrc="/form-hero-placeholder.avif"
               />
             </FadeIn>

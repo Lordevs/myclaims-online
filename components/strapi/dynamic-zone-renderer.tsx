@@ -11,7 +11,9 @@ import type {
   QuizSection,
   ProcessTimelineSection,
   ContactWithMapSection,
+  BlogSection,
 } from "@/lib/strapi/types/sections"
+import { BlogSectionBlock } from "@/components/sections/blog-section-block"
 import { FormHero } from "@/components/sections/form-hero"
 import { Hero } from "@/components/sections/hero"
 import { TextColumnsSection } from "@/components/sections/text-columns-section"
@@ -94,6 +96,7 @@ const SECTION_MAP: {
         primaryBtnHref={resolveStrapiLink(section.ctaButtons?.[0])}
         secondaryBtnText={section.ctaButtons?.[1]?.label || undefined}
         secondaryBtnHref={resolveStrapiLink(section.ctaButtons?.[1])}
+        layout={section.layout || undefined}
       />
     )
   },
@@ -400,15 +403,25 @@ const SECTION_MAP: {
       />
     )
   },
+  "sections.blog-section": (section: BlogSection, currentPage?: number) => {
+    return (
+      <BlogSectionBlock
+        key={section.id}
+        title={section.title}
+        currentPage={currentPage}
+      />
+    )
+  },
 }
 
 // ─── Renderer ─────────────────────────────────────────────────────────────────
 
 interface DynamicZoneRendererProps {
   sections: DynamicZoneSection[]
+  currentPage?: number
 }
 
-export function DynamicZoneRenderer({ sections }: DynamicZoneRendererProps) {
+export function DynamicZoneRenderer({ sections, currentPage }: DynamicZoneRendererProps) {
   if (!sections?.length) return null
 
   return (
@@ -419,7 +432,8 @@ export function DynamicZoneRenderer({ sections }: DynamicZoneRendererProps) {
         // cast to `any` here is the accepted workaround for this known limitation.
         const renderSection = SECTION_MAP[section.__component] as (
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          sec: any
+          sec: any,
+          page?: number
         ) => React.ReactNode
 
         if (!renderSection) {
@@ -431,7 +445,7 @@ export function DynamicZoneRenderer({ sections }: DynamicZoneRendererProps) {
           return null
         }
 
-        return renderSection(section)
+        return renderSection(section, currentPage)
       })}
     </>
   )

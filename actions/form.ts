@@ -58,7 +58,8 @@ export async function submitForm(
       key === "formDocumentId" ||
       key.startsWith("$ACTION_") ||
       key.startsWith("__type__")
-    ) continue
+    )
+      continue
 
     const strapiType = fieldTypes[key]
 
@@ -66,7 +67,11 @@ export async function submitForm(
       email = value.toString()
     } else if (strapiType === "tel") {
       phone = value.toString()
-    } else if (strapiType === "text" || strapiType === "textarea" || strapiType === "select") {
+    } else if (
+      strapiType === "text" ||
+      strapiType === "textarea" ||
+      strapiType === "select"
+    ) {
       // For non-typed fields or plain text fields, fall back to label normalization
       // to detect the fullName field (there is no dedicated "fullName" Strapi type).
       const normalizedKey = key.toLowerCase().replace(/[^a-z0-9]/g, "")

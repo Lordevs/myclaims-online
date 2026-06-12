@@ -23,8 +23,13 @@ export async function POST(req: NextRequest) {
   const secret = process.env.REVALIDATION_SECRET
 
   if (!secret) {
-    console.error("[revalidate] REVALIDATION_SECRET is not set — endpoint disabled.")
-    return NextResponse.json({ message: "Revalidation is not configured" }, { status: 500 })
+    console.error(
+      "[revalidate] REVALIDATION_SECRET is not set — endpoint disabled."
+    )
+    return NextResponse.json(
+      { message: "Revalidation is not configured" },
+      { status: 500 }
+    )
   }
 
   if (authHeader !== `Bearer ${secret}`) {
@@ -85,7 +90,9 @@ export async function POST(req: NextRequest) {
 
       default:
         // Unknown model — log and skip rather than blasting the entire cache
-        console.warn(`[revalidate] No revalidation rule for model: ${modelName}`)
+        console.warn(
+          `[revalidate] No revalidation rule for model: ${modelName}`
+        )
         break
     }
 

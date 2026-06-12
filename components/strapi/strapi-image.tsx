@@ -33,11 +33,15 @@ export function StrapiImage({
   const resolvedAlt =
     alt ?? image?.file?.alternativeText ?? image?.file?.name ?? ""
 
-  const resolvedWidth =
-    (props.width as number | undefined) ?? image?.file?.width ?? undefined
+  const isFill = !!props.fill
 
-  const resolvedHeight =
-    (props.height as number | undefined) ?? image?.file?.height ?? undefined
+  const resolvedWidth = isFill
+    ? undefined
+    : ((props.width as number | undefined) ?? image?.file?.width ?? undefined)
+
+  const resolvedHeight = isFill
+    ? undefined
+    : ((props.height as number | undefined) ?? image?.file?.height ?? undefined)
 
   return (
     <Image

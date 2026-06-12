@@ -16,6 +16,8 @@ export const STRAPI_ENDPOINTS = {
   CTAS: "/api/ctas",
   FORMS: "/api/forms",
   FORM_SUBMISSIONS: "/api/form-submissions",
+  BLOGS: "/api/articles",
 } as const
 
-export type StrapiEndpoint = (typeof STRAPI_ENDPOINTS)[keyof typeof STRAPI_ENDPOINTS]
+export type StrapiEndpoint =
+  (typeof STRAPI_ENDPOINTS)[keyof typeof STRAPI_ENDPOINTS]

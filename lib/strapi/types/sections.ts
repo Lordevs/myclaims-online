@@ -33,7 +33,7 @@ import type { FAQEntry, CTAEntry, FormEntry } from "./collections"
 
 // ─── sections.split-hero-section ─────────────────────────────────────────────
 
-export type SplitHeroLayout = "hero_with_media" | "hero_with_form"
+export type SplitHeroLayout = "hero_with_media" | "hero_with_form" | "simple_hero"
 
 export interface SplitHeroSection {
   __component: "sections.split-hero-section"
@@ -177,9 +177,17 @@ export interface ContactWithMapSection {
   ctaButton: FileLinkComponent | null
 }
 
+// ─── sections.blog-section ───────────────────────────────────────────────────
+
+export interface BlogSection {
+  __component: "sections.blog-section"
+  id: number
+  title: string
+}
+
 // ─── DynamicZone union ────────────────────────────────────────────────────────
 
-/** Union of all 11 possible DynamicZone section types for api::page.page */
+/** Union of all 12 possible DynamicZone section types for api::page.page */
 export type DynamicZoneSection =
   | SplitHeroSection
   | RichTextSection
@@ -192,3 +200,4 @@ export type DynamicZoneSection =
   | QuizSection
   | ProcessTimelineSection
   | ContactWithMapSection
+  | BlogSection

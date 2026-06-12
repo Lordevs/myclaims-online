@@ -133,7 +133,11 @@ export function DetailedEnquiryForm({
                   {field.label || ""}
                 </Label>
                 {/* Companion type marker — lets the server action route this field by its Strapi type */}
-                <input type="hidden" name={`__type__${fieldKey}`} value={field.type || "text"} />
+                <input
+                  type="hidden"
+                  name={`__type__${fieldKey}`}
+                  value={field.type || "text"}
+                />
                 {field.type === "textarea" ? (
                   <Textarea
                     required={field.required !== false}

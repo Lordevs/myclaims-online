@@ -288,7 +288,11 @@ export function ClaimsQuizForm({
                 return (
                   <div key={field.id} className="flex flex-col gap-2">
                     {/* Companion type marker — lets the server action route this field by its Strapi type */}
-                    <input type="hidden" name={`__type__${fieldKey}`} value={field.type || "text"} />
+                    <input
+                      type="hidden"
+                      name={`__type__${fieldKey}`}
+                      value={field.type || "text"}
+                    />
                     {field.label && (
                       <label
                         className="text-xs font-black text-[#1A1C19] sm:text-sm"

@@ -62,7 +62,17 @@ export function DesktopNav({
                 <NavigationMenuContent className="left-1/2 z-50 mt-[20px]! w-[340px]! min-w-[340px]! -translate-x-1/2 animate-in overflow-hidden! rounded-xl! border border-white/10! bg-primary! p-0! text-white! shadow-none! fade-in-0 zoom-in-95">
                   <div className="flex flex-col bg-primary py-1.5">
                     {item.items.map((subItem, idx) => {
-                      const href = resolveStrapiLink(subItem.page ? { isExternal: false, externalLink: null, page: subItem.page, label: subItem.label, id: subItem.id } : null)
+                      const href = resolveStrapiLink(
+                        subItem.page
+                          ? {
+                              isExternal: false,
+                              externalLink: null,
+                              page: subItem.page,
+                              label: subItem.label,
+                              id: subItem.id,
+                            }
+                          : null
+                      )
                       const isSubActive = isActive(href)
                       return (
                         <NavigationMenuLink asChild key={subItem.id}>

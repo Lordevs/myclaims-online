@@ -181,7 +181,34 @@ export const pagePopulate = {
           },
         },
       },
+      "sections.blog-section": {
+        populate: true,
+      },
     },
   },
 }
 
+// ─── Blog populates ──────────────────────────────────────────────────────────
+export const blogPopulate = {
+  tags: true,
+  sections: {
+    on: {
+      "shared.rich-text": true,
+      "sections.article-cta": {
+        populate: {
+          link: {
+            populate: linkPopulate
+          }
+        }
+      },
+      "shared.quote": true,
+    }
+  },
+  coverImage: { populate: mediaPopulate },
+  author: {
+    populate: {
+      avatar: { populate: mediaPopulate }
+    }
+  },
+  category: true,
+}

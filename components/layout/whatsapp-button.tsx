@@ -24,11 +24,11 @@ export function WhatsAppButton({ number, message }: WhatsAppButtonProps) {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Contact us on WhatsApp"
-      className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg transition-all duration-300 hover:scale-110 hover:bg-[#20ba5a] hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-[#25D366] focus:ring-offset-2 active:scale-95 group"
+      className="group fixed right-6 bottom-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg transition-all duration-300 hover:scale-110 hover:bg-[#20ba5a] hover:shadow-xl focus:ring-2 focus:ring-[#25D366] focus:ring-offset-2 focus:outline-none active:scale-95"
     >
       {/* Soft ping animation ring */}
       <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#25D366] opacity-40 transition-all group-hover:opacity-0" />
-      
+
       {/* WhatsApp SVG Icon */}
       <svg
         className="h-7 w-7 fill-current transition-transform duration-300 group-hover:rotate-12"

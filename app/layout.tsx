@@ -33,7 +33,14 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: globalData?.siteName || "My Claims Online",
       type: "website",
       locale: "en_GB",
-      images: [{ url: "/og-default.png", width: 1200, height: 630, alt: "My Claims Online" }],
+      images: [
+        {
+          url: "/og-default.png",
+          width: 1200,
+          height: 630,
+          alt: "My Claims Online",
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",

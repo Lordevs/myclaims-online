@@ -7,6 +7,7 @@ import { getStrapiMedia } from "@/lib/strapi/utils"
 
 interface PageProps {
   params: Promise<{ slug: string }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
 // Generate metadata dynamically
@@ -31,7 +32,8 @@ export async function generateMetadata({
   const seo = page.seo
   const globalSeo = globalData?.defaultSeo
   const title = seo?.metaTitle ?? page.title
-  const description = seo?.metaDescription ?? globalSeo?.metaDescription ?? undefined
+  const description =
+    seo?.metaDescription ?? globalSeo?.metaDescription ?? undefined
 
   const ogImage = seo?.shareImage?.url
     ? getStrapiMedia(seo.shareImage.url)
@@ -64,8 +66,10 @@ export async function generateStaticParams() {
     }))
 }
 
-export default async function Page({ params }: PageProps) {
+export default async function Page({ params, searchParams }: PageProps) {
   const { slug } = await params
+  const resolvedSearchParams = await searchParams
+  const currentPage = typeof resolvedSearchParams.page === "string" ? parseInt(resolvedSearchParams.page, 10) : 1
 
   // Redirect or not found if accessing /home explicitly, or just render it
   if (slug === "home") {
@@ -79,7 +83,7 @@ export default async function Page({ params }: PageProps) {
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-[#F9FAF5]">
-      <DynamicZoneRenderer sections={page.blocks} />
+      <DynamicZoneRenderer sections={page.blocks} currentPage={currentPage} />
     </div>
   )
 }
