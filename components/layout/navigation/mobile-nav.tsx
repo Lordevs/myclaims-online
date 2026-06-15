@@ -1,10 +1,11 @@
 "use client"
 
 import * as React from "react"
-import { Menu } from "lucide-react"
+import { Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetHeader,
   SheetTitle,
@@ -30,18 +31,29 @@ export function MobileNav({ ctaButton, navItems, logo }: MobileNavProps) {
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild className="md:hidden">
         <Button variant="ghost" size="icon" className="text-white">
-          <Menu className="h-6 w-6" />
+          <Menu className="size-7" />
           <span className="sr-only">Toggle menu</span>
         </Button>
       </SheetTrigger>
       <SheetContent
         side="right"
         className="flex w-[300px] flex-col border-white/10 bg-primary p-0 text-white sm:w-[400px]"
+        showCloseButton={false}
       >
         <SheetHeader className="px-6 pt-6 text-left">
           <SheetTitle className="text-left">
             <Logo logo={logo} />
           </SheetTitle>
+          <SheetClose asChild>
+            <Button
+              variant="ghost"
+              size="icon-lg"
+              className="absolute right-4 top-4 text-white hover:bg-white/20 hover:text-white"
+            >
+              <X className="size-6" />
+              <span className="sr-only">Close menu</span>
+            </Button>
+          </SheetClose>
         </SheetHeader>
 
         <div className="relative mt-8 flex-1 overflow-y-auto px-6">
