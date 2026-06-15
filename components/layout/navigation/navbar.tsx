@@ -35,7 +35,7 @@ export function Navbar({ globalData }: NavbarProps) {
       )}
     >
       <Container className="flex items-center justify-between">
-        <Logo logo={globalData?.logo} className="md:h-8" />
+        <Logo logo={globalData?.logo} className="h-10 md:h-8" />
 
         {/* Desktop Navigation */}
         <div className="flex items-center gap-10">
