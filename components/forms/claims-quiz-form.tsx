@@ -206,7 +206,7 @@ export function ClaimsQuizForm({
 
           <Progress
             value={isFormStep ? 100 : progressPercent}
-            className="h-4 w-full rounded-full border-2 border-[#4C6549] bg-[#E7E9E4] p-[2px] [&>[data-slot=progress-indicator]]:bg-[#AF2144]"
+            className="h-4 w-full rounded-full border-2 border-[#4C6549] bg-[#E7E9E4] p-[2px] *:data-[slot=progress-indicator]:bg-[#AF2144]"
           />
 
           <div className="text-xs font-normal tracking-wide text-[#594143] sm:text-sm">
@@ -414,7 +414,7 @@ export function ClaimsQuizForm({
                         : "border-[#4C6549] bg-[#F3F4EF] hover:border-[#4C6549] hover:bg-[#EAECE5]"
                     )}
                   >
-                    <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full border-2 border-[#4C6549] bg-white transition-all duration-200">
+                    <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 border-[#4C6549] bg-white transition-all duration-200">
                       {isSelected && (
                         <div className="h-3.5 w-3.5 animate-in rounded-full bg-[#AF2144] duration-200 zoom-in-50" />
                       )}

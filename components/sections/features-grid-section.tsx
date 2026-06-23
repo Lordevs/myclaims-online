@@ -68,7 +68,7 @@ export function FeaturesGridSection({
   return (
     <section
       className={cn(
-        "w-full overflow-hidden py-20 font-sans select-none md:py-28",
+        "w-full overflow-hidden py-16 font-sans select-none",
         bgClass
       )}
     >
@@ -78,7 +78,7 @@ export function FeaturesGridSection({
           <FadeIn delay={0.1}>
             <h2
               className={cn(
-                "mb-12 text-center text-3xl font-extrabold tracking-tight md:mb-20 md:text-5xl",
+                "mb-12 text-center text-3xl font-extrabold tracking-tight md:text-5xl",
                 titleColorClass
               )}
             >
@@ -92,7 +92,7 @@ export function FeaturesGridSection({
             staggerDelay={0.08}
             className="w-full"
           >
-            <div className="mb-12 grid w-full grid-cols-1 gap-6 md:mb-16 md:grid-cols-3 md:gap-8 lg:gap-10">
+            <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-3 md:gap-8 lg:gap-10">
               {items.map((item, idx) => {
                 const Icon = item.icon
                 return (
@@ -111,7 +111,7 @@ export function FeaturesGridSection({
                       {!isPink ? (
                         <div className="mb-6 flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#EAF5EE]">
                           {typeof Icon === "function" ||
-                          React.isValidElement(Icon) ? (
+                            React.isValidElement(Icon) ? (
                             React.createElement(
                               Icon as unknown as React.ComponentType<{
                                 className: string
@@ -194,7 +194,7 @@ export function FeaturesGridSection({
               <Button
                 asChild
                 className={cn(
-                  "h-auto cursor-pointer rounded-lg px-12 py-3.5 text-sm font-bold transition-transform duration-150 select-none active:scale-[0.97] md:text-base",
+                  "h-auto cursor-pointer rounded-lg px-12 py-3.5 text-sm font-bold transition-transform duration-150 select-none active:scale-[0.97] md:text-base mt-12 md:mt-16",
                   buttonBgClass,
                   buttonBorderClass,
                   buttonTextColorClass

@@ -64,7 +64,7 @@ export function ClaimsJourney({
   return (
     <section
       className={cn(
-        "relative w-full overflow-hidden bg-white py-20 font-sans select-none md:py-28",
+        "relative w-full overflow-hidden bg-white py-16 font-sans select-none",
         className
       )}
     >

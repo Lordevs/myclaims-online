@@ -131,52 +131,52 @@ interface ClaimsSupportProps {
 export function ClaimsSupport({ title, items }: ClaimsSupportProps = {}) {
   const claimTypes: ClaimTypeItem[] = items
     ? items.map((item) => ({
-        icon: item.icon,
-        title: item.title,
-        description: item.description,
-      }))
+      icon: item.icon,
+      title: item.title,
+      description: item.description,
+    }))
     : [
-        {
-          icon: FrontCarIcon,
-          title: "Private Car /\nCommercial Vehicle",
-          description:
-            "Full support for personal cars and business fleet vehicles involved in non-fault accidents.",
-        },
-        {
-          icon: FrontTaxiIcon,
-          title: "Taxi / Uber /\nPrivate Hire",
-          description:
-            "Specialist replacement plated vehicles to keep you working and earning after a collision.",
-        },
-        {
-          icon: MotorcycleIcon,
-          title: "Motorcycle\nClaims",
-          description:
-            "Expert handling for bikers, including protective gear replacement and like-for-like bike hire.",
-        },
-        {
-          icon: Bike,
-          title: "Cycle / E-Scooter\nClaims",
-          description:
-            "Dedicated support for vulnerable road users, ensuring fair compensation for injuries and equipment.",
-        },
-        {
-          icon: FrontEVIcon,
-          title: "Electric Vehicle\nClaims",
-          description:
-            "Specialized recovery and replacement services for EV and hybrid owners.",
-        },
-      ]
+      {
+        icon: FrontCarIcon,
+        title: "Private Car /\nCommercial Vehicle",
+        description:
+          "Full support for personal cars and business fleet vehicles involved in non-fault accidents.",
+      },
+      {
+        icon: FrontTaxiIcon,
+        title: "Taxi / Uber /\nPrivate Hire",
+        description:
+          "Specialist replacement plated vehicles to keep you working and earning after a collision.",
+      },
+      {
+        icon: MotorcycleIcon,
+        title: "Motorcycle\nClaims",
+        description:
+          "Expert handling for bikers, including protective gear replacement and like-for-like bike hire.",
+      },
+      {
+        icon: Bike,
+        title: "Cycle / E-Scooter\nClaims",
+        description:
+          "Dedicated support for vulnerable road users, ensuring fair compensation for injuries and equipment.",
+      },
+      {
+        icon: FrontEVIcon,
+        title: "Electric Vehicle\nClaims",
+        description:
+          "Specialized recovery and replacement services for EV and hybrid owners.",
+      },
+    ]
 
   const displayTitle = title || "Types of Claims We Support"
 
   return (
-    <section className="w-full overflow-hidden border-t-[2.25px] border-b-[2.25px] border-[#0F172A] bg-white py-16 font-sans select-none md:py-24">
+    <section className="w-full overflow-hidden border-t-[2.25px] border-b-[2.25px] border-[#0F172A] bg-white py-16 font-sans select-none">
       <Container>
         <div className="flex flex-col items-center">
           {/* Centered Heading */}
           <FadeIn delay={0.1}>
-            <h2 className="mb-12 text-center text-3xl font-extrabold tracking-tight text-[#0F172A] md:mb-16 md:text-5xl">
+            <h2 className="mb-12 text-center text-3xl font-extrabold tracking-tight text-[#0F172A] md:text-5xl">
               {displayTitle}
             </h2>
           </FadeIn>

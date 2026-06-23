@@ -63,7 +63,7 @@ export function ClaimsQuizSection({
   return (
     <section
       className={cn(
-        "overflow-hidden py-20 font-sans select-none md:py-28",
+        "overflow-hidden py-20 font-sans select-none",
         className
       )}
       style={{
@@ -92,7 +92,7 @@ export function ClaimsQuizSection({
                 <div className="flex flex-col gap-6 rounded-3xl border-2 border-[#4C6549] bg-[#F9FAF5] p-6 sm:p-8">
                   {/* Heading with Custom Green Shield Icon */}
                   <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border-2 border-[#4C6549] bg-[#627E2A] text-[#FAFFE7]">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-[#4C6549] bg-[#627E2A] text-[#FAFFE7]">
                       <ShieldCheck className="size-5" />
                     </div>
                     <h4 className="text-lg font-black text-[#1A1C19] sm:text-xl">
@@ -104,7 +104,7 @@ export function ClaimsQuizSection({
                   <ul className="flex flex-col gap-4">
                     {trustItems.map((item) => (
                       <li key={item} className="flex items-start gap-3">
-                        <div className="mt-0.5 flex-shrink-0 text-[#4A6412]">
+                        <div className="mt-0.5 shrink-0 text-[#4A6412]">
                           <Check className="size-5 stroke-[3px]" />
                         </div>
                         <span className="text-sm leading-relaxed font-semibold text-[#594143]">

@@ -47,7 +47,7 @@ export function FAQSection(props: Partial<FAQSection>) {
   const faqData = props.faqs?.length ? props.faqs : defaultFaqData
 
   return (
-    <section className="bg-white py-20 font-sans md:py-24">
+    <section className="bg-white py-16 font-sans">
       <Container className="max-w-6xl">
         {/* Section Heading */}
         <FadeIn delay={0.1} className="mb-10 text-center md:mb-12">

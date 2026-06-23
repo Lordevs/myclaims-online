@@ -144,14 +144,14 @@ export function AsymmetricRowSection({
   return (
     <section
       className={cn(
-        "w-full overflow-hidden bg-white py-16 select-none md:py-24",
+        "w-full overflow-hidden bg-white pt-8 pb-16 select-none",
         className
       )}
     >
       <Container>
         {/* Animated Main Section Header */}
         {title && (
-          <FadeIn delay={0.1} className="mb-12 text-center md:mb-20">
+          <FadeIn delay={0.1} className="mb-8 text-center">
             <h2 className="text-3xl leading-tight font-extrabold tracking-tight text-[#064E3B] md:text-5xl">
               {title}
             </h2>

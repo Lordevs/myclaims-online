@@ -59,7 +59,7 @@ export function Hero({
   return (
     <section
       className={cn(
-        "relative w-full overflow-hidden pt-20 pb-16 md:pt-28 md:pb-24 text-left",
+        "relative w-full overflow-hidden py-16 text-left",
         className
       )}
       style={{
@@ -146,7 +146,7 @@ export function Hero({
             <FadeIn delay={0.25}>
               {isSimple ? (
                 /* Clean rounded image for simple layout, no border, no rotated shadow */
-                <div className="relative mx-auto aspect-[1.25/1] w-full max-w-[600px] lg:max-w-none overflow-hidden rounded-[24px]">
+                <div className="relative mx-auto aspect-1.25/1 w-full max-w-[600px] lg:max-w-none overflow-hidden rounded-[24px]">
                   <StrapiImage
                     image={image}
                     fill

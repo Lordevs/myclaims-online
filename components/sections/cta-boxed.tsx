@@ -41,7 +41,7 @@ export function CtaBoxed({
   return (
     <section
       className={cn(
-        "w-full overflow-hidden border-none bg-white py-16 shadow-none select-none md:py-24",
+        "w-full overflow-hidden border-none bg-white py-16 shadow-none select-none",
         className
       )}
     >

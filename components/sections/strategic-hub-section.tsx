@@ -66,7 +66,7 @@ export function StrategicHubSection({
   return (
     <section
       className={cn(
-        "bg-[#F9FAF5] py-20 font-sans select-none md:py-28",
+        "bg-[#F9FAF5] py-20 font-sans select-none",
         className
       )}
     >

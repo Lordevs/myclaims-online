@@ -44,7 +44,7 @@ export function DetailedEnquirySection({
   return (
     <section
       className={cn(
-        "relative w-full overflow-hidden bg-[#F9FAF5] py-20 font-sans md:py-28",
+        "relative w-full overflow-hidden bg-[#F9FAF5] py-20 font-sans",
         className
       )}
     >

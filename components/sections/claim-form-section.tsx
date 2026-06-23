@@ -47,7 +47,7 @@ export function ClaimFormSection({
     <section
       id="enquiry-form"
       className={cn(
-        "relative w-full overflow-hidden py-20 font-sans select-none md:py-28",
+        "relative w-full overflow-hidden py-10 font-sans select-none",
         className
       )}
       style={{

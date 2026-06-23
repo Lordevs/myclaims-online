@@ -26,7 +26,7 @@ export interface CtaGridProps {
  */
 export function CtaGrid({ title, subtitle, contactItems }: CtaGridProps) {
   return (
-    <section className="bg-[#F9FAF5] py-20 font-sans md:py-28">
+    <section className="bg-[#F9FAF5] py-20 font-sans">
       <Container>
         <div className="mx-auto flex max-w-[865px] flex-col items-center rounded-3xl border-[2.25px] border-[#0F172A] bg-white px-6 py-12 text-center shadow-[4.5px_4.5px_0px_0px_#1A1C19] md:px-12 md:py-16 lg:px-20">
           {/* Section Heading & Tagline wrapped in FadeIn */}

@@ -36,7 +36,7 @@ export function CtaStrip({
   return (
     <section
       className={cn(
-        "w-full overflow-hidden border-none bg-white py-14 shadow-none select-none md:py-16",
+        "w-full overflow-hidden border-none bg-white py-8 shadow-none select-none",
         className
       )}
     >

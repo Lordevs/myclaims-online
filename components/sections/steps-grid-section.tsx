@@ -57,7 +57,7 @@ export function StepsGridSection({
   return (
     <section
       className={cn(
-        "w-full overflow-hidden border-y-[0.75px] border-[#EDF7EF] bg-[#FFFAFB] py-20 font-sans select-none md:py-28",
+        "w-full overflow-hidden border-y-[0.75px] border-[#EDF7EF] bg-[#FFFAFB] py-16 font-sans select-none",
         className
       )}
     >
@@ -65,7 +65,7 @@ export function StepsGridSection({
         <div className="flex flex-col items-center">
           {/* Centered Dynamic Heading */}
           <FadeIn delay={0.1}>
-            <h2 className="mb-16 text-center text-3xl leading-tight font-extrabold tracking-tight text-[#111111] md:mb-24 md:text-5xl">
+            <h2 className="mb-16 text-center text-3xl leading-tight font-extrabold tracking-tight text-[#111111] md:text-5xl">
               {renderTitle()}
             </h2>
           </FadeIn>
@@ -101,7 +101,7 @@ export function StepsGridSection({
                       </span>
                       {/* Main Icon */}
                       {typeof Icon === "function" ||
-                      React.isValidElement(Icon) ? (
+                        React.isValidElement(Icon) ? (
                         React.createElement(
                           Icon as unknown as React.ComponentType<{
                             className: string
