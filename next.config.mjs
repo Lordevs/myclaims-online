@@ -23,10 +23,10 @@ const securityHeaders = [
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       // Google Fonts, Iconify CDN
       "font-src 'self' https://fonts.gstatic.com https://api.iconify.design",
-      // Strapi Cloud images + local dev
-      "img-src 'self' data: blob: https://*.strapiapp.com https://*.media.strapiapp.com http://localhost:1337",
-      // Strapi API + Google Maps embed
-      "connect-src 'self' https://*.strapiapp.com http://localhost:1337 https://api.iconify.design",
+      // Strapi Cloud images + local dev + production custom domain
+      "img-src 'self' data: blob: https://*.strapiapp.com https://*.media.strapiapp.com http://localhost:1337 https://cms.myclaimsonline.co.uk",
+      // Strapi API + Google Maps embed + production custom domain
+      "connect-src 'self' https://*.strapiapp.com http://localhost:1337 https://api.iconify.design https://cms.myclaimsonline.co.uk",
       // Google Maps iframe
       "frame-src https://www.google.com https://maps.google.com",
       "object-src 'none'",
@@ -67,6 +67,12 @@ const nextConfig = {
         protocol: "https",
         hostname: "*.media.strapiapp.com",
         pathname: "/**",
+      },
+      // ── Custom Production Strapi ─────────────────────────────────────────
+      {
+        protocol: "https",
+        hostname: "cms.myclaimsonline.co.uk",
+        pathname: "/uploads/**",
       },
       // ── Custom S3 / CDN ──────────────────────────────────────────────────
       // If you configure an S3 or Cloudinary provider in Strapi, add it here:

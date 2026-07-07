@@ -17,7 +17,10 @@ import type { LinkComponent } from "./types/shared"
  * Local fallback: http://localhost:1337.
  */
 export function getStrapiURL(path = ""): string {
-  const base = process.env.STRAPI_URL || "http://localhost:1337"
+  const base =
+    process.env.NEXT_PUBLIC_STRAPI_URL ||
+    process.env.STRAPI_URL ||
+    "http://localhost:1337"
   return `${base.replace(/\/$/, "")}${path}`
 }
 
