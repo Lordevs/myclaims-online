@@ -11,7 +11,7 @@ import { BlogExplore } from "@/components/sections/blog-explore"
 import { DynamicZoneRenderer } from "@/components/strapi/dynamic-zone-renderer"
 import { ArticleZoneRenderer } from "@/components/strapi/article-zone-renderer"
 
-export const revalidate = 3600 // Revalidate cached static pages every hour
+export const revalidate = 3600 
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>
